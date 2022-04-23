@@ -2,11 +2,15 @@ THIS IS A FORK OF [THIS](https://github.com/malte0811/IndustrialWires), NOT MY M
 
 THINGHS I PLAN ADD:
  
-	-Blocks to control the Max energy on cables (Transformers, Triodes, etc.)
-	-Retifier Valve, to convert IF > EU, in a smaller scale (Need control temperature)
-	-More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon))
- -MAYBE: Tesla Tower (Massive tesla coil with cool uses like energy transmission, or to summom lightning HAHAHA)
-	-More thinghs related to valves (A fusor (only decorative and/or can light a big area) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
+-Blocks to control the Max energy on cables (Transformers, Triodes, etc.)
+
+-Retifier Valve, to convert IF > EU, in a smaller scale (Need control temperature)
+
+-More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon))
+
+-MAYBE: Tesla Tower (Massive tesla coil with cool uses like energy transmission, or to summom lightning HAHAHA)
+
+-More thinghs related to valves (A fusor (only decorative and/or can light a big area) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
 
 
 
