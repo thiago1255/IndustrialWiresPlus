@@ -1,6 +1,6 @@
 THIS IS A FORK OF [THIS](https://github.com/malte0811/IndustrialWires), NOT MY MOD.
 
-THINGHS I PLAN ADD:
+THINGHS I PLAN ADD IN MY MODIFICATION OF MOD:
  
 -Blocks to control the Max energy on cables (Transformers, Triodes, etc.)
 
