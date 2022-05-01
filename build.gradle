@@ -1,7 +1,7 @@
 import groovy.json.JsonOutput
 
-def mainVersion = "1.7"
-def buildNumber = "36"
+def mainVersion = "1.8"
+def buildNumber = "01"
 
 // For those who want the bleeding edge
 buildscript {
@@ -32,7 +32,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.12.2-14.23.5.2769"
+    version = "1.12.2-14.23.5.2768"
     runDir = "run"
 
     replace '${version}', project.version
