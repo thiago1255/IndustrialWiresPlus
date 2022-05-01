@@ -1,4 +1,2 @@
-# Made in Blockbench 4.2.3
-newmtl m_0
-map_Kd texture_blocks.png 
-newmtl none
+newmtl hv_autotransformer
+map_Ka hv_autotransformer
