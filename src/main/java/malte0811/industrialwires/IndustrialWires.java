@@ -24,6 +24,7 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.blocks.converter.*;
  import malte0811.industrialwires.blocks.hv.*;
  import malte0811.industrialwires.blocks.wire.*;
+ import malte0811.industrialwires.blocks.stuff.*;
  import malte0811.industrialwires.compat.Compat;
  import malte0811.industrialwires.controlpanel.PanelComponent;
  import malte0811.industrialwires.controlpanel.PanelUtils;
