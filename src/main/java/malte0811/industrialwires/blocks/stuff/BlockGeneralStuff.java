@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	public static final PropertyEnum<BlockTypes_GeneralStuff> PROPERTY = PropertyEnum.create("type",
 			BlockTypes_GeneralStuff.class);
-	public static final String NAME = "general_hv";
+	public static final String NAME = "general_stuff";
 
 	public BlockGeneralHV() {
 		super(Material.IRON, NAME);
