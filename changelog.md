@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-00
+ - First version by thiago1255
+ - Added autotransformer to test blocks
+
 ####Version 1.7-36
  - Added an RGB indicator light, controlled by 3 (independent) RS signals
  - Fixed a bug allowing for unfinished control panels to be duplicated
