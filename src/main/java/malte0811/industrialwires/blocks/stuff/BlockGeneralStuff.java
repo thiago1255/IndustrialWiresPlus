@@ -1,3 +1,7 @@
+/*
+Made using other files of this mod as example/model.
+*/
+
 package malte0811.industrialwires.blocks.stuff;
 
 import blusunrize.immersiveengineering.api.IEProperties;
@@ -50,7 +54,8 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-
+/*
+tileentity thinghs, will be added later.
 	@Nonnull
 	@Override
 	public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
@@ -70,9 +75,9 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		}
 		return null;
 	}
-
+*/
 	@Override
-	public BlockTypes_GeneralHV[] getValues() {
+	public BlockTypes_General[] getValues() {
 		return BlockTypes_GeneralStuff.values();
 	}
 
@@ -88,5 +93,5 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
-		return true;
+		return false;
 	}
