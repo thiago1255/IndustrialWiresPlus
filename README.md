@@ -13,8 +13,10 @@ THINGHS I PLAN ADD IN MY MODIFICATION OF MOD:
 -More thinghs related to valves (A fusor (only decorative and/or can light a big area) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
 
 
-
-
+--Credits: 
+-thiago1255 (modify the mod)
+-[This team that made the original mod](https://github.com/malte0811/IndustrialWires/graphs/contributors)
+-[Immersive engineering team for api and some examples](https://github.com/BluSunrize/ImmersiveEngineering/graphs/contributors)
 
 -----ORIGINAL README ABOVE:-----
 
