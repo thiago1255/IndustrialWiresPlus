@@ -1,3 +1,7 @@
+/*
+Made using other files of this mod as example/model.
+*/
+
 package malte0811.industrialwires.blocks.stuff;
 
 import net.minecraft.util.IStringSerializable;
