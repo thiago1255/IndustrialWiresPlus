@@ -11,6 +11,8 @@
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with Industrial Wires.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * edited by thiago1255 later.
  */
 package malte0811.industrialwires;
 
@@ -122,6 +124,8 @@ public class IndustrialWires {
 	public static BlockMechanicalMB mechanicalMB = null;
 	@GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralHV.NAME)
 	public static BlockGeneralHV generalHV = null;
+        @GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralStuff.NAME)
+	public static BlockGeneralStuff generalStuff = null;
 
 	@GameRegistry.ObjectHolder(MODID+":"+ItemIC2Coil.NAME)
 	public static ItemIC2Coil coil = null;
@@ -221,6 +225,7 @@ public class IndustrialWires {
 		event.getRegistry().register(new BlockHVMultiblocks());
 		event.getRegistry().register(new BlockMechanicalMB());
 		event.getRegistry().register(new BlockGeneralHV());
+                event.getRegistry().register(new BlockGeneralStuff());
 	}
 
 	@SubscribeEvent
