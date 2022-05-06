@@ -14,8 +14,11 @@ THINGHS I PLAN ADD IN MY MODIFICATION OF MOD:
 
 
 --Credits: 
+
 -thiago1255 (modify the mod)
+
 -[This team that made the original mod](https://github.com/malte0811/IndustrialWires/graphs/contributors)
+
 -[Immersive engineering team for api and some examples](https://github.com/BluSunrize/ImmersiveEngineering/graphs/contributors)
 
 -----ORIGINAL README ABOVE:-----
