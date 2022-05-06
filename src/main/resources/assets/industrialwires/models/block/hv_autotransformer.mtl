@@ -1,5 +1,3 @@
-/*
-Made using other files of this mod and blockbench has example/model.
-*/
+# Made using other files of this mod and blockbench has example/model.
 newmtl hv_autotransformer
 map_Ka ndustrialwires:blocks/texture_3d_blocks
