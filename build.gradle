@@ -96,8 +96,7 @@ dependencies {
     compileOnly "TechReborn:TechReborn-1.12:2.6.9.7:universal"
     compileOnly "RebornCore:RebornCore-1.12:3.2.+:universal"
     //Others
-    //TODO do something about this
-    // compileOnly 'com.elytradev:mirage:2.0.1-SNAPSHOT'
+    compileOnly 'com.elytradev:mirage:2.0.3-rc3-SNAPSHOT'
     compileOnly "mezz.jei:jei_1.12:4.+"
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.460"
 
