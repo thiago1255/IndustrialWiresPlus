@@ -77,7 +77,7 @@ tileentity thinghs, will be added later.
 	}
 */
 	@Override
-	public BlockTypes_General[] getValues() {
+	public BlockTypes_GeneralStuff[] getValues() {
 		return BlockTypes_GeneralStuff.values();
 	}
 
