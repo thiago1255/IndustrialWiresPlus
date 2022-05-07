@@ -95,3 +95,4 @@ tileentity thinghs, will be added later.
 	public boolean hasTileEntity(IBlockState state) {
 		return false;
 	}
+}
