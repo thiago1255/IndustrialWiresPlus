@@ -13,3 +13,4 @@ public enum BlockTypes_GeneralStuff implements IStringSerializable{
 	public String getName() {
 		return name().toLowerCase();
 	}
+}
