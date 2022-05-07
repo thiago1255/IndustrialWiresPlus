@@ -24,7 +24,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 			BlockTypes_GeneralStuff.class);
 	public static final String NAME = "general_stuff";
 
-	public BlockGeneralHV() {
+	public BlockGeneralStuff() {
 		super(Material.IRON, NAME);
 	}
 
