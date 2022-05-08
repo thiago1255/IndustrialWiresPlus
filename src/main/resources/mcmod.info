@@ -5,7 +5,7 @@
   "description": "An addon for IndustrialCraft2 and Immersive Engineering that adds IE wires to transfer IC2 power and other fun things!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/industrial-wires-plus",
   "updateUrl": "",
   "authorList": ["malte0811"],
   "credits": "BluSunrize and Mr. Damien Hazard for Immersive Engineering, the IC2 team for IC2, and thiago1255 for this fork.",
