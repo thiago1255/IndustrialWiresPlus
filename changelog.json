@@ -47,6 +47,7 @@
         "1.7-34": " - Control panels can use the texture of any block now\n - Added a recipe to copy the settings of an unfinished control panel\n - The Marx generator now returns the wires used in its construction when disassembled\n - Fixed the RS controller for non-IE wires not keeping its IO state on world reload\n - Fixed control panels not working correctly with multiple controllers",
         "1.7-35": " - Fixed a crash when placing certain items in the crafting grid",
         "1.7-36": " - Added an RGB indicator light, controlled by 3 (independent) RS signals\n - Fixed a bug allowing for unfinished control panels to be duplicated\n - Fixed insulated and uninsulated wire producing the same wire coils\n - Fixed some issues (including a crash) with the IE RS controller on dedicated servers",
-        "1.8-00": " - First version by thiago1255 - Added autotransformer to test blocks"
+        "1.8-00": " - First version by thiago1255 - Added autotransformer to test blocks",
+        "1.8-01": " - Fixed texture of transformer - Added curseforge url"
     }
 }
