@@ -4,6 +4,7 @@ Made using other files of this mod as example/model.
 
 package malte0811.industrialwires.blocks.stuff;
 
+import blusunrize.immersiveengineering.api.IEProperties;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
 import net.minecraft.block.material.Material;
@@ -25,6 +26,11 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 
 	public BlockGeneralStuff() {
 		super(Material.IRON, NAME);
+	}
+
+        @Override
+	protected IProperty[] getProperties() {
+		return new IProperty[] {IEProperties.FACING_HORIZONTAL};
 	}
 
 	@Override
