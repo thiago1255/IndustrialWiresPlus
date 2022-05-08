@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-01
+ - Fixed texture of transformer
+ - Added curseforge url
+
 ####Version 1.8-00
  - First version by thiago1255
  - Added autotransformer to test blocks
