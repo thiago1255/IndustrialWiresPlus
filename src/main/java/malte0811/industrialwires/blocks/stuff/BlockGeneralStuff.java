@@ -4,7 +4,6 @@ Made using other files of this mod as example/model.
 
 package malte0811.industrialwires.blocks.stuff;
 
-import blusunrize.immersiveengineering.api.IEProperties;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
 import net.minecraft.block.material.Material;
