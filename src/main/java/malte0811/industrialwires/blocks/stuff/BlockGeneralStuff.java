@@ -29,13 +29,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	}
 
 	@Override
-	protected IProperty[] getProperties() {
-		return new IProperty[] {
-				IEProperties.BOOLEANS[0], PROPERTY, IEProperties.FACING_HORIZONTAL
-		};
-	}
-
-	@Override
 	public boolean isTopSolid(IBlockState state) {
 		return false;
 	}
