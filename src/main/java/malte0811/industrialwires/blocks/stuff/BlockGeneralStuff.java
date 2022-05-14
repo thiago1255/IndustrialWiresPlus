@@ -52,17 +52,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-/*
-tileentity thinghs, will be added later.
-	@Nonnull
-	@Override
-	public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		state = super.getActualState(state, worldIn, pos);
-		TileEntity te = worldIn.getTileEntity(pos);
-		if (te instanceof TileEntityDischargeMeter)
-			state = state.withProperty(IEProperties.BOOLEANS[0], ((TileEntityDischargeMeter) te).hasWire);
-		return state;
-	}
 
 	@Nullable
 	@Override
@@ -73,7 +62,7 @@ tileentity thinghs, will be added later.
 		}
 		return null;
 	}
-*/
+
 	@Override
 	public BlockTypes_GeneralStuff[] getValues() {
 		return BlockTypes_GeneralStuff.values();
@@ -91,6 +80,6 @@ tileentity thinghs, will be added later.
 
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
-		return false;
+		return true;
 	}
 }
