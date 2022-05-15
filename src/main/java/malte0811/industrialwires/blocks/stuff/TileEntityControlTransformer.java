@@ -44,33 +44,33 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IP
 		}
 		return aabb;
 	}
-
+        //ok
 	@Nonnull
 	@Override
 	public EnumFacing getFacing() {
 		return facing;
 	}
-
+        //ok
 	@Override
 	public void setFacing(@Nonnull EnumFacing facing) {
 		this.facing = facing;
 	}
-
+        //ok
 	@Override
 	public int getFacingLimitation() {
 		return 2;
 	}
-
+        //ok ?
 	@Override
 	public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) {
 		return false;
 	}
-
+        //ok ?
 	@Override
 	public boolean canHammerRotate(@Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EntityLivingBase entity) {
 		return false;
 	}
-
+        //ok
 	@Override
 	public boolean canRotate(@Nonnull EnumFacing axis) {
 		return false;
