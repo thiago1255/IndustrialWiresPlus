@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-02
+ - Added TileEntity for transformer
+ - Start add name in lang files, (enUS for now)
+
 ####Version 1.8-01
  - Fixed texture of transformer
  - Added curseforge url
