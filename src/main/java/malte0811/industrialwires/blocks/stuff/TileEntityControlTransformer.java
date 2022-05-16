@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -27,7 +28,6 @@ public class TileEntityControlTransformer extends TileEntityIEBase implements IH
 	public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
                 dummy = nbt.getInteger("dummy");
 	  	facing = EnumFacing.HORIZONTALS[nbt.getInteger("facing")];
-	  	aabb = null;
    	}
 
 	@Override
