@@ -36,20 +36,13 @@ public class TileEntityControlTransformer extends TileEntityIEBase implements IH
 	   	nbt.setInteger("facing", facing.getHorizontalIndex());
   	}
 
-  	
-
-	AxisAlignedBB aabb = null;
-	@Override
-	public AxisAlignedBB getBoundingBoxNoRot() {
-		return new AxisAlignedBB(0, 0, 0, 1, 1, 2);
-	}
-
 	@Override
 	public AxisAlignedBB getBoundingBox() {
-		if (aabb==null) {
-			aabb = IBlockBoundsDirectional.super.getBoundingBox();
-		}
-		return aabb;
+		if (!isDummy()) {
+			return Block.FULL_BLOCK_AABB;
+		} else {
+                        return Block.FULL_BLOCK_AABB;
+                }
 	}
 
 	@Nonnull
