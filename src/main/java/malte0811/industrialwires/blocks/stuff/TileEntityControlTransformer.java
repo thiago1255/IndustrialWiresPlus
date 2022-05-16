@@ -17,7 +17,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityControlTransformer extends TileEntityIWBase implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile 
+public class TileEntityControlTransformer extends TileEntityIWBase implements IHasDummyBlocksIW, IBlockBoundsIW, IDirectionalTile 
 {  
           private int dummy = 0;
 	  private static final String FACING = "facing";
