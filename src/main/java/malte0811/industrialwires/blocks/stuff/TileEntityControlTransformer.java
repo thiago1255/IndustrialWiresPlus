@@ -24,18 +24,20 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IH
 	  private static final String FACING = "facing";
 	  EnumFacing facing = EnumFacing.NORTH;
 
-	@Override
-	public void writeCustomNBT(NBTTagCompound out, NBTTagCompound nbt, boolean updatePacket) {
-                nbt.setInteger("dummy", dummy);
-	   	out.setByte(FACING, (byte) facing.getHorizontalIndex());
-  	}
-
-  	@Override
-	public void readCustomNBT(NBTTagCompound in, NBTTagCompound nbt, boolean updatePacket) {;
+        @Override
+	public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
                 dummy = nbt.getInteger("dummy");
-	  	facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
+	  	facing = EnumFacing.HORIZONTALS[nbt.getInteger("facing")];
 	  	aabb = null;
    	}
+
+	@Override
+	public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+                nbt.setInteger("dummy", dummy);
+	   	nbt.setInteger("facing", facing.getHorizontalIndex());
+  	}
+
+  	
 
 	AxisAlignedBB aabb = null;
 	@Override
@@ -103,7 +105,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IH
 	{
 		for(int i = 0; i <= 1; i++)
                 {
-		       world.setBlockToAir(pos.offset(EnumFacing.RIGHT, i - dummy));
+		       world.setBlockToAir(pos.offset(EnumFacing.WEST, i - dummy));
                 }
 	}
 
