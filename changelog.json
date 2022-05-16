@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-      "1.12.2-latest": "1.8-00",
+      "1.12.2-latest": "1.8-02",
       "1.12.2-recommended": "1.7-36"
     },
     "1.10.2": {
@@ -48,6 +48,7 @@
         "1.7-35": " - Fixed a crash when placing certain items in the crafting grid",
         "1.7-36": " - Added an RGB indicator light, controlled by 3 (independent) RS signals\n - Fixed a bug allowing for unfinished control panels to be duplicated\n - Fixed insulated and uninsulated wire producing the same wire coils\n - Fixed some issues (including a crash) with the IE RS controller on dedicated servers",
         "1.8-00": " - First version by thiago1255 - Added autotransformer to test blocks",
-        "1.8-01": " - Fixed texture of transformer - Added curseforge url"
+        "1.8-01": " - Fixed texture of transformer - Added curseforge url",
+        "1.8-02": " - Added TileEntity for transformer - Start add name in lang files, (enUS for now)"
     }
 }
