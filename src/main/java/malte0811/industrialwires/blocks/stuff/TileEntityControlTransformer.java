@@ -24,14 +24,14 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IH
 	  private static final String FACING = "facing";
 	  EnumFacing facing = EnumFacing.NORTH;
 
-	  @Override
-	  public void writeNBT(NBTTagCompound out, boolean updatePacket) {
+	@Override
+	public void writeCustomNBT(NBTTagCompound out, NBTTagCompound nbt, boolean updatePacket) {
                 nbt.setInteger("dummy", dummy);
 	   	out.setByte(FACING, (byte) facing.getHorizontalIndex());
   	}
 
   	@Override
-	  public void readNBT(NBTTagCompound in, boolean updatePacket) {;
+	public void readCustomNBT(NBTTagCompound in, NBTTagCompound nbt, boolean updatePacket) {;
                 dummy = nbt.getInteger("dummy");
 	  	facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
 	  	aabb = null;
