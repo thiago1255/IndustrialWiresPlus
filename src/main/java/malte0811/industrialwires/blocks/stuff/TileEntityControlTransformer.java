@@ -2,8 +2,13 @@ package malte0811.industrialwires.blocks.stuff;
 
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
+import malte0811.industrialwires.blocks.IBlockBoundsIW;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
+import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
+import malte0811.industrialwires.blocks.IWProperties;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -11,8 +16,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityControlTransformer extends TileEntityIWBase implements IPlayerInteraction, IMarxTarget,
-		IBlockBoundsDirectional, IDirectionalTile 
+public class TileEntityControlTransformer extends TileEntityIWBase implements IBlockBoundsDirectional, IDirectionalTile 
 {  
           private int dummy = 0;
 	  private static final String FACING = "facing";
