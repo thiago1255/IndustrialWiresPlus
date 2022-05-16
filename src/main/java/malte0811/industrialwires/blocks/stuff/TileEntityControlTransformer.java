@@ -87,7 +87,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 	}
 
         @Override
-	public void placeDummies(BlockPos pos, IBlockState state, EnumFacing side, float hitX, float hitY, float hitZ)
+	public void placeDummies(IBlockState state)
 	{
 			for(int i = 1; i <= 1; i++)
 			{
@@ -97,11 +97,11 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 			}
 	}
         @Override
-	public void breakDummies(BlockPos pos, IBlockState state)
+	public void breakDummies()
 	{
 		for(int i = 0; i <= 1; i++)
                 {
-		       world.setBlockToAir(getPos().add(0, 0, -dummy).add(0, 0, i));
+		       world.setBlockToAir(pos.offset(EnumFacing.RIGHT, i - dummy));
                 }
 	}
 
