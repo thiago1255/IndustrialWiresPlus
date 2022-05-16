@@ -3,7 +3,6 @@ package malte0811.industrialwires.blocks.stuff;
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import malte0811.industrialwires.blocks.IBlockBoundsIW;
-import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import malte0811.industrialwires.blocks.IWProperties;
