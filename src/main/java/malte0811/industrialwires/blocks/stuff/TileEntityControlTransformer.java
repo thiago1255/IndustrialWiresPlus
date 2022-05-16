@@ -31,12 +31,10 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IP
 	  	aabb = null;
    	}
 
-//NEED FINISH UNDER:
 	AxisAlignedBB aabb = null;
 	@Override
 	public AxisAlignedBB getBoundingBoxNoRot() {
-		return new AxisAlignedBB(1F/16, 0, 5F/16,
-					10F/16, (hasWire?15F:14F)/16, 11F/16);
+		return new AxisAlignedBB(0, 0, 0, 1, 1, 2);
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IP
 		}
 		return aabb;
 	}
-//FINISHED UNDER THIS:
+
 	@Nonnull
 	@Override
 	public EnumFacing getFacing() {
