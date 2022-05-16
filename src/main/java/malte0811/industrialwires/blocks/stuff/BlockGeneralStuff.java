@@ -57,7 +57,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		switch (state.getValue(PROPERTY)) {
-			case CONTROL_TRANSFORMER;:
+			case CONTROL_TRANSFORMER:
 				return new TileEntityControlTransformer();
 		}
 		return null;
