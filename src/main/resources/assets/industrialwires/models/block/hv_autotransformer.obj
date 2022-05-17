@@ -1,5 +1,5 @@
 # Made in Blockbench 4.2.3 and edited later
-mtllib hv_autotransformer_new.mtl
+mtllib hv_autotransformer.mtl
 o cube
 v -0.5 1.75 0.6875
 v -0.5 1.75 0.3125
