@@ -36,7 +36,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 	AxisAlignedBB aabb = null;
 	@Override
 	public AxisAlignedBB getBoundingBoxNoRot() {
-		return new AxisAlignedBB(0, 0, 0, 16, 32, 16);
+		return new AxisAlignedBB(0, 0, 0, 2, 1, 1);
 	}
 
 	@Override
