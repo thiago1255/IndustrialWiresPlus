@@ -6,7 +6,6 @@ import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerIn
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
-import malte0811.industrialwires.hv.IMarxTarget;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
 
