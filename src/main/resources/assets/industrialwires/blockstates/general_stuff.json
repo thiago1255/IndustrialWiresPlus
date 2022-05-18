@@ -29,6 +29,13 @@
 				"model": "industrialwires:hv_autotransformer.obj"
 			}
 		},
+                "_0multiblockslave":
+		{
+			"false":{},
+			"true":{
+				"model": "builtin/generated"
+			}
+		},
 		"facing":
 		{
 			"north": { "transform": {
