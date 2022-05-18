@@ -19,22 +19,52 @@ import javax.annotation.Nonnull;
 public class TileEntityControlTransformer extends TileEntityIWBase implements IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
 	EnumFacing facing = EnumFacing.NORTH;
+        private int dummy = 0;
 
 	@Override
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
+                out.setInteger(DUMY, dummy);
 	}
 
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
 		facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
 		aabb = null;
+                dummy = in.getInteger(DUMY);
+	}
+        
+        @Override
+	public boolean isDummy() {
+		return dummy != 0;
+	}
+
+	@Override
+	public void placeDummies(IBlockState state) {
+		for (int i = 1; i <= 1; i++) {
+			BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
+			world.setBlockState(pos2, state);
+			TileEntity te = world.getTileEntity(pos2);
+			if (te instanceof TileEntityControlTransformer) {
+				((TileEntityControlTransformer) te).dummy = i;
+				((TileEntityControlTransformer) te).facing = facing;
+			}
+		}
+	}
+
+	@Override
+	public void breakDummies() {
+		for (int i = 0; i <= 1; i++) {
+			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
+				world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy));
+			}
+		}
 	}
 
 	AxisAlignedBB aabb = null;
 	@Override
 	public AxisAlignedBB getBoundingBoxNoRot() {
-		return new AxisAlignedBB(0, 0, 0, 2, 1, 1);
+		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 	}
 
 	@Override
