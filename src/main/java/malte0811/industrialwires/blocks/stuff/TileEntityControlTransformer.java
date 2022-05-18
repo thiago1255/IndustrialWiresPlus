@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
+import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
