@@ -1,5 +1,3 @@
-//NEED FIX IBLOCKSTATE ON DUMMY PLACE VOID
-
 package malte0811.industrialwires.blocks.stuff;
 
 import blusunrize.immersiveengineering.api.ApiUtils;
@@ -8,6 +6,8 @@ import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
