@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-03
+ - An internal build to test dummy blocks
+
 ####Version 1.8-02
  - Added TileEntity for transformer
  - Start add name in lang files, (enUS for now)
