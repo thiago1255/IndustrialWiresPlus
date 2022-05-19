@@ -19,12 +19,15 @@ import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IGeneralM
 import net.minecraft.block.state.IBlockState;
 
 public interface IHasDummyBlocksIW extends IGeneralMultiblock {
+        @Override
 	void placeDummies(IBlockState state);
 
+        @Override
 	void breakDummies();
 
+        @Override
 	boolean isDummy();
-
+        
 	default boolean isLogicDummy() {
 		return isDummy();
 	}
