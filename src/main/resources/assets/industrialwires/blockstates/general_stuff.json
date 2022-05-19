@@ -46,6 +46,13 @@
                                 "model": "industrialwires:HVvaristor.obj"
 		        }
 		},
+                "_0multiblockslave":
+		{
+			"false":{},
+			"true":{
+				"model": "builtin/generated"
+			}
+		},
 		"facing":
 		{
 			"north": { "transform": {
