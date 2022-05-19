@@ -17,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ITickable;
 
 
 import javax.annotation.Nonnull;
@@ -27,6 +28,14 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;
 
+        @Override
+	public void update() {
+		ApiUtils.checkForNeedlessTicking(this);
+		if (isDummy()) {
+			return;
+		}
+	}
+        
 	@Override
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
@@ -40,10 +49,12 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
                 dummy = in.getInteger(DUMY);
 	}
         
+        @Override
 	public boolean isDummy() {
 		return dummy != 0;
 	}
 
+        @Override
 	public void placeDummies(IBlockState state) {
 		for (int i = 1; i <= 1; i++) {
 			BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
@@ -55,7 +66,8 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 			}
 		}
 	}
-
+        
+        @Override
 	public void breakDummies() {
 		for (int i = 0; i <= 1; i++) {
 			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
