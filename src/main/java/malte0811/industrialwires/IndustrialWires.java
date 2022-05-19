@@ -201,7 +201,7 @@ public class IndustrialWires {
 		GameRegistry.registerTileEntity(TileEntityComponentPanel.class, new ResourceLocation(MODID, "single_component_panel"));
 		GameRegistry.registerTileEntity(TileEntityDischargeMeter.class, new ResourceLocation(MODID, "discharge_meter"));
                 GameRegistry.registerTileEntity(TileEntityControlTransformer.class, new ResourceLocation(MODID, "te_control_transformer")); 
-                GameRegistry.registerTileEntity(TileEntityControlTransformer.class, new ResourceLocation(MODID, "te_varistor"));               
+                GameRegistry.registerTileEntity(TileEntityVaristor.class, new ResourceLocation(MODID, "te_varistor"));               
 
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
 		MARKER_TEXTURE = EntityDataManager.createKey(EntityBrokenPart.class, RES_LOC_SERIALIZER);
