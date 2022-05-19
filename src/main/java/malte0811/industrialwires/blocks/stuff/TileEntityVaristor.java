@@ -1,4 +1,4 @@
-package malte0811.industrialwires.blocks.hv;
+package malte0811.industrialwires.blocks.stuff;
 
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
