@@ -8,6 +8,7 @@ import net.minecraft.util.IStringSerializable;
 
 public enum BlockTypes_GeneralStuff implements IStringSerializable{
 	CONTROL_TRANSFORMER;
+        VARISTOR;
 
 	@Override
 	public String getName() {
