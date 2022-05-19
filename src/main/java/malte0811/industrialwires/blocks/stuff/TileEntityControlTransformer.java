@@ -23,7 +23,7 @@ import net.minecraft.util.ITickable;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityControlTransformer extends TileEntityIWBase implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile {
+public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
         private static final String DUMY = "dumyy";
 	EnumFacing facing = EnumFacing.NORTH;
