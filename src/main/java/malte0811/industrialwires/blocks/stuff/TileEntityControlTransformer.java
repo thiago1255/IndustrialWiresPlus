@@ -56,25 +56,17 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	}
 
         @Override
-	public void placeDummies(IBlockState state) {
-		for (int i = 1; i <= 1; i++) {
-			BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
-			world.setBlockState(pos2, state);
-			TileEntity te = world.getTileEntity(pos2);
-			if (te instanceof TileEntityControlTransformer) {
-				((TileEntityControlTransformer) te).dummy = i;
-				((TileEntityControlTransformer) te).facing = facing;
-			}
-		}
+	public void placeDummies(BlockPos pos, IBlockState state, EnumFacing side, float hitX, float hitY, float hitZ) {
+		world.setBlockState(pos.offset(facing), state);
+		((TileEntityControlTransformer)world.getTileEntity(pos.offset(facing))).dummy = true;
+		((TileEntityControlTransformer)world.getTileEntity(pos.offset(facing))).facing = facing;
 	}
 
         @Override
 	public void breakDummies() {
-		for (int i = 0; i <= 1; i++) {
-			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
-				world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy));
-			}
-		}
+		for(int i = 0; i <= 1; i++)
+			if(world.getTileEntity(getPos().offset(facing, dummy?-1: 0).offset(facing, i)) instanceof TileEntityControlTransformer)
+				world.setBlockToAir(getPos().offset(facing, dummy?-1: 0).offset(facing, i));
 	}
 
 	AxisAlignedBB aabb = null;
