@@ -29,16 +29,14 @@ public class TileEntityVaristor extends TileEntityIWBase implements IBlockBounds
 
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
-		hasWire = in.getBoolean(HAS_WIRE);
 		facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
-		lastDischarge = in.getDouble(LAST_DISCHARGE);
 		aabb = null;
 	}
 
 	AxisAlignedBB aabb = null;
 	@Override
 	public AxisAlignedBB getBoundingBoxNoRot() {
-		return new AxisAlignedBB(0.3, 0, 0.3, 0,7, 1, 0,7);
+		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 	}
 
 	@Override
