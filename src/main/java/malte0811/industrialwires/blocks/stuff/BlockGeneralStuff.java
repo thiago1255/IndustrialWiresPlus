@@ -30,7 +30,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 
         @Override
 	protected IProperty[] getProperties() {
-		return new IProperty[] {PROPERTY, IEProperties.FACING_HORIZONTAL};
+		return new IProperty[] {PROPERTY, IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL};
 	}
 
 	@Override
