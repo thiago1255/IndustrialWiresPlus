@@ -59,6 +59,8 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		switch (state.getValue(PROPERTY)) {
 			case CONTROL_TRANSFORMER:
 				return new TileEntityControlTransformer();
+                        case VARISTOR:
+				return new TileEntityVaristor();
 		}
 		return null;
 	}
