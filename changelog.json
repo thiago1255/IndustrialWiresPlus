@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-      "1.12.2-latest": "1.8-04",
+      "1.12.2-latest": "1.8-05",
       "1.12.2-recommended": "1.7-36"
     },
     "1.10.2": {
@@ -51,6 +51,7 @@
         "1.8-01": " - Fixed texture of transformer - Added curseforge url",
         "1.8-02": " - Added TileEntity for transformer - Start add name in lang files, (enUS for now)",
         "1.8-03": " - An internal build to test dummy blocks"
-        "1.8-04": " - Added varistor block and te - Still testing dummy blocks - (Note: varistor and transformer didnt do nothingh for now)"
+        "1.8-04": " - Added varistor block and te - Still testing dummy blocks - (Note: varistor and transformer didnt do nothingh for now)",
+        "1.8-05": " - Fixed some render issues - Fixed crash when playing game - Fixed Boxes of varistor block "
     }
 }
