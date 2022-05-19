@@ -1,5 +1,10 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-04
+ - Added varistor block and te
+ - Still testing dummy blocks
+ - (Note: varistor and transformer didnt do nothingh for now)
+
 ####Version 1.8-03
  - An internal build to test dummy blocks
 
