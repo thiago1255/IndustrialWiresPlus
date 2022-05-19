@@ -35,7 +35,7 @@ public class TileEntityVaristor extends TileEntityIWBase implements IBlockBounds
 	AxisAlignedBB aabb = null;
 	@Override
 	public AxisAlignedBB getBoundingBoxNoRot() {
-		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+		return new AxisAlignedBB(0.3f, 0, 0.3f, 0.13f, 1, 0.13f);
 	}
 
 	@Override
