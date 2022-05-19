@@ -49,12 +49,11 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
                 dummy = in.getInteger(DUMY);
 	}
         
-        @Override
+
 	public boolean isDummy() {
 		return dummy != 0;
 	}
 
-        @Override
 	public void placeDummies(IBlockState state) {
 		for (int i = 1; i <= 1; i++) {
 			BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
@@ -67,7 +66,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 		}
 	}
         
-        @Override
 	public void breakDummies() {
 		for (int i = 0; i <= 1; i++) {
 			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
