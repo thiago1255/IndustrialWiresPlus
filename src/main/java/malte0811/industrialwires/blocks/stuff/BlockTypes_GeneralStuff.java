@@ -7,7 +7,7 @@ package malte0811.industrialwires.blocks.stuff;
 import net.minecraft.util.IStringSerializable;
 
 public enum BlockTypes_GeneralStuff implements IStringSerializable{
-	CONTROL_TRANSFORMER;
+	CONTROL_TRANSFORMER,
         VARISTOR;
 
 	@Override
