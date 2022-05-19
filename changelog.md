@@ -1,5 +1,10 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-05
+ - Fixed some render issues 
+ - Fixed crash when playing game
+ - Fixed Boxes of varistor block
+
 ####Version 1.8-04
  - Added varistor block and te
  - Still testing dummy blocks
