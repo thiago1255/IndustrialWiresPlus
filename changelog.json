@@ -51,5 +51,6 @@
         "1.8-01": " - Fixed texture of transformer - Added curseforge url",
         "1.8-02": " - Added TileEntity for transformer - Start add name in lang files, (enUS for now)",
         "1.8-03": " - An internal build to test dummy blocks"
+        "1.8-04": " - Added varistor block and te - Still testing dummy blocks - (Note: varistor and transformer didnt do nothingh for now)"
     }
 }
