@@ -4,6 +4,7 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
+import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
 import net.minecraft.block.Block;
@@ -22,7 +23,7 @@ import net.minecraft.util.ITickable;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityControlTransformer extends TileEntityIWBase implements IBlockBoundsDirectional, IDirectionalTile {
+public class TileEntityControlTransformer extends TileEntityIWBase implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
         private static final String DUMY = "dumyy";
 	EnumFacing facing = EnumFacing.NORTH;
@@ -49,11 +50,12 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
                 dummy = in.getInteger(DUMY);
 	}
         
-
+        @Override
 	public boolean isDummy() {
 		return dummy != 0;
 	}
 
+        @Override
 	public void placeDummies(IBlockState state) {
 		for (int i = 1; i <= 1; i++) {
 			BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
@@ -65,7 +67,8 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IB
 			}
 		}
 	}
-        
+
+        @Override
 	public void breakDummies() {
 		for (int i = 0; i <= 1; i++) {
 			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
