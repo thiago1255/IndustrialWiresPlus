@@ -61,6 +61,8 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 				return new TileEntityControlTransformer();
                         case VARISTOR:
 				return new TileEntityVaristor();
+                        default:
+				return null;
 		}
 		return null;
 	}
