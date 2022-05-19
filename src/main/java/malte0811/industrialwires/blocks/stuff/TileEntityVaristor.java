@@ -18,7 +18,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityDischargeMeter extends TileEntityIWBase implements IBlockBoundsDirectional, IDirectionalTile {
+public class TileEntityVaristor extends TileEntityIWBase implements IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
 	EnumFacing facing = EnumFacing.NORTH;
 
