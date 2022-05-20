@@ -19,6 +19,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
+import blusunrize.immersiveengineering.api.Lib;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
@@ -32,8 +34,10 @@ import javax.annotation.Nonnull;
 public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IImmersiveConnectable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
         private static final String DUMY = "dumyy";
+        private static final String RSV = "rsvalue";
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;
+        private int redstonevalue = 0;        
 
         @Override
 	public void update() {
@@ -41,12 +45,14 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		if (isDummy()) {
 			return;
 		}
+                redstonevalue = world.getRedstonePowerFromNeighbors();
 	}
         
 	@Override
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
+                out.setInteger(RSV, redstonevalue);
 	}
 
 	@Override
@@ -54,6 +60,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
 		aabb = null;
                 dummy = in.getInteger(DUMY);
+                redstonevalue = in.getInteger(RSV);
 	}
         
         @Override
