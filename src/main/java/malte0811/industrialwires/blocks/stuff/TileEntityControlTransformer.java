@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 
 public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IImmersiveConnectable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
-        private static final String DUMY = "dumyy";
+        private static final String DUMY = "dummys";
         private static final String RSV = "rsvalue";
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;
@@ -45,7 +45,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		if (isDummy()) {
 			return;
 		}
-                redstonevalue = world.getRedstonePowerFromNeighbors();
+                redstonevalue = world.getRedstonePowerFromNeighbors(pos);
 	}
         
 	@Override
@@ -85,7 +85,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public void breakDummies() {
 		for (int i = 0; i <= 1; i++) {
 			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
-				world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy));
+				world.setBlockToAir(pos.offset(EnumFacing.EAST, i - dummy));
 			}
 		}
 	}
