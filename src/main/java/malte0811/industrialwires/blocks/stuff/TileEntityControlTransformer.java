@@ -31,7 +31,7 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxH
 
 import javax.annotation.Nonnull;
 
-public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile {
+public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
         private static final String DUMY = "dummys";
         private static final String RSV = "rsvalue";
@@ -62,7 +62,17 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
                 dummy = in.getInteger(DUMY);
                 redstonevalue = in.getInteger(RSV);
 	}
-        
+
+        @Override
+	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand,
+							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote) 
+                {
+				player.sendMessage(redstonevalue);
+		}
+		return true;
+	}
+
         @Override
 	public boolean isDummy() {
 		return dummy != 0;
@@ -71,8 +81,24 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         @Override
 	public void placeDummies(IBlockState state) {
 		for (int i = 1; i <= 1; i++) {
-			BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
-			world.setBlockState(pos2, state);
+                        switch (facing) {
+			       case south:
+			              BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
+			              world.setBlockState(pos2, state);
+                                      break;
+                               case north:
+			              BlockPos pos2 = pos.offset(EnumFacing.EAST, i);
+			              world.setBlockState(pos2, state);
+                                      break;
+			       case east:
+			              BlockPos pos2 = pos.offset(EnumFacing.SOUTH, i);
+			              world.setBlockState(pos2, state);
+                                      break;
+                               case west:
+			              BlockPos pos2 = pos.offset(EnumFacing.NORTH, i);
+			              world.setBlockState(pos2, state);
+                                      break;
+			}
 			TileEntity te = world.getTileEntity(pos2);
 			if (te instanceof TileEntityControlTransformer) {
 				((TileEntityControlTransformer) te).dummy = i;
@@ -84,8 +110,27 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         @Override
 	public void breakDummies() {
 		for (int i = 0; i <= 1; i++) {
-			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
-				world.setBlockToAir(pos.offset(EnumFacing.EAST, i - dummy));
+                        switch (facing) {
+			       case south:
+			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
+				             world.setBlockToAir(pos.offset(EnumFacing.WEST, i - dummy));
+			              }
+                                      break;
+                               case north:
+			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.EAST, i - dummy)) instanceof TileEntityControlTransformer) {
+				             world.setBlockToAir(pos.offset(EnumFacing.EAST, i - dummy));
+			              }
+                                      break;
+			       case east:
+			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.SOUTH, i - dummy)) instanceof TileEntityControlTransformer) {
+				             world.setBlockToAir(pos.offset(EnumFacing.SOUTH, i - dummy));
+			              }
+                                      break;
+                               case west:
+			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.NORTH, i - dummy)) instanceof TileEntityControlTransformer) {
+				             world.setBlockToAir(pos.offset(EnumFacing.NORTH, i - dummy));
+			              }
+                                      break;
 			}
 		}
 	}
