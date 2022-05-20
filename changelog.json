@@ -52,6 +52,7 @@
         "1.8-02": " - Added TileEntity for transformer - Start add name in lang files, (enUS for now)",
         "1.8-03": " - An internal build to test dummy blocks"
         "1.8-04": " - Added varistor block and te - Still testing dummy blocks - (Note: varistor and transformer didnt do nothingh for now)",
-        "1.8-05": " - Fixed some render issues - Fixed crash when playing game - Fixed Boxes of varistor block "
+        "1.8-05": " - Fixed some render issues - Fixed crash when playing game - Fixed Boxes of varistor block ",
+        "1.8-06": " - Still testing te of transformer"
     }
 }
