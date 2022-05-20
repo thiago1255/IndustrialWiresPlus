@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-      "1.12.2-latest": "1.8-06",
+      "1.12.2-latest": "1.8-07",
       "1.12.2-recommended": "1.7-36"
     },
     "1.10.2": {
@@ -53,6 +53,7 @@
         "1.8-03": " - An internal build to test dummy blocks"
         "1.8-04": " - Added varistor block and te - Still testing dummy blocks - (Note: varistor and transformer didnt do nothingh for now)",
         "1.8-05": " - Fixed some render issues - Fixed crash when playing game - Fixed Boxes of varistor block ",
-        "1.8-06": " - Still testing te of transformer"
+        "1.8-06": " - Still testing te of transformer",
+        "1.8-07": " - Still testing te of transformer - Maybe fixed issue of some itens don be registered on game"
     }
 }
