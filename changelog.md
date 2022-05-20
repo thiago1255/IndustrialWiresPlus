@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-06
+ - Still testing te of transformer
+
 ####Version 1.8-05
  - Fixed some render issues 
  - Fixed crash when playing game
