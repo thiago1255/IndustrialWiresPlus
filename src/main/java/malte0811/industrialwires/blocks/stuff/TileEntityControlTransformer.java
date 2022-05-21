@@ -72,11 +72,11 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
                 {
-				player.sendMessage(String.format(redstonevalue));
+				player.sendMessage(new TextComponentTranslation(String.format(redstonevalue)));
 		}
 		return true;
 	}
-
+        
         @Override
 	public boolean isDummy() {
 		return dummy != 0;
@@ -95,6 +95,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 			        	((TileEntityControlTransformer) te).facing = facing;
 		                      }
                                       break;
+                               /*
                                case NORTH:
 			              BlockPos pos2 = pos.offset(EnumFacing.EAST, i);
 			              world.setBlockState(pos2, state);
@@ -122,6 +123,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 			        	((TileEntityControlTransformer) te).facing = facing;
 		                      }
                                       break;
+                               */
 			}
 		}
 	}
