@@ -74,7 +74,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
                 {
-				player.sendMessage(new TextComponentTranslation(String.format("%.1f", redstonevalue)));
+				player.sendMessage(new TextComponentTranslation(String.format("%f", redstonevalue)));
 		}
 		return true;
 	}
