@@ -68,7 +68,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
                 {
-				player.sendMessage(redstonevalue);
+				player.sendMessage(Integer.toString(redstonevalue));
 		}
 		return true;
 	}
@@ -82,27 +82,42 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public void placeDummies(IBlockState state) {
 		for (int i = 1; i <= 1; i++) {
                         switch (facing) {
-			       case south:
+			       case "south":
 			              BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
 			              world.setBlockState(pos2, state);
+                                      TileEntity te = world.getTileEntity(pos2);
+			              if (te instanceof TileEntityControlTransformer) {
+			           	((TileEntityControlTransformer) te).dummy = i;
+			        	((TileEntityControlTransformer) te).facing = facing;
+		                      }
                                       break;
-                               case north:
+                               case "north":
 			              BlockPos pos2 = pos.offset(EnumFacing.EAST, i);
 			              world.setBlockState(pos2, state);
+                                      TileEntity te = world.getTileEntity(pos2);
+			              if (te instanceof TileEntityControlTransformer) {
+			           	((TileEntityControlTransformer) te).dummy = i;
+			        	((TileEntityControlTransformer) te).facing = facing;
+		                      }
                                       break;
-			       case east:
+			       case "east":
 			              BlockPos pos2 = pos.offset(EnumFacing.SOUTH, i);
 			              world.setBlockState(pos2, state);
+                                      TileEntity te = world.getTileEntity(pos2);
+			              if (te instanceof TileEntityControlTransformer) {
+			           	((TileEntityControlTransformer) te).dummy = i;
+			        	((TileEntityControlTransformer) te).facing = facing;
+		                      }
                                       break;
-                               case west:
+                               case "west":
 			              BlockPos pos2 = pos.offset(EnumFacing.NORTH, i);
 			              world.setBlockState(pos2, state);
+                                      TileEntity te = world.getTileEntity(pos2);
+			              if (te instanceof TileEntityControlTransformer) {
+			           	((TileEntityControlTransformer) te).dummy = i;
+			        	((TileEntityControlTransformer) te).facing = facing;
+		                      }
                                       break;
-			}
-			TileEntity te = world.getTileEntity(pos2);
-			if (te instanceof TileEntityControlTransformer) {
-				((TileEntityControlTransformer) te).dummy = i;
-				((TileEntityControlTransformer) te).facing = facing;
 			}
 		}
 	}
@@ -111,22 +126,22 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public void breakDummies() {
 		for (int i = 0; i <= 1; i++) {
                         switch (facing) {
-			       case south:
+			       case "south":
 			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) {
 				             world.setBlockToAir(pos.offset(EnumFacing.WEST, i - dummy));
 			              }
                                       break;
-                               case north:
+                               case "north":
 			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.EAST, i - dummy)) instanceof TileEntityControlTransformer) {
 				             world.setBlockToAir(pos.offset(EnumFacing.EAST, i - dummy));
 			              }
                                       break;
-			       case east:
+			       case "east":
 			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.SOUTH, i - dummy)) instanceof TileEntityControlTransformer) {
 				             world.setBlockToAir(pos.offset(EnumFacing.SOUTH, i - dummy));
 			              }
                                       break;
-                               case west:
+                               case "west":
 			              if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.NORTH, i - dummy)) instanceof TileEntityControlTransformer) {
 				             world.setBlockToAir(pos.offset(EnumFacing.NORTH, i - dummy));
 			              }
