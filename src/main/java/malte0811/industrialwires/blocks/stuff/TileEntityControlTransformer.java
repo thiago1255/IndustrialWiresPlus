@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectio
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
+import malte0811.industrialwires.IndustrialWires;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
 import net.minecraft.block.Block;
@@ -73,7 +74,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
                 {
-				player.sendMessage(new TextComponentTranslation(String.format(redstonevalue)));
+				player.sendMessage(new TextComponentTranslation(String.format("%.1f", redstonevalue)));
 		}
 		return true;
 	}
