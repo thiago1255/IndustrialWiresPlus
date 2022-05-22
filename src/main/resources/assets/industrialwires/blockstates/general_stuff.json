@@ -10,7 +10,7 @@
 		}
 	},
 	"variants": {
-		"inventory,property=control_transformer": [
+		"inventory,type=control_transformer": [
 			{
 				"model": "industrialwires:hv_autotransformer.obj",
 				"transform": {
@@ -24,7 +24,7 @@
 				}
 			}
 		],
-                "inventory,property=varistor": [
+                "inventory,type=varistor": [
 			{
 				"model": "industrialwires:HVvaristor.obj",
 				"transform": {
@@ -38,7 +38,7 @@
 				}
 			}
 		],
-		"property": {
+		"type": {
 			"control_transformer": {
 				"model": "industrialwires:hv_autotransformer.obj"
 			},
