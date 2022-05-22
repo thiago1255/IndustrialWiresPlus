@@ -7,6 +7,8 @@ import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import malte0811.industrialwires.IndustrialWires;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
+import net.minecraft.util.text.TextComponentTranslation;
+import blusunrize.immersiveengineering.common.util.Utils;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -20,7 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import blusunrize.immersiveengineering.api.Lib;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
@@ -102,7 +104,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
                 {
-				player.sendMessage(new TextComponentString(String.format("%f", redstonevalue)));
+			ChatUtils.sendServerNoSpamMessages(player, new TextComponentTranslation("RS:", redstonevalue));
 		}
 		return true;
 	}
