@@ -20,7 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
 import blusunrize.immersiveengineering.api.Lib;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
@@ -74,7 +74,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
                 {
-				player.sendMessage(String.format("%f", redstonevalue));
+				player.sendMessage(new TextComponentString(String.format("%f", redstonevalue)));
 		}
 		return true;
 	}
@@ -87,19 +87,20 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         @Override
 	public void placeDummies(IBlockState state) {
 		for (int i = 1; i <= 1; i++) {
+                        BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
                         switch (facing) 
                         {
 			     case SOUTH:
-			            BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
+			            pos2 = pos.offset(EnumFacing.WEST, i);
                                     break;
                              case NORTH:
-			            BlockPos pos2 = pos.offset(EnumFacing.EAST, i);
+			            pos2 = pos.offset(EnumFacing.EAST, i);
                                     break;
 			     case EAST:
-			            BlockPos pos2 = pos.offset(EnumFacing.SOUTH, i);
+			            pos2 = pos.offset(EnumFacing.SOUTH, i);
                                     break;
                              case WEST:
-			            BlockPos pos2 = pos.offset(EnumFacing.NORTH, i);
+			            pos2 = pos.offset(EnumFacing.NORTH, i);
                                     break;
 			}
 			world.setBlockState(pos2, state);
