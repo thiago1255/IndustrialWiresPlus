@@ -32,18 +32,21 @@ import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Conn
 import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.*;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile {
+public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IPlayerInteraction, IImmersiveConnectable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
         private static final String DUMY = "dummys";
         private static final String SOUTH = "south";
         private static final String NORTH = "north";
         private static final String EAST = "east";
         private static final String WEST = "west";
+        private static final String STRG = "storage";
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;   
+        private FluxStorage energyStorage = new FluxStorage(32768, getMaxValue(), getMaxValue());
 
         @Override
 	public void update() {
@@ -85,6 +88,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
+                energyStorage.writeToNbt(out, STRG);
 	}
 
 	@Override
@@ -92,6 +96,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
 		aabb = null;
                 dummy = in.getInteger(DUMY);
+                energyStorage.readFromNBT(in.getCompoundTag(STRG));
 	}
 
         @Override
@@ -209,5 +214,36 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	@Override
 	public boolean canRotate(@Nonnull EnumFacing axis) {
 		return false;
+	}
+
+        //energy:
+
+        public int getMaxValue()
+	{
+		return maxvalue;
+	}
+        
+        @Override
+	protected boolean canTakeLV()
+	{
+		return false;
+	}
+        
+        @Override
+	protected boolean canTakeMV()
+	{
+		return false;
+	}
+
+        @Override
+	protected boolean canTakeHV()
+	{
+		return true;
+	}
+
+        @Override
+	public FluxStorage getFluxStorage()
+	{
+		return energyStorage;
 	}
 }
