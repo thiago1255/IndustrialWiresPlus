@@ -11,6 +11,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -26,6 +29,15 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 
 	public BlockGeneralStuff() {
 		super(Material.IRON, NAME);
+                setHardness(3.0F);
+		setResistance(15.0F);
+	}
+
+        @Override
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		for (int i = 0; i < TYPE.getAllowedValues().size(); i++) {
+			list.add(new ItemStack(this, 1, i));
+		}
 	}
 
         @Override
