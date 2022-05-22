@@ -1,6 +1,9 @@
 ###Minecraft 1.12.2
 
 ####Version 1.8-07
+ - Same as 1.8-07
+
+####Version 1.8-07
  - Still testing te of transformer
  - Maybe fixed issue of some itens don be registered on game
 
