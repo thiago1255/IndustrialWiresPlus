@@ -7,7 +7,7 @@ import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import malte0811.industrialwires.IndustrialWires;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
-import net.minecraft.util.text.TextComponentTranslation;
+import blusunrize.immersiveengineering.common.util.ChatUtils;
 import blusunrize.immersiveengineering.common.util.Utils;
 import malte0811.industrialwires.blocks.TileEntityIWBase;
 import net.minecraft.block.Block;
