@@ -38,15 +38,12 @@ import javax.annotation.Nonnull;
 public class TileEntityControlTransformer extends TileEntityIWBase implements ITickable, IHasDummyBlocksIW, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
         private static final String DUMY = "dummys";
-        private static final String RSV = "rsvalue";
         private static final String SOUTH = "south";
         private static final String NORTH = "north";
         private static final String EAST = "east";
         private static final String WEST = "west";
 	EnumFacing facing = EnumFacing.NORTH;
-        private int dummy = 0;
-        private int redstonevalue = 0;
-        private int maxvalue = 0;       
+        private int dummy = 0;   
 
         @Override
 	public void update() {
@@ -88,7 +85,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
-                out.setInteger(RSV, redstonevalue);
 	}
 
 	@Override
@@ -96,7 +92,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
 		aabb = null;
                 dummy = in.getInteger(DUMY);
-                redstonevalue = in.getInteger(RSV);
 	}
 
         @Override
