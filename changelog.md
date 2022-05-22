@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-09
+ - Still testing te of transformer
+ - Maybe fixed texture errors
+
 ####Version 1.8-08
  - Same as 1.8-07
 
