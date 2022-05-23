@@ -30,7 +30,8 @@ import net.minecraft.util.math.*;
 
 public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
 {
-	      private static final String FACING = "facing";
+// VARIABLES/CONS.: --------------------------------------
+        private static final String FACING = "facing";
         private static final String DUMY = "dummys";
         private static final String SOUTH = "south";
         private static final String NORTH = "north";
@@ -44,47 +45,61 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	      public boolean isDummy() { return dummy != 0; }
 
         @Override
-	      public void placeDummies(IBlockState state) {
+	public void placeDummies(IBlockState state) {
              BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
              switch (facing) {
-			           case SOUTH:
-			                pos2 = pos.offset(EnumFacing.WEST, i);
-                      break;
-                 case NORTH:
-			                pos2 = pos.offset(EnumFacing.EAST, i);
-                      break;
-			           case EAST:
-			                pos2 = pos.offset(EnumFacing.SOUTH, i);
-                      break;
-                 case WEST:
-			                pos2 = pos.offset(EnumFacing.NORTH, i);
-                      break;
-		         }
-			       world.setBlockState(pos2, state);
-             TileEntity te = world.getTileEntity(pos2);
-			       if (te instanceof TileEntityControlTransformer) {
-			           ((TileEntityControlTransformer) te).dummy = i;
-			           ((TileEntityControlTransformer) te).facing = facing;
-		        }
+		case SOUTH: pos2 = pos.offset(EnumFacing.WEST, i); break;
+                case NORTH: pos2 = pos.offset(EnumFacing.EAST, i); break;
+		case EAST: pos2 = pos.offset(EnumFacing.SOUTH, i); break;
+                case WEST: pos2 = pos.offset(EnumFacing.NORTH, i); break;
 	     }
+             world.setBlockState(pos2, state);
+             TileEntity te = world.getTileEntity(pos2);
+	     if (te instanceof TileEntityControlTransformer) {
+	         ((TileEntityControlTransformer) te).dummy = i;
+		 ((TileEntityControlTransformer) te).facing = facing;
+             }
+	}
 
         @Override
-	      public void breakDummies() {
-		        for (int i = 0; i <= 1; i++) {
+	public void breakDummies() {
+	    for (int i = 0; i <= 1; i++) {
                 switch (facing) {
-			              case SOUTH:
-			                  if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.WEST, i - dummy)); }
-                        break;
-                    case NORTH:
-			                  if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.EAST, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.EAST, i - dummy)); }
-                        break;
-			              case EAST:
-			                  if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.SOUTH, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.SOUTH, i - dummy)); }
-                        break;
-                    case WEST:
-			                  if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.NORTH, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.NORTH, i - dummy)); }
-                        break;
+                    case SOUTH: if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.WEST, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.WEST, i - dummy)); } break;
+                    case NORTH: if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.EAST, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.EAST, i - dummy)); } break;
+	            case EAST: if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.SOUTH, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.SOUTH, i - dummy)); } break;
+                    case WEST: if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.NORTH, i - dummy)) instanceof TileEntityControlTransformer) { world.setBlockToAir(pos.offset(EnumFacing.NORTH, i - dummy)); } break;
                 }
-		        }
-	      }
+            }
+       }
+// GENERAL PROPERTYES: --------------------------------------       
+       AxisAlignedBB aabb = null;
+       @Override
+       public AxisAlignedBB getBoundingBoxNoRot() { return new AxisAlignedBB(0, 0, 0, 1, 1, 1); }
+
+       @Override
+       public AxisAlignedBB getBoundingBox() 
+       {
+           if (aabb==null) { aabb = IBlockBoundsDirectional.super.getBoundingBox(); }
+	   return aabb;
+       }
+
+       @Nonnull
+       @Override
+       public EnumFacing getFacing() { return facing; }
+
+       @Override
+       public void setFacing(@Nonnull EnumFacing facing) { this.facing = facing; }
+
+       @Override
+       public int getFacingLimitation() { return 2; }
+
+       @Override
+       public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) { return false; }
+
+       @Override
+       public boolean canHammerRotate(@Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EntityLivingBase entity) { return false; }
+
+       @Override
+       public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
 }
