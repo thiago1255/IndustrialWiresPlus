@@ -101,6 +101,8 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
                 out.setInteger(WIRES, wires);
+                if(limitType!=null){ out.setString("limitType", limitType.getUniqueName()); }
+		energyStorage.writeToNBT(out);
                 
 	}
 
@@ -110,6 +112,9 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		aabb = null;
                 dummy = in.getInteger(DUMY);
                 wires = in.getInteger(WIRES);
+                if(in.hasKey("limitType")) { limitType = ApiUtils.getWireTypeFromNBT(in, "limitType"); }
+		else {limitType = null;}
+		energyStorage.readFromNBT(in);
 	}
 
         @Override
@@ -306,19 +311,14 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	}
 
         @Override
-	public void writeCustomNBT(NBTTagCompound nbt, boolean descPacket)
+	public boolean isEnergyOutput()
 	{
-                if(limitType!=null){ nbt.setString("limitType", limitType.getUniqueName()); }
-		if(descPacket){ writeConnsToNBT(nbt); }
-		energyStorage.writeToNBT(nbt);
+		return false;
 	}
 
 	@Override
-	public void readCustomNBT(NBTTagCompound nbt, boolean descPacket)
+	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
-                if(nbt.hasKey("limitType")) { limitType = ApiUtils.getWireTypeFromNBT(nbt, "limitType"); }
-		else {limitType = null;}
-		if(nbt.hasKey("connectionList")){ loadConnsFromNBT(nbt); }
-		energyStorage.readFromNBT(nbt);
+		return 0;
 	}
 }
