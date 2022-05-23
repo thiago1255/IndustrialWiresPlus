@@ -28,17 +28,30 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.*;
 
-public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
+public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile  
 {
 // VARIABLES/CONS.: --------------------------------------
-        private static final String FACING = "facing";
-        private static final String DUMY = "dummys";
         private static final String SOUTH = "south";
         private static final String NORTH = "north";
         private static final String EAST = "east";
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;
+
+// NBT DATA: --------------------------------------
+        @Override
+	public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+		super.readCustomNBT(nbt, descPacket);
+                facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
+                dummy = nbt.getInteger("dummys");
+        }
+        
+        @Override
+	public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+		super.writeCustomNBT(nbt, descPacket);
+		nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
+                nbt.setInteger("dummys", dummy);
+        }
 
 // DUMMY BLOCKS: --------------------------------------
         @Override
@@ -72,6 +85,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 }
             }
        }
+
 // GENERAL PROPERTYES: --------------------------------------       
        AxisAlignedBB aabb = null;
        @Override
@@ -102,4 +116,5 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
        @Override
        public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
+
 }
