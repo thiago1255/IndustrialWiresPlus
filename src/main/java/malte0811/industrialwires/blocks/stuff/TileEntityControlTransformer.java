@@ -1,7 +1,5 @@
 package malte0811.industrialwires.blocks.stuff;
 
-import blusunrize.immersiveengineering.api.ApiUtils;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
@@ -36,7 +34,9 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.api.TargetingInfo;
-
+import blusunrize.immersiveengineering.ImmersiveEngineering;
+import blusunrize.immersiveengineering.api.ApiUtils;
+import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 
 import static blusunrize.immersiveengineering.api.energy.wires.WireApi.canMix;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.*;
@@ -50,7 +50,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         private static final String NORTH = "north";
         private static final String EAST = "east";
         private static final String WEST = "west";
-        private static final String STRG = "storage";
         private static final String WIRES = "wires";
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;   
@@ -100,7 +99,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
                 out.setInteger(WIRES, wires);
-                out.setInteger(STRG, energyStorage);
                 
 	}
 
@@ -110,7 +108,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		aabb = null;
                 dummy = in.getInteger(DUMY);
                 wires = in.getInteger(WIRES);
-                energyStorage = in.getInteger(STRG);
 	}
 
         @Override
@@ -240,24 +237,6 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	}
         
         @Override
-	protected boolean canTakeLV()
-	{
-		return false;
-	}
-        
-        @Override
-	protected boolean canTakeMV()
-	{
-		return false;
-	}
-
-        @Override
-	protected boolean canTakeHV()
-	{
-		return true;
-	}
-
-        @Override
 	public FluxStorage getFluxStorage()
 	{
 		return energyStorage;
@@ -273,8 +252,9 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
 	{
 		if(!cableType.isEnergyWire()) { return false; }
-		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
-		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
+		if(LV_CATEGORY.equals(cableType.getCategory())) { return false; }
+		if(MV_CATEGORY.equals(cableType.getCategory())) { return false; }
+                if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
 		if(wires >= 2) { return false; }
 		return limitType==null||WireApi.canMix(cableType, limitType);
 	}
@@ -315,5 +295,23 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public Vec3d getConnectionOffset(Connection con)
 	{
 		return new Vec3d(1, 1, 1);
+	}
+
+        @Override
+	public BlockPos getConnectionMaster(WireType cableType, TargetingInfo target)
+	{
+		return getPos();
+	}
+
+        @Override
+	public void writeCustomNBT(NBTTagCompound nbt, boolean descPacket)
+	{
+		energyStorage.writeToNBT(nbt);
+	}
+
+	@Override
+	public void readCustomNBT(NBTTagCompound nbt, boolean descPacket)
+	{
+		energyStorage.readFromNBT(nbt);
 	}
 }
