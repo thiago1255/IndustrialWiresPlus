@@ -321,4 +321,10 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	{
 		return 0;
 	}
+
+        @Override
+	public boolean canConnect()
+	{
+		return true;
+	}
 }
