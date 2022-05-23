@@ -30,12 +30,16 @@ import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
+import blusunrize.immersiveengineering.api.energy.wires.*;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.*;
 import blusunrize.immersiveengineering.api.TargetingInfo;
+
+
+import static blusunrize.immersiveengineering.api.energy.wires.WireApi.canMix;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.*;
 
 import javax.annotation.Nonnull;
 
@@ -51,6 +55,8 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;   
         public int wires = 0;
+        public int redstonevalue = 0;
+        public int maxvalue = 0;
         private FluxStorage energyStorage = new FluxStorage(32768, getMaxValue(), getMaxValue());
         
         @Override
@@ -94,7 +100,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
                 out.setInteger(WIRES, wires);
-                energyStorage.writeToNbt(out, STRG);
+                out.setInteger(STRG, energyStorage);
                 
 	}
 
@@ -104,10 +110,10 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		aabb = null;
                 dummy = in.getInteger(DUMY);
                 wires = in.getInteger(WIRES);
-                energyStorage.readFromNBT(in.getCompoundTag(STRG));
+                energyStorage = in.getInteger(STRG);
 	}
 
-        /*@Override
+        @Override
 	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand,
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
@@ -115,7 +121,7 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 			ChatUtils.sendServerNoSpamMessages(player, new TextComponentTranslation("RS:", redstonevalue));
 		}
 		return true;
-	} */
+	}
         
         
 
