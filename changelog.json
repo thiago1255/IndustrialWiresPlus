@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-      "1.12.2-latest": "1.8-09",
+      "1.12.2-latest": "1.8-10",
       "1.12.2-recommended": "1.7-36"
     },
     "1.10.2": {
@@ -56,6 +56,7 @@
         "1.8-06": " - Still testing te of transformer",
         "1.8-07": " - Still testing te of transformer - Maybe fixed issue of some itens don be registered on game",
         "1.8-08": " - Same as 1.8-07",
-        "1.8-09": " - Still testing te of transformer - Maybe fixed texture errors"
+        "1.8-09": " - Still testing te of transformer - Maybe fixed texture errors",
+        "1.8-10": " - Same as 1.8-09, but now testing wires"
     }
 }
