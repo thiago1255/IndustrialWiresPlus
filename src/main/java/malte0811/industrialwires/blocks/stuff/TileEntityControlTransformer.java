@@ -37,6 +37,8 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;
+        private int redstonevalue = 0;
+        private int maxvalue = 0;
 
 // NBT DATA: --------------------------------------
         @Override
@@ -53,9 +55,42 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 nbt.setInteger("dummys", dummy);
         }
 
+// ITICKABLE: --------------------------------------
+        @Override
+ 	public void update() {
+		if (isDummy() || world.isRemote) {
+		    return;
+		}
+
+                redstonevalue = world.getRedstonePowerFromNeighbors(pos);  
+                      
+                maxvalue = ((redstonevalue + 1)*2048); 
+                //HV: 32768 cable 4096 conector
+                /*
+                divided by 16:
+                    redstone | max value
+                            0: 2048
+                            1: 4096
+                            2: 6144
+                            3: 8192
+                            4: 10240
+		            5: 12288
+		            6: 14336
+		            7: 16384
+		            8: 18432
+		            9: 20480
+	                   10: 22528
+		           11: 24576
+                           12: 26624
+		           13: 28672
+		           14: 30720
+		           15: 32768
+                */
+	}
+
 // DUMMY BLOCKS: --------------------------------------
         @Override
-	      public boolean isDummy() { return dummy != 0; }
+	public boolean isDummy() { return dummy != 0; }
 
         @Override
 	public void placeDummies(IBlockState state) {
