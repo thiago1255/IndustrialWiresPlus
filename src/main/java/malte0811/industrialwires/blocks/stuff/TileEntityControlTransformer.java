@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -57,7 +58,8 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         public int redstonevalue = 0;
         public int maxvalue = 0;
         private FluxStorage energyStorage = new FluxStorage(32768, getMaxValue(), getMaxValue());
-        
+        protected WireType limitType = null;        
+
         @Override
 	public void update() {
                 int redstonevalue = 0;
@@ -306,12 +308,17 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         @Override
 	public void writeCustomNBT(NBTTagCompound nbt, boolean descPacket)
 	{
+                if(limitType!=null){ nbt.setString("limitType", limitType.getUniqueName()); }
+		if(descPacket){ writeConnsToNBT(nbt); }
 		energyStorage.writeToNBT(nbt);
 	}
 
 	@Override
 	public void readCustomNBT(NBTTagCompound nbt, boolean descPacket)
 	{
+                if(nbt.hasKey("limitType")) { limitType = ApiUtils.getWireTypeFromNBT(nbt, "limitType"); }
+		else {limitType = null;}
+		if(nbt.hasKey("connectionList")){ loadConnsFromNBT(nbt); }
 		energyStorage.readFromNBT(nbt);
 	}
 }
