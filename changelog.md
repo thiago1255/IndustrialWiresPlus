@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-10
+ - Same as 1.8-09, but now testing wires
+
 ####Version 1.8-09
  - Still testing te of transformer
  - Maybe fixed texture errors
