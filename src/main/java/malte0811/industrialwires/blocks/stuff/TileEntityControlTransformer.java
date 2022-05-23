@@ -44,10 +44,12 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
         private static final String EAST = "east";
         private static final String WEST = "west";
         private static final String STRG = "storage";
+        private static final String WIRES = "wires";
 	EnumFacing facing = EnumFacing.NORTH;
         private int dummy = 0;   
+        public int wires = 0;
         private FluxStorage energyStorage = new FluxStorage(32768, getMaxValue(), getMaxValue());
-
+        
         @Override
 	public void update() {
                 int redstonevalue = 0;
@@ -88,7 +90,9 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		out.setByte(FACING, (byte) facing.getHorizontalIndex());
                 out.setInteger(DUMY, dummy);
+                out.setInteger(WIRES, wires);
                 energyStorage.writeToNbt(out, STRG);
+                
 	}
 
 	@Override
@@ -96,10 +100,11 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 		facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
 		aabb = null;
                 dummy = in.getInteger(DUMY);
+                wires = in.getInteger(WIRES);
                 energyStorage.readFromNBT(in.getCompoundTag(STRG));
 	}
 
-        @Override
+        /*@Override
 	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand,
 							@Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) 
@@ -107,8 +112,10 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 			ChatUtils.sendServerNoSpamMessages(player, new TextComponentTranslation("RS:", redstonevalue));
 		}
 		return true;
-	}
+	} */
         
+        
+
         @Override
 	public boolean isDummy() {
 		return dummy != 0;
@@ -245,5 +252,59 @@ public class TileEntityControlTransformer extends TileEntityIWBase implements IT
 	public FluxStorage getFluxStorage()
 	{
 		return energyStorage;
+	}
+        
+        @Override
+	public boolean allowEnergyToPass(Connection con)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
+	{
+		if(!cableType.isEnergyWire()) { return false; }
+		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
+		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
+		if(wires >= 2) { return false; }
+		return limitType==null||WireApi.canMix(cableType, limitType);
+	}
+
+	@Override
+	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other)
+	{
+		if(this.limitType==null)
+			this.limitType = cableType;
+		wires++;
+	}
+
+	@Override
+	public WireType getCableLimiter(TargetingInfo target)
+	{
+		return limitType;
+	}
+
+	@Override
+	public void removeCable(Connection connection)
+	{
+		WireType type = connection!=null?connection.cableType: null;
+		if(type==null)
+                {
+		    wires = 0;
+		}
+		else
+		{
+		    wires--;
+		}
+		if(wires <= 0)
+		{
+		    limitType = null;
+		}
+	}
+        
+        @Override
+	public Vec3d getConnectionOffset(Connection con)
+	{
+		return new Vec3d(1, 1, 1);
 	}
 }
