@@ -39,6 +39,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private int dummy = 0;
         private int redstonevalue = 0;
         private int maxvalue = 0;
+	private int wires = 0;
 
 // NBT DATA: --------------------------------------
         @Override
@@ -46,6 +47,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		super.readCustomNBT(nbt, descPacket);
                 facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
                 dummy = nbt.getInteger("dummys");
+                wires = nbt.getInteger("wires");
         }
         
         @Override
@@ -53,6 +55,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		super.writeCustomNBT(nbt, descPacket);
 		nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
                 nbt.setInteger("dummys", dummy);
+                nbt.setInteger("wires", wires);
         }
 
 // ITICKABLE: --------------------------------------
@@ -86,6 +89,86 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		           14: 30720
 		           15: 32768
                 */
+	}
+
+//WIRE STUFF: --------------------------------------
+        @Override
+        protected boolean canTakeLV() { return false; }
+        
+        @Override
+	protected boolean canTakeMV() { return false; }
+
+        @Override
+	protected boolean canTakeHV() { return true; }
+ 
+        @Override
+	protected boolean isRelay() { return false; }
+
+        @Override
+	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
+	{
+		if(!cableType.isEnergyWire()) { return false; }
+		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
+		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
+		if(wires >= 2) { return false; }
+		return limitType==null||WireApi.canMix(cableType, limitType);
+	}
+
+        @Override
+	public WireType getCableLimiter(TargetingInfo target) { return limitType; }
+
+        @Override
+	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other)
+	{
+		if(this.limitType==null) { this.limitType = cableType; }
+		wires++;
+		onConnectionChange();
+	}
+
+        @Override
+	public void removeCable(Connection connection)
+	{
+		WireType type = connection!=null?connection.cableType: null;
+		if(type==null) { wires = 0; }
+		else { wires--; }
+
+		if(wires <= 0) { limitType = null; }
+		onConnectionChange();
+	}
+
+        protected void onConnectionChange()
+	{
+		if(world!=null&&world.isRemote) {
+			endOfLeftConnection = null;
+			ImmersiveEngineering.proxy.clearConnectionModelCache();
+			// reset cached connection vertices
+			Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
+			if(conns!=null) {
+				for(Connection c : conns)
+				{
+					c.catenaryVertices = null;
+					world.markBlockRangeForRenderUpdate(c.end, c.end);
+					Set<Connection> connsThere = ImmersiveNetHandler.INSTANCE.getConnections(world, c.end);
+					if(connsThere!=null) { for(Connection c2 : connsThere) { if(c2.end.equals(pos)) { c2.catenaryVertices = null; } } }
+				}
+                        }
+		}
+		if(world!=null) { markContainingBlockForUpdate(null); }
+	}
+
+        @Override
+	public boolean moveConnectionTo(Connection c, BlockPos newEnd) {
+		if(c.end.equals(endOfLeftConnection)) { endOfLeftConnection = newEnd; }
+		return true;
+	}
+
+        @Override
+	public boolean receiveClientEvent(int id, int arg)
+	{
+		if(super.receiveClientEvent(id, arg)) { return true; }
+		// IDK WHAT IS: this.active = id==1;
+		this.markContainingBlockForUpdate(null);
+		return true;
 	}
 
 // DUMMY BLOCKS: --------------------------------------
