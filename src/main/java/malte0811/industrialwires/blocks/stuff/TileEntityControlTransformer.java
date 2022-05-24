@@ -69,7 +69,6 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private int redstonevalue = 0;
         private int maxvalue = 0;
 	private int wires = 0;
-        private int i = 0;
         private FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
 
 // NBT DATA: --------------------------------------
@@ -136,6 +135,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
  
         @Override
 	protected boolean isRelay() { return false; }
+
+        @Override
+	public boolean allowEnergyToPass(Connection con) { return false; }
 
         @Override
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
