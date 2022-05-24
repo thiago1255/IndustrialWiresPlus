@@ -15,6 +15,17 @@ import blusunrize.immersiveengineering.api.energy.wires.*;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
+import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
+import blusunrize.immersiveengineering.api.energy.wires.TileEntityImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.wires.WireType;
+import blusunrize.immersiveengineering.common.util.EnergyHelper;
+import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
+import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
+import blusunrize.immersiveengineering.common.util.Utils;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
@@ -28,7 +39,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.*;
 
-public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile  
+public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile  
 {
 // VARIABLES/CONS.: --------------------------------------
         private static final String SOUTH = "south";
@@ -40,6 +51,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private int redstonevalue = 0;
         private int maxvalue = 0;
 	private int wires = 0;
+        private FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
 
 // NBT DATA: --------------------------------------
         @Override
@@ -48,6 +60,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
                 dummy = nbt.getInteger("dummys");
                 wires = nbt.getInteger("wires");
+                energyStorage.readFromNBT(nbt);
         }
         
         @Override
@@ -56,6 +69,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
                 nbt.setInteger("dummys", dummy);
                 nbt.setInteger("wires", wires);
+		energyStorage.writeToNBT(nbt);
         }
 
 // ITICKABLE: --------------------------------------
@@ -170,6 +184,36 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		this.markContainingBlockForUpdate(null);
 		return true;
 	}
+
+        @Override
+	public Vec3d getConnectionOffset(Connection con)
+	{
+                /*
+		Matrix4 mat = new Matrix4(facing);
+		mat.translate(.5, .5, 0).rotate(Math.PI/2*rotation, 0, 0, 1).translate(-.5, -.5, 0);
+		if(endOfLeftConnection==null)
+			calculateLeftConn(mat);
+		boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
+		Vec3d ret = mat.apply(new Vec3d(isLeft?.25: .75, .5, .125));
+		return ret;
+                */
+                
+	}
+//ENERGY STRG: --------------------------------------       
+        private int getMaxStorage() { return 32768; }
+
+	private int getMaxInput() { return maxvalue; }
+
+	private int getMaxOutput() { return maxvalue; }
+        
+        @Override
+	public int getEnergyStored(EnumFacing from) { return energyStorage.getEnergyStored(); }
+
+	@Override
+	public int getMaxEnergyStored(EnumFacing from) { return getMaxStorage(); }
+        
+        @Override
+	public boolean canConnectEnergy(EnumFacing from) { return false; }
 
 // DUMMY BLOCKS: --------------------------------------
         @Override
