@@ -38,6 +38,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.*;
+import net.minecraft.block.state.IBlockState;
+
+import javax.annotation.Nonnull;
 
 public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile  
 {
