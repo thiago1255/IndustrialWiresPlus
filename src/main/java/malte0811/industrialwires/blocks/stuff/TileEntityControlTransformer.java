@@ -26,6 +26,7 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
+import blusunrize.immersiveengineering.ImmersiveEngineering;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
@@ -38,10 +39,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.*;
 import net.minecraft.block.state.IBlockState;
 
 import javax.annotation.Nonnull;
+
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
 public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile  
 {
@@ -51,10 +58,12 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private static final String EAST = "east";
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
+        public BlockPos endOfLeftConnection = null;
         private int dummy = 0;
         private int redstonevalue = 0;
         private int maxvalue = 0;
 	private int wires = 0;
+        private int i = 0;
         private FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
 
 // NBT DATA: --------------------------------------
@@ -143,7 +152,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		onConnectionChange();
 	}
 
-        @Override
+        @Override 
 	public void removeCable(Connection connection)
 	{
 		WireType type = connection!=null?connection.cableType: null;
@@ -218,6 +227,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         
         @Override
 	public boolean canConnectEnergy(EnumFacing from) { return false; }
+
+        @Override
+	public FluxStorage getFluxStorage() { return energyStorage; }
 
 // DUMMY BLOCKS: --------------------------------------
         @Override
