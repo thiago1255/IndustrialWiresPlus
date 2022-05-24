@@ -37,6 +37,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.*;
 import net.minecraft.block.state.IBlockState;
 
@@ -200,7 +201,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		Vec3d ret = mat.apply(new Vec3d(isLeft?.25: .75, .5, .125));
 		return ret;
                 */
-                
+                return new Vec3d(0.5, 1.5, 0.5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
