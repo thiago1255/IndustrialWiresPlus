@@ -254,18 +254,20 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
         @Override
 	public void placeDummies(IBlockState state) {
-             BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
-             switch (facing) {
-		case SOUTH: pos2 = pos.offset(EnumFacing.WEST, i); break;
-                case NORTH: pos2 = pos.offset(EnumFacing.EAST, i); break;
-		case EAST: pos2 = pos.offset(EnumFacing.SOUTH, i); break;
-                case WEST: pos2 = pos.offset(EnumFacing.NORTH, i); break;
-	     }
-             world.setBlockState(pos2, state);
-             TileEntity te = world.getTileEntity(pos2);
-	     if (te instanceof TileEntityControlTransformer) {
-	         ((TileEntityControlTransformer) te).dummy = i;
-		 ((TileEntityControlTransformer) te).facing = facing;
+             for (int i = 1; i <= 1; i++) {
+                 BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
+                 switch (facing) {
+		    case SOUTH: pos2 = pos.offset(EnumFacing.WEST, i); break;
+                    case NORTH: pos2 = pos.offset(EnumFacing.EAST, i); break;
+		    case EAST: pos2 = pos.offset(EnumFacing.SOUTH, i); break;
+                    case WEST: pos2 = pos.offset(EnumFacing.NORTH, i); break;
+	         }
+                 world.setBlockState(pos2, state);
+                 TileEntity te = world.getTileEntity(pos2);
+	         if (te instanceof TileEntityControlTransformer) {
+	             ((TileEntityControlTransformer) te).dummy = i;
+		     ((TileEntityControlTransformer) te).facing = facing;
+                 }
              }
 	}
 
