@@ -239,6 +239,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
         
+        @Nonnull
+	@Override
+	public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }
+        
 // DUMMY BLOCKS: --------------------------------------
         @Override
 	public boolean isDummy() { return dummy != 0; }
