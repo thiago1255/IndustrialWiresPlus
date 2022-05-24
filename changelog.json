@@ -57,6 +57,7 @@
         "1.8-07": " - Still testing te of transformer - Maybe fixed issue of some itens don be registered on game",
         "1.8-08": " - Same as 1.8-07",
         "1.8-09": " - Still testing te of transformer - Maybe fixed texture errors",
-        "1.8-10": " - Same as 1.8-09, but now testing wires"
+        "1.8-10": " - Same as 1.8-09, but now testing wires",
+        "1.8-11": " - Little build for test."
     }
 }
