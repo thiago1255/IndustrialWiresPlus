@@ -44,6 +44,11 @@ import net.minecraft.util.math.*;
 import net.minecraft.block.state.IBlockState;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
@@ -231,6 +236,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public FluxStorage getFluxStorage() { return energyStorage; }
 
+        @Override
+	public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
+        
 // DUMMY BLOCKS: --------------------------------------
         @Override
 	public boolean isDummy() { return dummy != 0; }
