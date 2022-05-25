@@ -1,16 +1,25 @@
 THIS IS A FORK OF [THIS](https://github.com/malte0811/IndustrialWires), NOT MY MOD.
 
+ALREADY ADDED:
+
+- HV control transformer (read wiki)
+- Varistor (read wiki)
+
 THINGHS I PLAN ADD IN MY MODIFICATION OF MOD:
  
--Blocks to control the Max energy on cables (Transformers, Triodes, etc.)
+-More blocks to control the Max energy on cables (Potentiometer, Triodes, etc.)
+
+-Current transformer with 2 redstone exit (to have 2 digits)
+
+-More compat with the wires that mod add.
 
 -Retifier Valve, to convert IF > EU, in a smaller scale (Need control temperature)
 
--More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon))
+-More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon), or pneumaticraft air)
 
 -MAYBE: Tesla Tower (Massive tesla coil with cool uses like energy transmission, or to summom lightning HAHAHA)
 
--More thinghs related to valves (A fusor (only decorative and/or can light a big area) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
+-More thinghs related to valves (A fusor (only decorative and/or can light a big area, or maybe to transform H in He) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
 
 
 --Credits: 
