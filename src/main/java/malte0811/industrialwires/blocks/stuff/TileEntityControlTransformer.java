@@ -65,11 +65,14 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
         public BlockPos endOfLeftConnection = null;
+        public int currentTickToNet = 0;
         private int dummy = 0;
         private int redstonevalue = 0;
         private int maxvalue = 0;
 	private int wires = 0;
         private FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
+        
+        boolean firstTick = true;
 
 // NBT DATA: --------------------------------------
         @Override
@@ -93,34 +96,30 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 // ITICKABLE: --------------------------------------
         @Override
  	public void update() {
-		if (isDummy() || world.isRemote) {
-		    return;
+                if (isDummy()) { return; }
+		if (!world.isRemote) {
+		    /*if(energyStorage.getEnergyStored() > 0) {
+	                int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
+		        if(temp > 0) {
+                            energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+		    	    markDirty();
+		        }
+		        addAvailableEnergy(-1F, null);
+		        notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
+		    }
+		    currentTickToMachine = 0;
+		    currentTickToNet = 0; */
+                  
+                    redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
+                    maxvalue = ((redstonevalue + 1)*2048); 
+                }
+                else if(firstTick) {
+		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
+		    if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
+		    firstTick = false;
 		}
-
-                redstonevalue = world.getRedstonePowerFromNeighbors(pos);  
-                      
-                maxvalue = ((redstonevalue + 1)*2048); 
-                //HV: 32768 cable 4096 conector
-                /*
-                divided by 16:
-                    redstone | max value
-                            0: 2048
-                            1: 4096
-                            2: 6144
-                            3: 8192
-                            4: 10240
-		            5: 12288
-		            6: 14336
-		            7: 16384
-		            8: 18432
-		            9: 20480
-	                   10: 22528
-		           11: 24576
-                           12: 26624
-		           13: 28672
-		           14: 30720
-		           15: 32768
-                */
+                
+                
 	}
 
 //WIRE STUFF: --------------------------------------
@@ -138,6 +137,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
         @Override
 	public boolean allowEnergyToPass(Connection con) { return false; }
+
+        @Override
+	public boolean isEnergyOutput() { return false; }
 
         @Override
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
@@ -218,7 +220,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		Vec3d ret = mat.apply(new Vec3d(isLeft?.25: .75, .5, .125));
 		return ret;
                 */
-                return new Vec3d(0.5, 1.5, 0.5);
+                return new Vec3d(0.5, 1.75, 0.5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
@@ -226,7 +228,13 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	private int getMaxInput() { return maxvalue; }
 
 	private int getMaxOutput() { return maxvalue; }
-        
+
+        @Override
+	public int outputEnergy(int amount, boolean simulate, int energyType)
+	{
+		return 0;
+	}
+
         @Override
 	public int getEnergyStored(EnumFacing from) { return energyStorage.getEnergyStored(); }
 
@@ -243,10 +251,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
         
         @Override
-	public SideConfig getEnergySideConfig(EnumFacing facing)
-	{
-		return SideConfig.NONE;
-	}
+	public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }
         
 // DUMMY BLOCKS: --------------------------------------
         @Override
@@ -315,3 +320,103 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
        public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
 
 }
+
+/*
+public int transferEnergy(int energy, boolean simulate, final int energyType) {
+	    int received = 0;
+	    if(!world.isRemote) {
+	        Set<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(this), world, true);
+		int powerLeft = Math.min(Math.min(getMaxOutput(), getMaxInput()), energy);
+		final int powerForSort = powerLeft;
+		if(outputs.isEmpty()) { return 0; }
+		int sum = 0;
+			//TreeMap to prioritize outputs close to this connector if more energy is requested than available
+			//(energy will be provided to the nearby outputs rather than some random ones)
+			Map<AbstractConnection, Integer> powerSorting = new TreeMap<>();
+			for(AbstractConnection con : outputs)
+				if(con.isEnergyOutput)
+				{
+					IImmersiveConnectable end = ApiUtils.toIIC(con.end, world);
+					if(con.cableType!=null&&end!=null)
+					{
+						int atmOut = Math.min(powerForSort, con.cableType.getTransferRate());
+						int tempR = end.outputEnergy(atmOut, true, energyType);
+						if(tempR > 0)
+						{
+							powerSorting.put(con, tempR);
+							sum += tempR;
+						}
+					}
+				}
+
+			if(sum > 0)
+				for(AbstractConnection con : powerSorting.keySet())
+				{
+					IImmersiveConnectable end = ApiUtils.toIIC(con.end, world);
+					if(con.cableType!=null&&end!=null)
+					{
+						float prio = powerSorting.get(con)/(float)sum;
+						int output = Math.min(MathHelper.ceil(powerForSort*prio), powerLeft);
+
+						int tempR = end.outputEnergy(Math.min(output, con.cableType.getTransferRate()), true, energyType);
+						int r = tempR;
+						int maxInput = getMaxInput();
+						tempR -= (int)Math.max(0, Math.floor(tempR*con.getPreciseLossRate(tempR, maxInput)));
+						end.outputEnergy(tempR, simulate, energyType);
+						HashSet<IImmersiveConnectable> passedConnectors = new HashSet<IImmersiveConnectable>();
+						float intermediaryLoss = 0;
+						//<editor-fold desc="Transfer rate and passed energy">
+						for(Connection sub : con.subConnections)
+						{
+							float length = sub.length/(float)sub.cableType.getMaxLength();
+							float baseLoss = (float)sub.cableType.getLossRatio();
+							float mod = (((maxInput-tempR)/(float)maxInput)/.25f)*.1f;
+							intermediaryLoss = MathHelper.clamp(intermediaryLoss+length*(baseLoss+baseLoss*mod), 0, 1);
+
+							int transferredPerCon = ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).getOrDefault(sub, 0);
+							transferredPerCon += r;
+							if(!simulate)
+							{
+								ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).put(sub, transferredPerCon);
+								IImmersiveConnectable subStart = ApiUtils.toIIC(sub.start, world);
+								IImmersiveConnectable subEnd = ApiUtils.toIIC(sub.end, world);
+								if(subStart!=null&&passedConnectors.add(subStart))
+									subStart.onEnergyPassthrough(r-r*intermediaryLoss);
+								if(subEnd!=null&&passedConnectors.add(subEnd))
+									subEnd.onEnergyPassthrough(r-r*intermediaryLoss);
+							}
+						}
+						//</editor-fold>
+						received += r;
+						powerLeft -= r;
+						if(powerLeft <= 0)
+							break;
+					}
+	            }
+	    }
+		return received;
+	}
+*/
+// MATHMATIC NOTES: --------------------------------------  
+
+                //HV: 32768 cable 4096 conector
+                /*
+                divided by 16:
+                    redstone | max value
+                            0: 2048
+                            1: 4096
+                            2: 6144
+                            3: 8192
+                            4: 10240
+		            5: 12288
+		            6: 14336
+		            7: 16384
+		            8: 18432
+		            9: 20480
+	                   10: 22528
+		           11: 24576
+                           12: 26624
+		           13: 28672
+		           14: 30720
+		           15: 32768
+                */
