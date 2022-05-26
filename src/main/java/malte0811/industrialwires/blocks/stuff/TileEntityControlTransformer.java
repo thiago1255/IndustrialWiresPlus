@@ -245,13 +245,14 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    return amount;
 	}
         
+/* comment will make addAvailableEnergy from Main class ?
         @Override
 	public void addAvailableEnergy(float amount, Consumer<Float> consume)
 	{
             //THIS WILL BE CHANGED SOON
 	    return amount;
         }
-
+*/
         @Override
 	public int getEnergyStored(EnumFacing from) { return energyStorage.getEnergyStored(); }
 
