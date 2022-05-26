@@ -65,7 +65,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
         public BlockPos endOfLeftConnection = null;
-        public int currentTickToNet = 0;
+        private int quantityenergy = 0;
         private int dummy = 0;
         private int redstonevalue = 0;
         private int maxvalue = 0;
@@ -100,8 +100,30 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		if (!world.isRemote) { 
                     redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                     maxvalue = ((redstonevalue + 1)*2048); 
-                    
-                    
+                    //input energy to storage:
+                    quantityenergy = 0;
+                    if (( 32768 - energyStorage.getEnergyStored() ) < maxvalue){
+                        quantityenergy = ( 32768 - energyStorage.getEnergyStored() );
+                    }
+                    else {
+                        quantityenergy = maxvalue;
+                    }
+		       //WARNING: THIS WILL CREATE ENERGY IF THERE ARE NOT ENERGY ON GRID, THIS WILL BE FIXED IN 1.8-13
+		       outputEnergy(quantityenergy, false, 0);
+                       energyStorage.modifyEnergyStored(quantityenergy);
+		       //WARNING: THIS WILL CREATE ENERGY IF THERE ARE NOT ENERGY ON GRID, THIS WILL BE FIXED IN 1.8-13
+		    //exit to grid:
+                    quantityenergy = 0;
+                    if (energyStorage.getEnergyStored() <= maxvalue){
+                        quantityenergy = energyStorage.getEnergyStored();
+                    }
+                    else {
+                        quantityenergy = maxvalue;
+                    }
+                       //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID
+		       addAvailableEnergy(quantityenergy, null);
+                       energyStorage.modifyEnergyStored(-quantityenergy);
+		       //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID           
                 }
                 else if(firstTick) {
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
@@ -129,7 +151,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	public boolean allowEnergyToPass(Connection con) { return false; }
 
         @Override
-	public boolean isEnergyOutput() { return false; }
+	public boolean isEnergyOutput() { return true; }
 
         @Override
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
@@ -219,8 +241,16 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
-		return 0;
+            //THIS WILL BE CHANGED SOON
+	    return amount;
 	}
+        
+        @Override
+	public void addAvailableEnergy(float amount, Consumer<Float> consume)
+	{
+            //THIS WILL BE CHANGED SOON
+	    return amount;
+        }
 
         @Override
 	public int getEnergyStored(EnumFacing from) { return energyStorage.getEnergyStored(); }
