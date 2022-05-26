@@ -58,6 +58,7 @@
         "1.8-08": " - Same as 1.8-07",
         "1.8-09": " - Still testing te of transformer - Maybe fixed texture errors",
         "1.8-10": " - Same as 1.8-09, but now testing wires",
-        "1.8-11": " - Little build for test."
+        "1.8-11": " - Little build for test.",
+        "1.8-12": " - Control transformer is prob. now working, but only to tests - Start pt_BR translation"
     }
 }
