@@ -97,21 +97,11 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
  	public void update() {
                 if (isDummy()) { return; }
-		if (!world.isRemote) {
-		    /*if(energyStorage.getEnergyStored() > 0) {
-	                int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
-		        if(temp > 0) {
-                            energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
-		    	    markDirty();
-		        }
-		        addAvailableEnergy(-1F, null);
-		        notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
-		    }
-		    currentTickToMachine = 0;
-		    currentTickToNet = 0; */
-                  
+		if (!world.isRemote) { 
                     redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                     maxvalue = ((redstonevalue + 1)*2048); 
+                    
+                    
                 }
                 else if(firstTick) {
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
@@ -211,11 +201,8 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public Vec3d getConnectionOffset(Connection con)
 	{
+                
                 /*
-		Matrix4 mat = new Matrix4(facing);
-		mat.translate(.5, .5, 0).rotate(Math.PI/2*rotation, 0, 0, 1).translate(-.5, -.5, 0);
-		if(endOfLeftConnection==null)
-			calculateLeftConn(mat);
 		boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
 		Vec3d ret = mat.apply(new Vec3d(isLeft?.25: .75, .5, .125));
 		return ret;
