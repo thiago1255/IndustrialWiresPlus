@@ -246,10 +246,14 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public Vec3d getConnectionOffset(Connection con)
 	{
+                /*
 		boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
 		Vec3d ret = mat.apply(new Vec3d(isLeft?.5: 1.5, 1.7, .5));
 		return ret;
+                */
                 //return new Vec3d(0.5, 1.75, 0.5);
+                boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
+                return new Vec3d(isLeft?.5: 1.5, 1.7, .5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
