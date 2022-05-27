@@ -120,32 +120,6 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		if (!world.isRemote) { 
                     redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                     maxvalue = ((redstonevalue + 1)*2048); 
-                    //input energy to storage:
-                    quantityenergy = 0;
-                    if (( 32768 - energyStorage.getEnergyStored() ) < maxvalue){
-                        quantityenergy = ( 32768 - energyStorage.getEnergyStored() );
-                    }
-                    else {
-                        quantityenergy = maxvalue;
-                    }
-		       //WARNING: THIS WILL CREATE ENERGY IF THERE ARE NOT ENERGY ON GRID, THIS WILL BE FIXED IN 1.8-13
-		       outputEnergy(quantityenergy, false, 0);
-                       energyStorage.modifyEnergyStored(+quantityenergy);
-		       //WARNING: THIS WILL CREATE ENERGY IF THERE ARE NOT ENERGY ON GRID, THIS WILL BE FIXED IN 1.8-13
-		    //exit to grid:
-                    /*
-                    quantityenergy = 0;
-                    if (energyStorage.getEnergyStored() <= maxvalue){
-                        quantityenergy = energyStorage.getEnergyStored();
-                    }
-                    else {
-                        quantityenergy = maxvalue;
-                    }
-                       //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID
-		       addAvailableEnergy(quantityenergy, null);
-                       energyStorage.modifyEnergyStored(-quantityenergy);
-		       //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID   
-                    */        
                 }
                 else if(firstTick) {
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
@@ -253,7 +227,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 */
                 //return new Vec3d(0.5, 1.75, 0.5);
                 boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
-                return new Vec3d(isLeft?.5: 1.5, 1.7, .5);
+                return new Vec3d(0.5, 1.7, isLeft?0.5: 1.5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
@@ -265,8 +239,18 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
-            //THIS WILL BE CHANGED SOON
-	    return amount;
+           //need know what is
+                if(amount > 0&&energyStorage < maximumStorage)
+		{
+			if(!simulate)
+			{
+				int rec = Math.min(maximumStorage-energyStorage, amount);
+				energyStorage += rec;
+				return rec;
+			}
+			return Math.min(maximumStorage-energyStorage, amount);
+		}
+		return 0;
 	}
         
 /* comment will make addAvailableEnergy from Main class ?
