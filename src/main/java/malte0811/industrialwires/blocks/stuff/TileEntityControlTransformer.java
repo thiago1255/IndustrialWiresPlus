@@ -110,9 +110,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                     }
 		       //WARNING: THIS WILL CREATE ENERGY IF THERE ARE NOT ENERGY ON GRID, THIS WILL BE FIXED IN 1.8-13
 		       outputEnergy(quantityenergy, false, 0);
-                       energyStorage.modifyEnergyStored(quantityenergy);
+                       energyStorage.modifyEnergyStored(+quantityenergy);
 		       //WARNING: THIS WILL CREATE ENERGY IF THERE ARE NOT ENERGY ON GRID, THIS WILL BE FIXED IN 1.8-13
 		    //exit to grid:
+                    /*
                     quantityenergy = 0;
                     if (energyStorage.getEnergyStored() <= maxvalue){
                         quantityenergy = energyStorage.getEnergyStored();
@@ -123,7 +124,8 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                        //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID
 		       addAvailableEnergy(quantityenergy, null);
                        energyStorage.modifyEnergyStored(-quantityenergy);
-		       //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID           
+		       //WARNING: THIS WILL DELETE ENERGY EVEN IF THERE ARE NO NEED OF ENERGY ON GRID   
+                    */        
                 }
                 else if(firstTick) {
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
