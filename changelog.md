@@ -1,5 +1,10 @@
 ###Minecraft 1.12.2
 
+
+####Version 1.8-13
+ - Still test CT
+ - More translation
+
 ####Version 1.8-12
  - Control transformer is prob. now working, but only to tests
  - Start pt_BR translation
