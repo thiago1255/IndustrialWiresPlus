@@ -40,12 +40,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
                 setHardness(3.0F);
 		setResistance(15.0F);
 	}
-        
-	@Override
-	public Object[] getValues() {
-		return BlockTypes_GeneralStuff.values();
-	}
-	
+      	
         @Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
