@@ -107,25 +107,25 @@ industrialwires.tooltip.narrow=Estreito
 
 industrialwires.tooltip.horizontal=Horizontal
 industrialwires.tooltip.vertical=Vertical
-industrialwires.tooltip.rsId=Redstone Connector ID: %1s
-industrialwires.tooltip.text=Text: %1s
-industrialwires.tooltip.latching=Stays on indefinitely
-industrialwires.tooltip.instantaneous=Turns off after half a second
-industrialwires.tooltip.length=Length: %1s
-industrialwires.tooltip.power_tier=Power Tier: %s
+industrialwires.tooltip.rsId=ID do conector de Redstone: %1s
+industrialwires.tooltip.text=Texto: %1s
+industrialwires.tooltip.latching=Sempre ligado
+industrialwires.tooltip.instantaneous=Desligar após 1 sec.
+industrialwires.tooltip.length=Largura: %1s
+industrialwires.tooltip.power_tier=Nível de poder: %s
 industrialwires.tooltip.energy_per_tick=%s EU/t=%s IF/t
-industrialwires.tooltip.transfer_rate=Burns at %s EU/t (%s IF/t)
-industrialwires.tooltip.input_rate=%s EU/t (%s IF/t) per connector
+industrialwires.tooltip.transfer_rate=Queima em %s EU/t (%s IF/t)
+industrialwires.tooltip.input_rate=%s EU/t (%s IF/t) por conector
 
 
-industrialwires.chat.tooLong=This coil does not contain enough wire for this connection
-industrialwires.chat.stackSize=Linking is only possible with a stack of size 1
-industrialwires.chat.marxEnergy=Last discharge was %s kJ per block
-industrialwires.chat.maxSpeed=Highest measurable speed: %s
-industrialwires.chat.currSpeed=Current speed: %s radians/second = %s RPM
+industrialwires.chat.tooLong=Essa bobina não tem fio suficiente para essa conecção
+industrialwires.chat.stackSize=Conecção somente possivel com o 'stack' de itens em 1
+industrialwires.chat.marxEnergy=A ultima discarga foi de %s kJ por bloco
+industrialwires.chat.maxSpeed=Velocidade máxima medida: %s
+industrialwires.chat.currSpeed=Velocidade atual: %s radianos/segundo = %s RPM
 
-death.attack.industrialwires.jacobs_ladder=%1$s was electrocuted by a Jacob's Ladder
-death.attack.industrialwires.marx=%1$s was struck by lightning produced by a Marx generator
+death.attack.industrialwires.jacobs_ladder=%1$s foi eletrecutado por uma 'Jacob's Ladder'
+death.attack.industrialwires.marx=%1$s foi atingido por um raio de Gerador Marx
 
 desc.immersiveengineering.info.multiblock.iw:marx_generator=Marx Generator
 desc.immersiveengineering.info.multiblock.industrialwires:mech_mb=Mechanical Multiblock
