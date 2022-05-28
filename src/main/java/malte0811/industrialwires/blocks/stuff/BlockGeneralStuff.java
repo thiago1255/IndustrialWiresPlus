@@ -44,9 +44,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
 		for (int i = 0; i < values.length; i++) {
-			if (values[i].showInCreative()) {
-				list.add(new ItemStack(this, 1, i));
-			}
+		    list.add(new ItemStack(this, 1, i));
 		}
 	}
 
