@@ -9,24 +9,15 @@
 
 package malte0811.industrialwires.blocks.stuff;
 
-import blusunrize.immersiveengineering.common.blocks.BlockIEBase.IBlockEnum;
+import malte0811.industrialwires.compat.Compat;
+import net.minecraft.util.IStringSerializable;
 
-public enum BlockTypes_GeneralStuff implements IBlockEnum{
+public enum BlockTypes_GeneralStuff implements IStringSerializable{
 	CONTROL_TRANSFORMER,
         VARISTOR;
 
 	@Override
 	public String getName() {
 		return name().toLowerCase();
-	}
-        
-        @Override
-	public int getMeta() {
-		return ordinal();
-	}
-
-	@Override
-	public boolean listForCreative() {
-		return true;
 	}
 }
