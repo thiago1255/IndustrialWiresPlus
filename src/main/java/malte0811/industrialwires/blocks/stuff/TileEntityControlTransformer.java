@@ -212,7 +212,6 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	public boolean receiveClientEvent(int id, int arg)
 	{
 		if(super.receiveClientEvent(id, arg)) { return true; }
-		// IDK WHAT IS: this.active = id==1;
 		this.markContainingBlockForUpdate(null);
 		return true;
 	}
@@ -220,12 +219,6 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public Vec3d getConnectionOffset(Connection con)
 	{
-                /*
-		boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
-		Vec3d ret = mat.apply(new Vec3d(isLeft?.5: 1.5, 1.7, .5));
-		return ret;
-                */
-                //return new Vec3d(0.5, 1.75, 0.5);
                 boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
                 return new Vec3d(0.5, 1.7, isLeft?0.5: 1.5);
 	}
@@ -239,28 +232,17 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
-           //need know what is
-                if(amount > 0&&energyStorage < maximumStorage)
-		{
-			if(!simulate)
-			{
-				int rec = Math.min(maximumStorage-energyStorage, amount);
-				energyStorage += rec;
-				return rec;
-			}
-			return Math.min(maximumStorage-energyStorage, amount);
+            if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage();){
+                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), amount);
+                if (quantityenergy > maxvalue){ quantityenergy = maxvalue; }
+	        if(!simulate){
+		    energyStorage.modifyEnergyStored(+quantityenergy);
 		}
-		return 0;
+		return quantityenergy;
+	    }
+	    return 0;
 	}
         
-/* comment will make addAvailableEnergy from Main class ?
-        @Override
-	public void addAvailableEnergy(float amount, Consumer<Float> consume)
-	{
-            //THIS WILL BE CHANGED SOON
-	    return amount;
-        }
-*/
         @Override
 	public int getEnergyStored(EnumFacing from) { return energyStorage.getEnergyStored(); }
 
