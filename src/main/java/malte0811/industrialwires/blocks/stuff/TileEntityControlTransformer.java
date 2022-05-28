@@ -88,7 +88,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private int quantityenergy = 0;
         private int dummy = 0;
         private int redstonevalue = 0;
-        private int maxvalue = 0;
+        private int maxvalue = 2048;
 	private int wires = 0;
         private FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
         
@@ -116,10 +116,25 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 // ITICKABLE: --------------------------------------
         @Override
  	public void update() {
-                if (isDummy()) { return; }
 		if (!world.isRemote) { 
-                    redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
-                    maxvalue = ((redstonevalue + 1)*2048); 
+                    if (!isDummy()) {
+                        redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
+                        maxvalue = ((redstonevalue + 1)*2048); 
+                    }
+                    if (isDummy()) {
+                        //output to grid 
+			if(energyStorage.getEnergyStored() > 0)
+			{
+			    int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
+			    if(temp > 0)
+			    {
+			        energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+				markDirty();
+			    }
+			    addAvailableEnergy(-1F, null);
+			    notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
+			}
+                    }
                 }
                 else if(firstTick) {
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
@@ -153,7 +168,6 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
 	{
 		if(!cableType.isEnergyWire()) { return false; }
-                if(isDummy()) { return false; }
 		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
 		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
 		if(wires >= 2) { return false; }
@@ -219,8 +233,11 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public Vec3d getConnectionOffset(Connection con)
 	{
+                /*
                 boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
                 return new Vec3d(0.5, 1.7, isLeft?0.5: 1.5);
+                */
+            return new Vec3d(0.5, 0.7, 0,5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
@@ -232,9 +249,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
+            if(isDummy()) { return 0; }
             if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
-                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), amount);
-                if (quantityenergy > maxvalue){ quantityenergy = maxvalue; }
+                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), amount, maxvalue);
 	        if(!simulate){
 		    energyStorage.modifyEnergyStored(+quantityenergy);
 		}
