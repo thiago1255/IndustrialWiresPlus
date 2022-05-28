@@ -1,5 +1,10 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-15
+ - Some small fixes
+ - More translation in pt_BR
+ - probably control transformer now can be used normaly !
+ 
 ####Version 1.8-14
  - Near finishing te of CT!
  - Fix again varistor not rendering
