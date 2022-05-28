@@ -12,6 +12,7 @@ package malte0811.industrialwires.blocks.stuff;
 import blusunrize.immersiveengineering.api.IEProperties;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -39,7 +40,12 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
                 setHardness(3.0F);
 		setResistance(15.0F);
 	}
-
+        
+	@Override
+	public Object[] getValues() {
+		return BlockTypes_GeneralStuff.values();
+	}
+	
         @Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
@@ -47,10 +53,10 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		    list.add(new ItemStack(this, 1, i));
 		}
 	}
-
+  
         @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {type, IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL};
+		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL, type};
 	}
 
 	@Override
@@ -98,6 +104,11 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(type, getValues()[meta]);
+	}
+	
+	@Override
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+		return state.getValue(type)==BlockTypes_GeneralStuff.CONTROL_TRANSFORMER;
 	}
 
 	@Override
