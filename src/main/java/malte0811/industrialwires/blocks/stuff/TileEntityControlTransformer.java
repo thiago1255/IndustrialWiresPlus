@@ -67,6 +67,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -236,7 +238,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
                 return new Vec3d(0.5, 1.7, isLeft?0.5: 1.5);
                 */
-            return new Vec3d(0.5, 0.7, 0,5);
+            return new Vec3d(0.5, 0.7, 0.5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
@@ -250,7 +252,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	{
             if(isDummy()) { return 0; }
             if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
-                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), amount, maxvalue);
+                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
 	        if(!simulate){
 		    energyStorage.modifyEnergyStored(+quantityenergy);
 		}
@@ -415,10 +417,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 				    if(subEnd!=null&&passedConnectors.add(subEnd)) { subEnd.onEnergyPassthrough(r-r*intermediaryLoss); }
                                 }
 			    }
+			    received += r;
+			    powerLeft -= r;
+			    if(powerLeft <= 0) { break; }
 			}
-			received += r;
-			powerLeft -= r;
-			if(powerLeft <= 0) { break; }
 		    }
 	        }
             }
