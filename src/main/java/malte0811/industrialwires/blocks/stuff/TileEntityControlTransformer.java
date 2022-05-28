@@ -232,7 +232,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
-            if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage();){
+            if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
                 quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), amount);
                 if (quantityenergy > maxvalue){ quantityenergy = maxvalue; }
 	        if(!simulate){
