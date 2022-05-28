@@ -23,13 +23,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
-	public static final PropertyEnum<BlockTypes_GeneralStuff> PROPERTY = PropertyEnum.create("type",
-			BlockTypes_GeneralStuff.class);
+	public static final PropertyEnum<BlockTypes_GeneralStuff> type = PropertyEnum.create("type",BlockTypes_GeneralStuff.class);
 	public static final String NAME = "general_stuff";
 
 	public BlockGeneralStuff() {
@@ -40,14 +42,17 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 
         @Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		for (int i = 0; i < PROPERTY.getAllowedValues().size(); i++) {
-			list.add(new ItemStack(this, 1, i));
+		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
+		for (int i = 0; i < values.length; i++) {
+			if (values[i].showInCreative()) {
+				list.add(new ItemStack(this, 1, i));
+			}
 		}
 	}
 
         @Override
-	protected IProperty[] getProperties() {
-		return new IProperty[] {PROPERTY, IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL};
+	protected IProperty<?>[] getProperties() {
+		return new IProperty[] {type, IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL};
 	}
 
 	@Override
@@ -73,7 +78,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	@Nullable
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
-		switch (state.getValue(PROPERTY)) {
+		switch (state.getValue(type)) {
 			case CONTROL_TRANSFORMER:
 				return new TileEntityControlTransformer();
                         case VARISTOR:
@@ -89,12 +94,12 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(PROPERTY).ordinal();
+		return state.getValue(type).ordinal();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(PROPERTY, getValues()[meta]);
+		return getDefaultState().withProperty(type, getValues()[meta]);
 	}
 
 	@Override
