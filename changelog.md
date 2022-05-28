@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-14
+ - Near finishing te of CT!
+ - Fix again varistor not rendering
 
 ####Version 1.8-13
  - Still test CT
