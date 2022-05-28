@@ -123,11 +123,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                     }
                     if (isDummy()) {
                         //output to grid 
-			if(energyStorage.getEnergyStored() > 0)
-			{
+			if(energyStorage.getEnergyStored() > 0){
 			    int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
-			    if(temp > 0)
-			    {
+			    if(temp > 0){
 			        energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
 				markDirty();
 			    }
@@ -140,9 +138,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
 		    if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
 		    firstTick = false;
-		}
-                
-                
+		}               
 	}
 
 //WIRE STUFF: --------------------------------------
@@ -409,14 +405,14 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 				int transferredPerCon = ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).getOrDefault(sub, 0);
 				transferredPerCon += r;
 				if(!simulate){
-				ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).put(sub, transferredPerCon);
-				IImmersiveConnectable subStart = ApiUtils.toIIC(sub.start, world);
-				IImmersiveConnectable subEnd = ApiUtils.toIIC(sub.end, world);
-				if(subStart!=null&&passedConnectors.add(subStart)) { subStart.onEnergyPassthrough(r-r*intermediaryLoss); }
-				if(subEnd!=null&&passedConnectors.add(subEnd)) { subEnd.onEnergyPassthrough(r-r*intermediaryLoss); }
+				    ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).put(sub, transferredPerCon);
+				    IImmersiveConnectable subStart = ApiUtils.toIIC(sub.start, world);
+				    IImmersiveConnectable subEnd = ApiUtils.toIIC(sub.end, world);
+				    if(subStart!=null&&passedConnectors.add(subStart)) { subStart.onEnergyPassthrough(r-r*intermediaryLoss); }
+				    if(subEnd!=null&&passedConnectors.add(subEnd)) { subEnd.onEnergyPassthrough(r-r*intermediaryLoss); }
+                                }
 			    }
 			}
-			//</editor-fold>
 			received += r;
 			powerLeft -= r;
 			if(powerLeft <= 0) { break; }
@@ -425,28 +421,4 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
             }
 	    return received;
 	}
-
 }
-// MATHMATIC NOTES: --------------------------------------  
-
-                //HV: 32768 cable 4096 conector
-                /*
-                divided by 16:
-                    redstone | max value
-                            0: 2048
-                            1: 4096
-                            2: 6144
-                            3: 8192
-                            4: 10240
-		            5: 12288
-		            6: 14336
-		            7: 16384
-		            8: 18432
-		            9: 20480
-	                   10: 22528
-		           11: 24576
-                           12: 26624
-		           13: 28672
-		           14: 30720
-		           15: 32768
-                */
