@@ -63,6 +63,9 @@ import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.common.model.TRSRTransformation;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Map;
