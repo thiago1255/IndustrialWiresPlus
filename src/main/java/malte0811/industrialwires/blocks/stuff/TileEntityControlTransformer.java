@@ -122,7 +122,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
  	public void update() {
 		if (!world.isRemote) { 
-                    int transferenergytoblock 0;
+                    int transferenergytoblock = 0;
                     if (!isDummy()) {
                         redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                         maxvalue = ((redstonevalue + 1)*2048); 
