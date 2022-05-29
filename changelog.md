@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-16
+ - More tests on TEs and blocks
+
 ####Version 1.8-15
  - Some small fixes
  - More translation in pt_BR
