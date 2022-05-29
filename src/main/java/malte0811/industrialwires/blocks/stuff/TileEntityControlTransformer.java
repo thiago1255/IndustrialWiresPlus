@@ -260,18 +260,18 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    }
 	    return 0;
 	}
-        
-        @Override
-	public int getEnergyStored(EnumFacing from) { return energyStorage.getEnergyStored(); }
 
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) { return getMaxStorage(); }
-        
         @Override
 	public boolean canConnectEnergy(EnumFacing from) { return false; }
 
         @Override
-	public FluxStorage getFluxStorage() { return energyStorage; }
+	public FluxStorage getFluxStorage() { 
+            if (isDummy()) {
+	        return energyStorage; 
+	    } else {
+	        return energyStorage;
+            } 
+	}
 
         @Override
 	public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
