@@ -100,7 +100,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	@Nonnull
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return super.getStateFromMeta(meta).withProperty(type, BlockTypes_Stuff.values()[meta]);
+		return super.getStateFromMeta(meta).withProperty(type, BlockTypes_GeneralStuff.values()[meta]);
 	}
 	
 	@Override
