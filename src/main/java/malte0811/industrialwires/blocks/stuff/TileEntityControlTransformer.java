@@ -95,7 +95,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private int redstonevalue = 0;
         private int maxvalue = 2048;
 	private int wires = 0;
-        public FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
+	public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
         
         boolean firstTick = true;
 
@@ -345,8 +345,116 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
        @Override
        public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
        
-// OUTPUT ENERGY TO GRID: ---------------------       
+// OUTPUT ENERGY TO GRID: --------------------- (copy from: https://github.com/BluSunrize/ImmersiveEngineering/blob/master/src/main/java/blusunrize/immersiveengineering/common/blocks/metal/TileEntityConnectorLV.java)      
        
+       public int transferEnergy(int energy, boolean simulate, final int energyType)
+	{
+		int received = 0;
+		if(!world.isRemote)
+		{
+			Set<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(this),
+					world, true);
+			int powerLeft = Math.min(Math.min(getMaxOutput(), getMaxInput()), energy);
+			final int powerForSort = powerLeft;
+
+			if(outputs.isEmpty())
+				return 0;
+
+			int sum = 0;
+			//TreeMap to prioritize outputs close to this connector if more energy is requested than available
+			//(energy will be provided to the nearby outputs rather than some random ones)
+			Map<AbstractConnection, Integer> powerSorting = new TreeMap<>();
+			for(AbstractConnection con : outputs)
+				if(con.isEnergyOutput)
+				{
+					IImmersiveConnectable end = ApiUtils.toIIC(con.end, world);
+					if(con.cableType!=null&&end!=null)
+					{
+						int atmOut = Math.min(powerForSort, con.cableType.getTransferRate());
+						int tempR = end.outputEnergy(atmOut, true, energyType);
+						if(tempR > 0)
+						{
+							powerSorting.put(con, tempR);
+							sum += tempR;
+						}
+					}
+				}
+
+			if(sum > 0)
+				for(AbstractConnection con : powerSorting.keySet())
+				{
+					IImmersiveConnectable end = ApiUtils.toIIC(con.end, world);
+					if(con.cableType!=null&&end!=null)
+					{
+						float prio = powerSorting.get(con)/(float)sum;
+						int output = Math.min(MathHelper.ceil(powerForSort*prio), powerLeft);
+
+						int tempR = end.outputEnergy(Math.min(output, con.cableType.getTransferRate()), true, energyType);
+						int r = tempR;
+						int maxInput = getMaxInput();
+						tempR -= (int)Math.max(0, Math.floor(tempR*con.getPreciseLossRate(tempR, maxInput)));
+						end.outputEnergy(tempR, simulate, energyType);
+						HashSet<IImmersiveConnectable> passedConnectors = new HashSet<IImmersiveConnectable>();
+						float intermediaryLoss = 0;
+						//<editor-fold desc="Transfer rate and passed energy">
+						for(Connection sub : con.subConnections)
+						{
+							float length = sub.length/(float)sub.cableType.getMaxLength();
+							float baseLoss = (float)sub.cableType.getLossRatio();
+							float mod = (((maxInput-tempR)/(float)maxInput)/.25f)*.1f;
+							intermediaryLoss = MathHelper.clamp(intermediaryLoss+length*(baseLoss+baseLoss*mod), 0, 1);
+
+							int transferredPerCon = ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).getOrDefault(sub, 0);
+							transferredPerCon += r;
+							if(!simulate)
+							{
+								ImmersiveNetHandler.INSTANCE.getTransferedRates(world.provider.getDimension()).put(sub, transferredPerCon);
+								IImmersiveConnectable subStart = ApiUtils.toIIC(sub.start, world);
+								IImmersiveConnectable subEnd = ApiUtils.toIIC(sub.end, world);
+								if(subStart!=null&&passedConnectors.add(subStart))
+									subStart.onEnergyPassthrough(r-r*intermediaryLoss);
+								if(subEnd!=null&&passedConnectors.add(subEnd))
+									subEnd.onEnergyPassthrough(r-r*intermediaryLoss);
+							}
+						}
+						//</editor-fold>
+						received += r;
+						powerLeft -= r;
+						if(powerLeft <= 0)
+							break;
+					}
+				}
+		}
+		return received;
+	}
+
+	private void notifyAvailableEnergy(int energyStored, @Nullable Set<AbstractConnection> outputs)
+	{
+		if(outputs==null)
+			outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(pos, world, true);
+		for(AbstractConnection con : outputs)
+		{
+			IImmersiveConnectable end = ApiUtils.toIIC(con.end, world);
+			if(con.cableType!=null&&end!=null&&end.allowEnergyToPass(null))
+			{
+				Pair<Float, Consumer<Float>> e = getEnergyForConnection(con);
+				end.addAvailableEnergy(e.getKey(), e.getValue());
+			}
+		}
+	}
+
+	private Pair<Float, Consumer<Float>> getEnergyForConnection(@Nullable AbstractConnection c)
+	{
+		float loss = c!=null?c.getAverageLossRate(): 0;
+		float max = (1-loss)*energyStorage.getEnergyStored();
+		Consumer<Float> extract = (energy) -> {
+			energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
+		};
+		return new ImmutablePair<>(max, extract);
+	}
+
+
+       /*
        private void notifyAvailableEnergy(int energyStored, @Nullable Set<AbstractConnection> outputs){
            if(outputs==null) { outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(pos, world, true); }
 	   for(AbstractConnection con : outputs){
@@ -425,5 +533,5 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	        }
             }
 	    return received;
-	}
+	}*/
 }
