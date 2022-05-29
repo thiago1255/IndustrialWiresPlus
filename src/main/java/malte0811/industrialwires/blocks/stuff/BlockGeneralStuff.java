@@ -97,15 +97,16 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		return state.getValue(type).ordinal();
 	}
 
+	@Nonnull
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(type, getValues()[meta]);
+		return super.getStateFromMeta(meta).withProperty(type, BlockTypes_Stuff.values()[meta]);
 	}
 	
-	/*@Override
+	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
 		return state.getValue(type)==BlockTypes_GeneralStuff.CONTROL_TRANSFORMER;
-	} */
+	}
 
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
