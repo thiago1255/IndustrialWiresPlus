@@ -95,7 +95,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private int redstonevalue = 0;
         private int maxvalue = 2048;
 	private int wires = 0;
-        private FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
+        public FluxStorage energyStorage = new FluxStorage(getMaxStorage(), getMaxInput(), getMaxOutput());
         
         boolean firstTick = true;
 
@@ -122,24 +122,20 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
  	public void update() {
 		if (!world.isRemote) { 
-                    int transferenergytoblock = 0;
                     if (!isDummy()) {
                         redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                         maxvalue = ((redstonevalue + 1)*2048); 
-                        transferenergytoblock = Math.min(energyStorage.getEnergyStored(), maxvalue);
-                        energyStorage.modifyEnergyStored(-transferenergytoblock);
                     }
                     if (isDummy()) {
-		        energyStorage.modifyEnergyStored(+transferenergytoblock);
                         //output to grid 
-			if(energyStorage.getEnergyStored() > 0){
-			    int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
+			if(this.energyStorage.getEnergyStored() > 0){
+			    int temp = this.transferEnergy(this.energyStorage.getEnergyStored(), true, 0);
 			    if(temp > 0){
-			        energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+			        this.energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
 				markDirty();
 			    }
 			    addAvailableEnergy(-1F, null);
-			    notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
+			    notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
 			}
                     }
                 }
@@ -255,10 +251,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
             if(isDummy()) { return 0; }
-            if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
-                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
+            if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
+                quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
 	        if(!simulate){
-		    energyStorage.modifyEnergyStored(+quantityenergy);
+		    this.energyStorage.modifyEnergyStored(+quantityenergy);
 		}
 		return quantityenergy;
 	    }
@@ -270,11 +266,11 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
         @Override
 	public FluxStorage getFluxStorage() { 
-            if (isDummy()) {
-	        return energyStorage; 
-	    } else {
-	        return energyStorage;
-            } 
+           if(dummy > 0){
+	       TileEntity te = world.getTileEntity(getPos().add(0, -dummy, 0));
+	       if(te instanceof TileEntityControlTransformer) { return ((TileEntityControlTransformer)te).getFluxStorage(); }
+	       }
+	       return energyStorage;
 	}
 
         @Override
@@ -364,9 +360,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
        private Pair<Float, Consumer<Float>> getEnergyForConnection(@Nullable AbstractConnection c) {
            float loss = c!=null?c.getAverageLossRate(): 0;
-	   float max = (1-loss)*energyStorage.getEnergyStored();
+	   float max = (1-loss)*this.energyStorage.getEnergyStored();
 	   Consumer<Float> extract = (energy) -> {
-	       energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
+	       this.energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
 	   };
 	   return new ImmutablePair<>(max, extract);
        }
