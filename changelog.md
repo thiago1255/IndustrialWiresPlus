@@ -1,5 +1,10 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-17
+ - More translation in pt_BR.
+ - Transformer now can be used !
+ 
+
 ####Version 1.8-16
  - More tests on TEs and blocks
 
