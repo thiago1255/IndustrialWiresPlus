@@ -90,6 +90,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
         public BlockPos endOfLeftConnection = null;
+	public int currentTickToNet = 0;
         private int quantityenergy = 0;
         private int dummy = 0;
         private int redstonevalue = 0;
@@ -138,6 +139,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 			    notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
 			}
                     }
+		    currentTickToNet = 0;
                 }
                 else if(firstTick) {
 		    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
@@ -250,12 +252,25 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType)
 	{
-            if(isDummy()) { return 0; }
             if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
+	    
                 quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
-	        if(!simulate){
+                if(isDummy()) {
+		    int numberidk = Math.min(getMaxInput()-currentTickToNet, quantityenergy);
+		    if(numberidk <= 0) { return 0; }
+		    numberidk = Math.min(getMaxInput(), quantityenergy);
+		    numberidk = Math.min(getMaxOutput()-this.energyStorage.getEnergyStored(), numberidk);
+                    if(numberidk <= 0) { return 0; }
+		    if(!simulate) {
+			notifyAvailableEnergy(numberidk, null);
+			currentTickToNet += numberidk;
+			markDirty();
+		    }
+		}
+		if(!simulate){
 		    this.energyStorage.modifyEnergyStored(+quantityenergy);
 		}
+                if(isDummy()) { return 0; }
 		return quantityenergy;
 	    }
 	    return 0;
@@ -285,7 +300,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         
         @Override
 	public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }
-        
+	       
 // DUMMY BLOCKS: --------------------------------------
         @Override
 	public boolean isDummy() { return dummy != 0; }
