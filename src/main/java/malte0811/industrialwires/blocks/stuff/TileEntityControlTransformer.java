@@ -171,7 +171,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		if(!cableType.isEnergyWire()) { return false; }
 		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
 		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
-		if(wires >= 2) { return false; }
+		if(wires >= 1) { return false; }
 		return limitType==null||WireApi.canMix(cableType, limitType);
 	}
 
@@ -238,7 +238,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 boolean isLeft = con.end.equals(endOfLeftConnection)||con.start.equals(endOfLeftConnection);
                 return new Vec3d(0.5, 1.7, isLeft?0.5: 1.5);
                 */
-            return new Vec3d(0.5, 0.7, 0.5);
+            return new Vec3d(0.5, 1.7, 0.5);
 	}
 //ENERGY STRG: --------------------------------------       
         private int getMaxStorage() { return 32768; }
@@ -267,10 +267,17 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public FluxStorage getFluxStorage() { 
            if(dummy > 0){
-	       TileEntity te = world.getTileEntity(getPos().add(0, -dummy, 0));
-	       if(te instanceof TileEntityControlTransformer) { return ((TileEntityControlTransformer)te).getFluxStorage(); }
+               BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
+               switch (facing) {
+		   case SOUTH: pos2 = pos.offset(EnumFacing.WEST, dummy); break;
+                   case NORTH: pos2 = pos.offset(EnumFacing.EAST, dummy); break;
+		   case EAST: pos2 = pos.offset(EnumFacing.SOUTH, dummy); break;
+                   case WEST: pos2 = pos.offset(EnumFacing.NORTH, dummy); break;
 	       }
-	       return energyStorage;
+               TileEntity te = world.getTileEntity(pos2);
+	       if(te instanceof TileEntityControlTransformer) { return ((TileEntityControlTransformer)te).getFluxStorage(); }
+	   }
+	   return energyStorage;
 	}
 
         @Override
