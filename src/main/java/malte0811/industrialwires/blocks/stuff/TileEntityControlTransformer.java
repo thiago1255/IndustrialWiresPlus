@@ -453,9 +453,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	private Pair<Float, Consumer<Float>> getEnergyForConnection(@Nullable AbstractConnection c)
 	{
 		float loss = c!=null?c.getAverageLossRate(): 0;
-		float max = (1-loss)*energyStorage.getEnergyStored();
+		float max = (1-loss)*this.energyStorage.getEnergyStored();
 		Consumer<Float> extract = (energy) -> {
-			energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
+			this.energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
 		};
 		return new ImmutablePair<>(max, extract);
 	}
