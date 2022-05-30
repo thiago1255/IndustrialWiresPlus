@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-        "1.12.2-latest": "1.8-16",
+        "1.12.2-latest": "1.8-17",
         "1.12.2-recommended": "1.7-36"
     },
     "1.10.2": {
@@ -63,6 +63,7 @@
         "1.8-13": " - Still test CT - More translation",
         "1.8-14": " - Near finishing te of CT! - Fix again varistor not rendering",
         "1.8-15": " - Some small fixes - More translation in pt_BR - probably control transformer now can be used normaly !",
-        "1.8-16": " - More tests on TEs and blocks"
+        "1.8-16": " - More tests on TEs and blocks",
+        "1.8-17": " - More translation in pt_BR. - Transformer now can be used !"
     }
 }
