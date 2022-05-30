@@ -267,7 +267,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public FluxStorage getFluxStorage() { 
            if(dummy > 0){
-               BlockPos pos2 = pos.offset(EnumFacing.WEST, i);
+               BlockPos pos2 = pos.offset(EnumFacing.WEST, dummy);
                switch (facing) {
 		   case SOUTH: pos2 = pos.offset(EnumFacing.WEST, dummy); break;
                    case NORTH: pos2 = pos.offset(EnumFacing.EAST, dummy); break;
