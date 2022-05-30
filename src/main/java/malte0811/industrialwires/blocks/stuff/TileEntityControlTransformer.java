@@ -91,11 +91,11 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         EnumFacing facing = EnumFacing.NORTH;
         public BlockPos endOfLeftConnection = null;
 	public int currentTickToNet = 0;
-        private int quantityenergy = 0;
+        public int quantityenergy = 0;
         private int dummy = 0;
-        private int redstonevalue = 0;
-        private int maxvalue = 2048;
-	private int wires = 0;
+        public int redstonevalue = 0;
+        public int maxvalue = 2048;
+	public int wires = 0;
 	public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
         
         boolean firstTick = true;
@@ -162,7 +162,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	protected boolean isRelay() { return false; }
 
         @Override
-	public boolean allowEnergyToPass(Connection con) { return false; }
+	public boolean allowEnergyToPass(Connection con) {
+	    if(isDummy()) {return true;}
+	    if(!isDummy()) {return false;}
+	}
 
         @Override
 	public boolean isEnergyOutput() { return true; }
@@ -170,10 +173,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
 	{
+	        if(wires >= 1) { return false; }
 		if(!cableType.isEnergyWire()) { return false; }
 		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
 		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
-		if(wires >= 1) { return false; }
 		return limitType==null||WireApi.canMix(cableType, limitType);
 	}
 
