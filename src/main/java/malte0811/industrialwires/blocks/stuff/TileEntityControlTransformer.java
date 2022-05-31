@@ -246,34 +246,20 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
             return new Vec3d(0.5, 1.7, 0.5);
 	}
 //ENERGY STRG: --------------------------------------       
-        private int getMaxStorage() { return 32768; }
+        public int getMaxStorage() { return 32768; }
 
-	private int getMaxInput() { return maxvalue; }
+	public int getMaxInput() { return maxvalue; }
 
-	private int getMaxOutput() { return maxvalue; }
+	public int getMaxOutput() { return maxvalue; }
 
         @Override
-	public int outputEnergy(int amount, boolean simulate, int energyType)
-	{
+	public int outputEnergy(int amount, boolean simulate, int energyType){
+	    if(isDummy()) { return 0; }
             if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
-	    
                 quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
-                if(isDummy()) {
-		    int numberidk = Math.min(getMaxInput()-currentTickToNet, quantityenergy);
-		    if(numberidk <= 0) { return 0; }
-		    numberidk = Math.min(getMaxInput(), quantityenergy);
-		    numberidk = Math.min(getMaxOutput()-this.energyStorage.getEnergyStored(), numberidk);
-                    if(numberidk <= 0) { return 0; }
-		    if(!simulate) {
-			notifyAvailableEnergy(numberidk, null);
-			currentTickToNet += numberidk;
-			markDirty();
-		    }
-		}
 		if(!simulate){
 		    this.energyStorage.modifyEnergyStored(+quantityenergy);
 		}
-                if(isDummy()) { return 0; }
 		return quantityenergy;
 	    }
 	    return 0;
@@ -478,6 +464,12 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		return new ImmutablePair<>(max, extract);
 	}
 
+        @Nullable
+	@Override
+	protected Pair<Float, Consumer<Float>> getOwnEnergy()
+	{
+		return getEnergyForConnection(null);
+	}
 
        /*
        private void notifyAvailableEnergy(int energyStored, @Nullable Set<AbstractConnection> outputs){
