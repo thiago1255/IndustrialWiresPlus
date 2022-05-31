@@ -164,7 +164,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public boolean allowEnergyToPass(Connection con) {
 	    if(isDummy()) {return true;}
-	    if(!isDummy()) {return false;}
+	    return false;
 	}
 
         @Override
@@ -173,7 +173,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset)
 	{
-	        if(wires >= 1) { return false; }
+	        if(wires >= 2) { return false; }
 		if(!cableType.isEnergyWire()) { return false; }
 		if(MV_CATEGORY.equals(cableType.getCategory())&&!canTakeMV()) { return false; }
 		if(LV_CATEGORY.equals(cableType.getCategory())&&!canTakeLV()) { return false; }
