@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-18
+ - Just a test version
+ 
 ####Version 1.8-17
  - More translation in pt_BR.
  - Transformer now can be used !
