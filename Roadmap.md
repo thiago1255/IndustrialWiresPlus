@@ -7,6 +7,7 @@
  - AC current transformer (same of IE's one, but u can connect redstone to output of values (2 channels also))
 ### 1.10: ###
  - Mercury Arc Valve (used to convert AC > DC )
+ - A modulable Switch for LV AC (to control areas with a lot of lamps)
 ### 2.0 ###
  - More Mechanical Multiblock parts (pneumaticcraft compat, IE's rotational energy, etc.)
 ### 2.1 (or maybe 2.0) ###
