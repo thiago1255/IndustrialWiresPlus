@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-        "1.12.2-latest": "1.8-17",
+        "1.12.2-latest": "1.8-19",
         "1.12.2-recommended": "1.7-36"
     },
     "1.10.2": {
@@ -65,6 +65,7 @@
         "1.8-15": " - Some small fixes - More translation in pt_BR - probably control transformer now can be used normaly !",
         "1.8-16": " - More tests on TEs and blocks",
         "1.8-17": " - More translation in pt_BR. - Transformer now can be used !",
-        "1.8-18": " - Just a test version"
+        "1.8-18": " - Just a test version",
+        "1.8-19": " - Still testing - Also preparing for next versions"
     }
 }
