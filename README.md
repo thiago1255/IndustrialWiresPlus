@@ -5,7 +5,7 @@ ALREADY ADDED:
 - HV control transformer (read wiki)
 - Varistor (read wiki)
 
-THINGHS I PLAN ADD IN MY MODIFICATION OF MOD:
+THINGHS I PLAN +- ADD IN MY MODIFICATION OF MOD:
  
 -More blocks to control the Max energy on cables (Potentiometer, Triodes, etc.)
 
