@@ -125,6 +125,8 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
                 redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                 maxvalue = ((redstonevalue + 1)*2048); 
                 energyStorage.modifyEnergyStored(+maxvalue);
+		getMaxInput();
+		getMaxOutput();
 			          if(energyStorage.getEnergyStored() > 0){
 			              int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
 			              if(temp > 0){
