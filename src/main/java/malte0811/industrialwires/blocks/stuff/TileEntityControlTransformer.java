@@ -94,9 +94,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         private static final String WEST = "west";
         EnumFacing facing = EnumFacing.NORTH;
         public BlockPos endOfLeftConnection = null;
-        protected int redstonevalue = 0;
-        protected int maxvalue = 2048;
-	      public int wires = 0;
+        public int redstonevalue = 0;
+        public int maxvalue = 2048;
+	public int wires = 0;
         public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
         
         boolean firstTick = true;
