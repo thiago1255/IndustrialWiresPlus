@@ -304,7 +304,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 		{
 			Set<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(this),
 					world, true);
-			int powerLeft = Math.min(Math.min(getMaxOutput(), getMaxInput()), energy);
+			int powerLeft = Math.min(maxvalue, energy);
 			final int powerForSort = powerLeft;
 
 			if(outputs.isEmpty())
@@ -341,7 +341,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
 						int tempR = end.outputEnergy(Math.min(output, con.cableType.getTransferRate()), true, energyType);
 						int r = tempR;
-						int maxInput = getMaxInput();
+						int maxInput = maxvalue;
 						tempR -= (int)Math.max(0, Math.floor(tempR*con.getPreciseLossRate(tempR, maxInput)));
 						end.outputEnergy(tempR, simulate, energyType);
 						HashSet<IImmersiveConnectable> passedConnectors = new HashSet<IImmersiveConnectable>();
