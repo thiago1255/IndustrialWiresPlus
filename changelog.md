@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-20
+ - Maybe CT now work
+ - Fixed offset of varistor
+
 ####Version 1.8-19
  - Still testing
  - Also preparing for next versions
