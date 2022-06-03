@@ -14,8 +14,8 @@ import net.minecraft.util.IStringSerializable;
 
 public enum BlockTypes_GeneralStuff implements IStringSerializable{
 	CONTROL_TRANSFORMER,
-	DC_BREAKER,
-        DC_VOLTMETER,
+	//DC_BREAKER,
+        //DC_VOLTMETER,
         VARISTOR;
 
 	@Override
