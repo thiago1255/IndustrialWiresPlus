@@ -85,7 +85,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
-public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
+public class TileEntityControlTransformer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
 {
 // VARIABLES/CONS.: --------------------------------------
         private static final String SOUTH = "south";
