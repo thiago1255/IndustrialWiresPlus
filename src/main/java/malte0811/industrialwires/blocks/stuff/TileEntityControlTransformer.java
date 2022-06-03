@@ -128,7 +128,6 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    if (!world.isRemote) { 
                 redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                 maxvalue = ((redstonevalue + 1)*2048); 
-                energyStorage.modifyEnergyStored(+maxvalue);
 		if(energyStorage.getEnergyStored() > 0){
 		    int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
 		    if(temp > 0){
@@ -154,10 +153,10 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    if(!isDummy()) {
 	        return 0; 
 	    }
-            if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
-                quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), Math.min(amount, quantityenergy));
+            if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
+                quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, quantityenergy));
 		if(!simulate){
-		    energyStorage.modifyEnergyStored(+quantityenergy);
+		    this.energyStorage.modifyEnergyStored(+quantityenergy);
 		}
 		return quantityenergy;
 	    }
