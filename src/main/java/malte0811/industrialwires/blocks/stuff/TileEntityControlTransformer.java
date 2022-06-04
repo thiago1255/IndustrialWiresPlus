@@ -124,8 +124,8 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 // ITICKABLE: --------------------------------------
         @Override
  	public void update() {
-	    if (isDummy()) { return; }
 	    if (!world.isRemote) { 
+	        if (isDummy()) { return; }
                 redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                 maxvalue = ((redstonevalue + 1)*2048); 
 		if(this.energyStorage.getEnergyStored() > 0){
@@ -149,16 +149,15 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 
         @Override
 	public int outputEnergy(int amount, boolean simulate, int energyType){
-	    int quantityenergy = maxvalue;
-	    if(!isDummy()) {
-	        return 0; 
-	    }
-            if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
-                quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, quantityenergy));
-		if(!simulate){
-		    this.energyStorage.modifyEnergyStored(+quantityenergy);
-		}
-		return quantityenergy;
+	    int quantityenergy = this.maxvalue;
+	    if(isDummy()){
+                if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
+                    quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, quantityenergy));
+		    if(!simulate){
+		        this.energyStorage.modifyEnergyStored(+quantityenergy);
+		    }
+		    return quantityenergy;
+	        }
 	    }
 	    return 0;
 	}
