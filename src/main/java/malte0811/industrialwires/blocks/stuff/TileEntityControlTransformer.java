@@ -128,14 +128,14 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    if (!world.isRemote) { 
                 redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
                 maxvalue = ((redstonevalue + 1)*2048); 
-		if(energyStorage.getEnergyStored() > 0){
-		    int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
+		if(this.energyStorage.getEnergyStored() > 0){
+		    int temp = this.transferEnergy(this.energyStorage.getEnergyStored(), true, 0);
 		    if(temp > 0){
-		        energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+		        this.energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
 			markDirty();
 		    }
 		    addAvailableEnergy(-1F, null);
-		    notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
+		    notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
 		}
             }
             else if(firstTick) {
@@ -413,9 +413,9 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	private Pair<Float, Consumer<Float>> getEnergyForConnection(@Nullable AbstractConnection c)
 	{
 		float loss = c!=null?c.getAverageLossRate(): 0;
-		float max = (1-loss)*energyStorage.getEnergyStored();
+		float max = (1-loss)*this.energyStorage.getEnergyStored();
 		Consumer<Float> extract = (energy) -> {
-			energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
+			this.energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
 		};
 		return new ImmutablePair<>(max, extract);
 	}
