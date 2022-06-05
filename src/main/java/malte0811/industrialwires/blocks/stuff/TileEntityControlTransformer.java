@@ -97,7 +97,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	private int redstonevalue = 0;
         public BlockPos endOfLeftConnection = null;
         public int maxvalue = 2048;
-	public int wires = 0;
+	private boolean wireenergy = false;
         public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
         
         boolean firstTick = true;
@@ -108,7 +108,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    super.readCustomNBT(nbt, descPacket);
             facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
 	    dummy = nbt.getInteger("dummys");
-            wires = nbt.getInteger("wires");
+            wireenergy = nbt.getBoolean("wireenergy");
             energyStorage.readFromNBT(nbt);
         }
         
@@ -117,7 +117,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
 	    super.writeCustomNBT(nbt, descPacket);
 	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
 	    nbt.setInteger("dummys", dummy);
-            nbt.setInteger("wires", wires);
+            nbt.setBoolean("wireenergy", wireenergy);
             energyStorage.writeToNBT(nbt);
         }
         
@@ -125,17 +125,18 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
  	public void update() {
 	    if (!world.isRemote) { 
-	        if (isDummy()) { return; }
-                redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
-                maxvalue = ((redstonevalue + 1)*2048); 
-		if(this.energyStorage.getEnergyStored() > 0){
-		    int temp = this.transferEnergy(this.energyStorage.getEnergyStored(), true, 0);
-		    if(temp > 0){
-		        this.energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
-			markDirty();
+	        if (!isDummy()){
+                    redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
+                    maxvalue = ((redstonevalue + 1)*2048); 
+		    if(this.energyStorage.getEnergyStored() > 0){
+		        int temp = this.transferEnergy(this.energyStorage.getEnergyStored(), true, 0);
+		        if(temp > 0){
+		            this.energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+			    markDirty();
+		        }
+		        addAvailableEnergy(-1F, null);
+		        notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
 		    }
-		    addAvailableEnergy(-1F, null);
-		    notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
 		}
             }
             else if(firstTick) {
@@ -211,7 +212,7 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset){
 	    if(!cableType.isEnergyWire()&&!REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
-	    if(wires >= 2) { return false; }
+	    if(wireenergy) { return false; }
 	    return limitType==null||WireApi.canMix(cableType, limitType);
 	}
 
@@ -221,16 +222,16 @@ public class TileEntityControlTransformer extends TileEntityImmersiveConnectable
         @Override
 	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other){
 	    if(this.limitType==null) { this.limitType = cableType; }
-	    wires++;
+	    wireenergy = true;
 	}
 
         @Override 
 	public void removeCable(Connection connection){
 	    WireType type = connection!=null?connection.cableType: null;
-	    if(type==null) { wires = 0; }
-	    else { wires--; }
+	    if(type==null) { wireenergy = false; }
+	    else { wireenergy = false; }
 
-	    if(wires <= 0) { limitType = null; }
+	    if(!wireenergy) { limitType = null; }
 	}
 
         @Override
