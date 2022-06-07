@@ -1,5 +1,5 @@
 /*
-|| (do what u want with this, but give credits to:)
+|| UNDER 'GNU General Public License v3.0'
 || File made by thiago1255 based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
 ||
 || (check github for credits of this mods:)
@@ -79,7 +79,9 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		switch (state.getValue(type)) {
-			case CONTROL_TRANSFORMER:
+			case CONTROL_TRANSFORMER_RS:
+				return new ();
+                        case CONTROL_TRANSFORMER_NORMAL:
 				return new TileEntityControlTransformer();
                         case VARISTOR:
 				return new TileEntityVaristor();
