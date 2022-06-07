@@ -1,5 +1,5 @@
 /*
-|| (do what u want with this, but give credits to:)
+|| UNDER 'GNU General Public License v3.0'
 || File made by thiago1255 based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
 ||
 || (check github for credits of this mods:)
@@ -13,7 +13,8 @@ import malte0811.industrialwires.compat.Compat;
 import net.minecraft.util.IStringSerializable;
 
 public enum BlockTypes_GeneralStuff implements IStringSerializable{
-	CONTROL_TRANSFORMER,
+	CONTROL_TRANSFORMER_RS,
+	CONTROL_TRANSFORMER_NORMAL,
 	//DC_BREAKER,
         //DC_VOLTMETER,
         VARISTOR;
