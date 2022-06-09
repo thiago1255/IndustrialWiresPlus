@@ -11,7 +11,8 @@ tile.industrialwires.ic2_connector.glass_relay.name=Glass Fiber Wire Relay
 
 tile.industrialwires.general_hv.discharge_meter.name=Discharge Energy Meter
 
-tile.industrialwires.general_stuff.control_transformer.name=HV Control transformer
+tile.industrialwires.general_stuff.control_transformer_normal.name=Control transformer output
+tile.industrialwires.general_stuff.control_transformer_rs.name=Control transformer input
 tile.industrialwires.general_stuff.varistor.name=Varistor
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Rotational Motor
