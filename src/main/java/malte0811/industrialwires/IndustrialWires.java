@@ -85,8 +85,7 @@ package malte0811.industrialwires;
  import static malte0811.industrialwires.wires.MixedWireType.*;
 
  @Mod(modid = IndustrialWires.MODID, version = IndustrialWires.VERSION, dependencies = "required-after:immersiveengineering@[0.12-86,);after:ic2;required-after:forge@[14.23.3.2694,)",
-		certificateFingerprint = "7e11c175d1e24007afec7498a1616bef0000027d",
-		updateJSON = "https://raw.githubusercontent.com/malte0811/IndustrialWires/MC1.12/changelog.json")
+		updateJSON = "https://raw.githubusercontent.com/thiago1255/IndustrialWiresPlus/MC1.12/changelog.json")
 @Mod.EventBusSubscriber
 public class IndustrialWires {
 	public static final String MODID = "industrialwires";
@@ -200,7 +199,8 @@ public class IndustrialWires {
 		GameRegistry.registerTileEntity(TileEntityUnfinishedPanel.class, new ResourceLocation(MODID, "unfinished_panel"));
 		GameRegistry.registerTileEntity(TileEntityComponentPanel.class, new ResourceLocation(MODID, "single_component_panel"));
 		GameRegistry.registerTileEntity(TileEntityDischargeMeter.class, new ResourceLocation(MODID, "discharge_meter"));
-                GameRegistry.registerTileEntity(TileEntityControlTransformer.class, new ResourceLocation(MODID, "te_control_transformer")); 
+                GameRegistry.registerTileEntity(TileEntityControlTransformerRs.class, new ResourceLocation(MODID, "te_control_transformer_rs"));
+                GameRegistry.registerTileEntity(TileEntityControlTransformerNormal.class, new ResourceLocation(MODID, "te_control_transformer_normal"));  
                 GameRegistry.registerTileEntity(TileEntityVaristor.class, new ResourceLocation(MODID, "te_varistor"));               
 
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
