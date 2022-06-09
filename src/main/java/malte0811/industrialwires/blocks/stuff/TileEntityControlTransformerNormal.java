@@ -47,7 +47,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vecid;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.block.state.IBlockState;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
