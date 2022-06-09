@@ -1,3 +1,53 @@
+/*
+|| UNDER 'GNU General Public License v3.0'
+|| File made by thiago1255 based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
+||
+|| (check github for credits of this mods:)
+|| IW: https://github.com/malte0811/IndustrialWires
+|| IE: https://github.com/BluSunrize/ImmersiveEngineering
+*/
+package malte0811.industrialwires.blocks.stuff;
+
+import blusunrize.immersiveengineering.ImmersiveEngineering;
+import blusunrize.immersiveengineering.api.ApiUtils;
+import blusunrize.immersiveengineering.api.IEEnums.SideConfig;
+import blusunrize.immersiveengineering.api.energy.wires.TileEntityImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
+import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
+import blusunrize.immersiveengineering.api.energy.wires.WireType;
+import blusunrize.immersiveengineering.api.TargetingInfo;
+import blusunrize.immersiveengineering.api.energy.wires.*;
+import blusunrize.immersiveengineering.common.util.EnergyHelper;
+import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
+import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
+import blusunrize.immersiveengineering.common.util.Utils;
+
+import malte0811.industrialwires.IndustrialWires;
+import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.state.IBlockState;
+
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
+
 public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
 {
 // VARIABLES/CONS.: --------------------------------------
@@ -23,25 +73,25 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     }
        
     @Override
-	  public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
-		    super.writeCustomNBT(nbt, descPacket);
-		    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
+    public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+        super.writeCustomNBT(nbt, descPacket);
+	nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
         nbt.setBoolean("wireenergy", wireenergy);
-		    energyStorage.writeToNBT(nbt);
+	energyStorage.writeToNBT(nbt);
     }
 
 // ITICKABLE: --------------------------------------
     @Override
- 	  public void update() {
-		    if (!world.isRemote) {
+    public void update() {
+        if (!world.isRemote) {
             redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
             maxvalue = ((redstonevalue + 1)*2048);     
-			  }
+	}
         else if(firstTick) {
-		        Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
-		        if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
-		        firstTick = false;
-		    }               
+	    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
+	    if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
+	    firstTick = false;
+	}               
     }
     
 //WIRE STUFF: --------------------------------------
@@ -49,83 +99,78 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     protected boolean canTakeLV() { return false; }
         
     @Override
-	  protected boolean canTakeMV() { return false; }
+    protected boolean canTakeMV() { return false; }
 
     @Override
-	  protected boolean canTakeHV() { return true; }
+    protected boolean canTakeHV() { return true; }
  
     @Override
-	  protected boolean isRelay() { return false; }
+    protected boolean isRelay() { return false; }
 
     @Override
-	  public boolean allowEnergyToPass(Connection con) { return true; }
+    public boolean allowEnergyToPass(Connection con) { return true; }
 
     @Override
-	  public boolean isEnergyOutput() { return true; }
+    public boolean isEnergyOutput() { return true; }
 
     @Override
-	  public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-	      if(wireenergy) { return false; }
-		    if(!cableType.isEnergyWire()) { return false; }
-		    if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
-		    return limitType==null||WireApi.canMix(cableType, limitType);
-	  }
+    public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
+        if(wireenergy) { return false; }
+	if(!cableType.isEnergyWire()) { return false; }
+	if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
+	return limitType==null||WireApi.canMix(cableType, limitType);
+    }
 
     @Override
-	  public WireType getCableLimiter(TargetingInfo target) { return limitType; }
+    public WireType getCableLimiter(TargetingInfo target) { return limitType; }
 
     @Override
-	  public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-		    if(this.limitType==null) { this.limitType = cableType; }
-		    wireenergy = true;
-	  }
+    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
+        if(this.limitType==null) { this.limitType = cableType; }
+	wireenergy = true;
+    }
 
     @Override 
-	  public void removeCable(Connection connection) {
+    public void removeCable(Connection connection) {
         wireenergy = false;
-		    limitType = null;
-	  }
+	limitType = null;
+    }
   
     @Override
-	  public Vec3d getConnectionOffset(Connection con)
-	  {
+    public Vec3d getConnectionOffset(Connection con) {
         return new Vec3d(0.5, 1.7, 0.5);
-	  }
+    }
     
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
 
-	  public int getMaxInput() { return maxvalue; }
+    public int getMaxInput() { return maxvalue; }
 
-	  public int getMaxOutput() { return maxvalue; }
+    public int getMaxOutput() { return maxvalue; }
 
     @Override
-	  public int outputEnergy(int amount, boolean simulate, int energyType) {
+    public int outputEnergy(int amount, boolean simulate, int energyType) {
         if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
             int quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
-		        if(!simulate){
-		            energyStorage.modifyEnergyStored(+quantityenergy);
-		        }
-		        return quantityenergy;
-	      }
-	      return 0;
+	    if(!simulate){
+		energyStorage.modifyEnergyStored(+quantityenergy);
+            }
+	    return quantityenergy;
+        }
+	return 0;
     }
 
     @Override
-	  public boolean canConnectEnergy(EnumFacing from) {
-        return false; 
-    }
+    public boolean canConnectEnergy(EnumFacing from) { return false; }
 
     @Override
     public FluxStorage getFluxStorage() { return energyStorage; }
 
-    IEForgeEnergyWrapper energyWrapper;    
-
     @Override
-	  public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
+    public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
         
     @Override
-	  public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
+    public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
 
 // GENERAL PROPERTYES: --------------------------------------       
     AxisAlignedBB aabb = null;
