@@ -33,32 +33,32 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     }
        
     @Override
-	  public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
-		    super.writeCustomNBT(nbt, descPacket);
-		    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
+    public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+        super.writeCustomNBT(nbt, descPacket);
+	nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
         nbt.setBoolean("wire", wire);
-		    energyStorage.writeToNBT(nbt);
+	energyStorage.writeToNBT(nbt);
     }
 
 // ITICKABLE: --------------------------------------
     @Override
- 	  public void update() {
-		    if (!world.isRemote) { 
+    public void update() {
+        if (!world.isRemote) { 
             if(this.energyStorage.getEnergyStored() > 0){
-			          int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
-			          if(temp > 0){
-			              energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
-				            markDirty();
-			          }
-			          addAvailableEnergy(-1F, null);
-			          notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
+	        int temp = this.transferEnergy(this.energyStorage.getEnergyStored(), true, 0);
+		    if(temp > 0){
+		        this.energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+			markDirty();
+		    }
+		    addAvailableEnergy(-1F, null);
+		    notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
             }
-			  }
+	}
         else if(firstTick) {
-		        Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
-		        if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
-		        firstTick = false;
-		    }               
+	    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
+	    if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
+	    firstTick = false;
+	}               
     }
     
 //WIRE STUFF: --------------------------------------
@@ -66,72 +66,80 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     protected boolean canTakeLV() { return false; }
         
     @Override
-	  protected boolean canTakeMV() { return false; }
+    protected boolean canTakeMV() { return false; }
 
     @Override
-	  protected boolean canTakeHV() { return true; }
+    protected boolean canTakeHV() { return true; }
  
     @Override
-	  protected boolean isRelay() { return false; }
+    protected boolean isRelay() { return false; }
 
     @Override
-	  public boolean allowEnergyToPass(Connection con) { return true; }
+    public boolean allowEnergyToPass(Connection con) { return true; }
 
     @Override
-	  public boolean isEnergyOutput() { return true; }
+    public boolean isEnergyOutput() { return true; }
 
     @Override
-	  public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-	      if(wire) { return false; }
-		    if(!cableType.isEnergyWire()) { return false; }
-		    if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
-		    return limitType==null||WireApi.canMix(cableType, limitType);
-	  }
+    public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
+        if(wire) { return false; }
+	if(!cableType.isEnergyWire()) { return false; }
+	if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
+	return limitType==null||WireApi.canMix(cableType, limitType);
+    }
 
     @Override
-	  public WireType getCableLimiter(TargetingInfo target) { return limitType; }
+    public WireType getCableLimiter(TargetingInfo target) { return limitType; }
 
     @Override
-	  public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-		    if(this.limitType==null) { this.limitType = cableType; }
-		    wire = true;
-	  }
+    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
+        if(this.limitType==null) { this.limitType = cableType; }
+	wire = true;
+    }
 
     @Override 
-	  public void removeCable(Connection connection) {
+    public void removeCable(Connection connection) {
         wire = false;
-		    limitType = null;
-	  }
+	limitType = null;
+    }
   
     @Override
-	  public Vec3d getConnectionOffset(Connection con)
-	  {
+    public Vec3d getConnectionOffset(Connection con) {
         return new Vec3d(0.5, 1.7, 0.5);
-	  }
+    }
     
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
 
-	  public int getMaxInput() { return 32768; }
+    public int getMaxInput() { return 32768; }
 
-	  public int getMaxOutput() { return 32768; }
-
-    @Override
-	  public int outputEnergy(int amount, boolean simulate, int energyType) { return 0; }
+    public int getMaxOutput() { return 32768; }
 
     @Override
-	  public boolean canConnectEnergy(EnumFacing from) {
-        return false; 
+    public int outputEnergy(int amount, boolean simulate, int energyType) { return 0; }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) { return false; }
+
+    @Override
+    public FluxStorage getFluxStorage() {
+        BlockPos pos2 = pos.offset(EnumFacing.WEST, -dummy);
+        switch (facing) {
+	    case SOUTH: pos2 = pos.offset(EnumFacing.EAST, -1); break;
+            case NORTH: pos2 = pos.offset(EnumFacing.WEST, -1); break;
+	    case EAST: pos2 = pos.offset(EnumFacing.NORTH, -1); break;
+            case WEST: pos2 = pos.offset(EnumFacing.SOUTH, -1); break;
+	}
+        TileEntity te = world.getTileEntity(pos2);
+	if(te instanceof TileEntityControlTransformerRs) { return ((TileEntityControlTransformerRs)te).getFluxStorage(); }
+	return energyStorage;
     }
 
     @Override
-    public FluxStorage getFluxStorage() { return energyStorage; }
-
-    @Override
-	  public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
+    public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
         
     @Override
-	  public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
+    public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
 
 // GENERAL PROPERTYES: --------------------------------------       
     AxisAlignedBB aabb = null;
@@ -141,7 +149,7 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     @Override
     public AxisAlignedBB getBoundingBox() {
         if (aabb==null) { aabb = IBlockBoundsDirectional.super.getBoundingBox(); }
-	      return aabb;
+	return aabb;
     }
 
     @Nonnull
@@ -263,9 +271,9 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 	private Pair<Float, Consumer<Float>> getEnergyForConnection(@Nullable AbstractConnection c)
 	{
 		float loss = c!=null?c.getAverageLossRate(): 0;
-		float max = (1-loss)*energyStorage.getEnergyStored();
+		float max = (1-loss)*this.energyStorage.getEnergyStored();
 		Consumer<Float> extract = (energy) -> {
-			energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
+			this.energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
 		};
 		return new ImmutablePair<>(max, extract);
 	}
