@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-21
+ - Control transformer now is 2 blocks instead 1
+
 ####Version 1.8-20
  - Maybe CT now work
  - Fixed offset of varistor
