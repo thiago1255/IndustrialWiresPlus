@@ -11,7 +11,8 @@ tile.industrialwires.ic2_connector.glass_relay.name=Repetidor para cabo de Fibra
 
 tile.industrialwires.general_hv.discharge_meter.name=Medidor de descarga elétrica 
 
-tile.industrialwires.general_stuff.control_transformer.name=Transformador de controle A.T.
+tile.industrialwires.general_stuff.control_transformer_rs.name=Transformador de controle (entrada)
+tile.industrialwires.general_stuff.control_transformer_normal.name=Transformador de controle (saída)
 tile.industrialwires.general_stuff.varistor.name=Varistor
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Motor rotacional
