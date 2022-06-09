@@ -28,6 +28,7 @@ import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectio
 import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
+import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.api.IEEnums.SideConfig;
 
 import malte0811.industrialwires.IndustrialWires;
@@ -182,7 +183,7 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 
     @Override
     public FluxStorage getFluxStorage() {
-        BlockPos pos2 = pos.offset(EnumFacing.WEST, -dummy);
+        BlockPos pos2 = pos.offset(EnumFacing.WEST, -1);
         switch (facing) {
 	    case SOUTH: pos2 = pos.offset(EnumFacing.EAST, -1); break;
             case NORTH: pos2 = pos.offset(EnumFacing.WEST, -1); break;
