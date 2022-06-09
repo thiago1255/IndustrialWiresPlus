@@ -80,9 +80,9 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		switch (state.getValue(type)) {
 			case CONTROL_TRANSFORMER_RS:
-				return new ();
+				return new TileEntityControlTransformerRs();
                         case CONTROL_TRANSFORMER_NORMAL:
-				return new TileEntityControlTransformer();
+				return new TileEntityControlTransformerNormal();
                         case VARISTOR:
 				return new TileEntityVaristor();
 		}
