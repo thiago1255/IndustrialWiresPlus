@@ -107,7 +107,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	
 	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-		return state.getValue(type)==BlockTypes_GeneralStuff.CONTROL_TRANSFORMER;
+		return state.getValue(type)==BlockTypes_GeneralStuff.CONTROL_TRANSFORMER_RS;
 	}
 
 	@Override
