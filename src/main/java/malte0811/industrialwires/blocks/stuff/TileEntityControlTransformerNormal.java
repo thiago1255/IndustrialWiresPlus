@@ -104,14 +104,14 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     @Override
     public void update() {
         if (!world.isRemote) { 
-            if(this.energyStorage.getEnergyStored() > 0){
-	        int temp = this.transferEnergy(this.energyStorage.getEnergyStored(), true, 0);
+            if(energyStorage.getEnergyStored() > 0){
+	        int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
 		    if(temp > 0){
-		        this.energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
+		        energyStorage.modifyEnergyStored(-this.transferEnergy(temp, false, 0));
 			markDirty();
 		    }
 		    addAvailableEnergy(-1F, null);
-		    notifyAvailableEnergy(this.energyStorage.getEnergyStored(), null);
+		    notifyAvailableEnergy(energyStorage.getEnergyStored(), null);
             }
 	}
         else if(firstTick) {
@@ -185,10 +185,10 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     public FluxStorage getFluxStorage() {
         BlockPos pos2 = pos.offset(EnumFacing.WEST, -1);
         switch (facing) {
-	    case SOUTH: pos2 = pos.offset(EnumFacing.EAST, -1); break;
-            case NORTH: pos2 = pos.offset(EnumFacing.WEST, -1); break;
-	    case EAST: pos2 = pos.offset(EnumFacing.NORTH, -1); break;
-            case WEST: pos2 = pos.offset(EnumFacing.SOUTH, -1); break;
+	    case SOUTH: pos2 = pos.offset(EnumFacing.WEST, -1); break;
+            case NORTH: pos2 = pos.offset(EnumFacing.EAST, -1); break;
+	    case EAST: pos2 = pos.offset(EnumFacing.SOUTH, -1); break;
+            case WEST: pos2 = pos.offset(EnumFacing.NORTH, -1); break;
 	}
         TileEntity te = world.getTileEntity(pos2);
 	if(te instanceof TileEntityControlTransformerRs) { return ((TileEntityControlTransformerRs)te).getFluxStorage(); }
@@ -331,9 +331,9 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 	private Pair<Float, Consumer<Float>> getEnergyForConnection(@Nullable AbstractConnection c)
 	{
 		float loss = c!=null?c.getAverageLossRate(): 0;
-		float max = (1-loss)*this.energyStorage.getEnergyStored();
+		float max = (1-loss)*energyStorage.getEnergyStored();
 		Consumer<Float> extract = (energy) -> {
-			this.energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
+			energyStorage.modifyEnergyStored((int)(-energy/(1-loss)));
 		};
 		return new ImmutablePair<>(max, extract);
 	}
