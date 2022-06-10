@@ -1,4 +1,4 @@
-# Made in Blockbench 4.2.3
+# Made in Blockbench 4.2.3 and edited
 mtllib autotransformer_part_redstone.mtl
 
 o cube
@@ -432,10 +432,10 @@ vt 0.75 1
 vt 1 1
 vt 1 0.75
 vt 0.75 0.75
-vt 0.5 0.5
 vt 0.75 0.5
+vt 1 0.5
+vt 1 0.25
 vt 0.75 0.25
-vt 0.5 0.25
 vt 0.5 0.75
 vt 0.75 0.75
 vt 0.75 0.5
