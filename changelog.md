@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-22
+ - Fixed textures and CT (normal part) TE
+
 ####Version 1.8-21
  - Control transformer now is 2 blocks instead 1
 
