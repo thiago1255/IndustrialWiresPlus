@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-23
+ - More tests in control transformer.
+
 ####Version 1.8-22
  - Fixed textures and CT (normal part) TE
 
