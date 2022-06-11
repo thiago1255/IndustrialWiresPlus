@@ -127,7 +127,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     protected boolean isRelay() { return false; }
 
     @Override
-    public boolean allowEnergyToPass(Connection con) { return true; }
+    public boolean allowEnergyToPass(Connection con) { return false; }
 
     @Override
     public boolean isEnergyOutput() { return true; }
@@ -174,7 +174,6 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	        int quantityenergy = ( getMaxStorage() - ((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() );
                 quantityenergy = Math.min(quantityenergy, amount);
                 quantityenergy = Math.min(quantityenergy, maxvalue);
-                quantityenergy = maxvalue;
 	        if(!simulate){
 		    ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+quantityenergy);
                 }
