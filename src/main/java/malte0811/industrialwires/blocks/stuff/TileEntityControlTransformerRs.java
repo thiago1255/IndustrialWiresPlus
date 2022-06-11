@@ -73,6 +73,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private boolean wireenergy = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     boolean firstTick = true;
+    TileEntity te = null;
+    BlockPos left = null;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -95,6 +97,13 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public void update() {
         if (!world.isRemote) {
+            switch (facing) {
+	        case SOUTH: left = pos.offset(EnumFacing.EAST, -1); break;
+                case NORTH: left = pos.offset(EnumFacing.WEST, -1); break;
+	        case EAST: left = pos.offset(EnumFacing.NORTH, -1); break;
+                case WEST: left = pos.offset(EnumFacing.SOUTH, -1); break;
+	    }
+            te = world.getTileEntity(left);
             redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
             maxvalue = ((redstonevalue + 1)*2048);     
 	}
@@ -161,13 +170,15 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public int outputEnergy(int amount, boolean simulate, int energyType) {
-        if(amount > 0&&energyStorage.getEnergyStored() < getMaxStorage()){
-            int quantityenergy = Math.min(getMaxStorage()-energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
-	    if(!simulate){
-		energyStorage.modifyEnergyStored(+quantityenergy);
+        if(te instanceof TileEntityControlTransformerNormal) {
+            if(amount > 0&&((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < getMaxStorage()){
+                int quantityenergy = Math.min(getMaxStorage()-((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
+	        if(!simulate){
+		    ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+quantityenergy);
+                }
+	        return quantityenergy;
             }
-	    return quantityenergy;
-        }
+	}
 	return 0;
     }
 
@@ -175,7 +186,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public boolean canConnectEnergy(EnumFacing from) { return false; }
 
     @Override
-    public FluxStorage getFluxStorage() { return energyStorage; }
+    public FluxStorage getFluxStorage() {
+	if(te instanceof TileEntityControlTransformerNormal) { return ((TileEntityControlTransformerNormal)te).getFluxStorage(); }
+        return energyStorage; 
+    }
 
     @Override
     public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
