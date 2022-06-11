@@ -67,7 +67,6 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String EAST = "east";
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
-    public BlockPos endOfLeftConnection = null;
     public int maxvalue = 2048;
     private int redstonevalue = 0;
     private boolean wireenergy = false;
@@ -97,15 +96,15 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public void update() {
         if (!world.isRemote) {
+            redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
+            maxvalue = ((redstonevalue + 1)*2048);   
             switch (facing) {
 	        case SOUTH: left = pos.offset(EnumFacing.EAST, -1); break;
                 case NORTH: left = pos.offset(EnumFacing.WEST, -1); break;
 	        case EAST: left = pos.offset(EnumFacing.NORTH, -1); break;
                 case WEST: left = pos.offset(EnumFacing.SOUTH, -1); break;
 	    }
-            te = world.getTileEntity(left);
-            redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
-            maxvalue = ((redstonevalue + 1)*2048);     
+            te = world.getTileEntity(left);  
 	}
         else if(firstTick) {
 	    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
@@ -171,8 +170,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public int outputEnergy(int amount, boolean simulate, int energyType) {
         if(te instanceof TileEntityControlTransformerNormal) {
-            if(amount > 0&&((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < getMaxStorage()){
-                int quantityenergy = Math.min(getMaxStorage()-((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
+            if( (amount > 0) && ( ((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < getMaxStorage() ) ){
+	        int quantityenergy = ( getMaxStorage() - ((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() );
+                quantityenergy = Math.min(quantityenergy, amount);
+                quantityenergy = Math.min(quantityenergy, maxvalue);
 	        if(!simulate){
 		    ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+quantityenergy);
                 }
