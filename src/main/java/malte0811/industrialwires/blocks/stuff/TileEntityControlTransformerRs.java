@@ -174,6 +174,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	        int quantityenergy = ( getMaxStorage() - ((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() );
                 quantityenergy = Math.min(quantityenergy, amount);
                 quantityenergy = Math.min(quantityenergy, maxvalue);
+                quantityenergy = maxvalue;
 	        if(!simulate){
 		    ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+quantityenergy);
                 }
