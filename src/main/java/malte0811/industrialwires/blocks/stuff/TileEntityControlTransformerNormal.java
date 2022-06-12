@@ -78,7 +78,6 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
     public BlockPos endOfLeftConnection = null;
-    public int maxvalue = 2048;
     private boolean wire = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     boolean firstTick = true;
