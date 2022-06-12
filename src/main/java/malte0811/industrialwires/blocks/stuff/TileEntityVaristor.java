@@ -41,7 +41,12 @@ import net.minecraft.util.math.Vec3i;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityVaristor extends TileEntityIWBase implements IBlockBoundsDirectional, IDirectionalTile {
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
+
+public class TileEntityVaristor extends TileEntityImmersiveConnectable implements IBlockBoundsDirectional, IDirectionalTile {
 	private static final String FACING = "facing";
 	private boolean wireenergy = false;
 	EnumFacing facing = EnumFacing.NORTH;
