@@ -54,14 +54,14 @@ public class TileEntityVaristor extends TileEntityImmersiveConnectable implement
 	@Override
 	public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
             super.writeCustomNBT(nbt, descPacket);
-	    out.setByte(FACING, (byte) facing.getHorizontalIndex());
+	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
 	    nbt.setBoolean("wireenergy", wireenergy);
 	}
 
 	@Override
 	public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
             super.readCustomNBT(nbt, descPacket);
-            facing = EnumFacing.byHorizontalIndex(in.getByte(FACING));
+            facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
 	    wireenergy = nbt.getBoolean("wireenergy");
 	}
 
