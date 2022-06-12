@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-24
+ - Wire can be connected on varistor
+ - Control transformer is now working !
+
 ####Version 1.8-23
  - More tests in control transformer.
 
