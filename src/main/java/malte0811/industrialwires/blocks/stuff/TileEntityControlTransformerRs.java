@@ -181,7 +181,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    if(!simulate){
 	        this.energyStorage.modifyEnergyStored(+quantityenergy);
 	    }
-	    return quantityenergy
+	    return quantityenergy;
 	}
 	return 0;
     }
