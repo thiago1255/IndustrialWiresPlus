@@ -173,16 +173,16 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override 
     public void removeCable(Connection connection) {
-        if(REDSTONE_CATEGORY.equals(connection.getCategory())) {
+        if(REDSTONE_CATEGORY.equals(connection.cableType)) {
 	    wirers = false;
-	} else {
+	} else if(HV_CATEGORY.equals(connection.cableType)){
 	    wireenergy = false; 
 	}
     }
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        if(REDSTONE_CATEGORY.equals(con.getCategory())) {
+        if(REDSTONE_CATEGORY.equals(con.cableType)) {
 	    return new Vec3d(1.2, 0.5, 0.5);
 	}  
 	return new Vec3d(0.5, 1.7, 0.5); 	
