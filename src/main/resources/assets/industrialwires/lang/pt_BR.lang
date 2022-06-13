@@ -124,6 +124,7 @@ industrialwires.chat.stackSize=Conecção somente possivel com o 'stack' de iten
 industrialwires.chat.marxEnergy=A ultima discarga foi de %s kJ por bloco
 industrialwires.chat.maxSpeed=Velocidade máxima medida: %s
 industrialwires.chat.currSpeed=Velocidade atual: %s radianos/segundo = %s RPM
+industrialwires.chat.transformer=Valor máximo: %s
 
 death.attack.industrialwires.jacobs_ladder=%1$s foi eletrecutado por uma 'Jacob's Ladder'
 death.attack.industrialwires.marx=%1$s foi atingido por um raio de Gerador Marx
