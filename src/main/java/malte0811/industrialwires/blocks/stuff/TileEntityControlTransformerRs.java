@@ -105,7 +105,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void update() {
         if (!world.isRemote) {  
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+redstoneValueFine); 
-            maxvalue = (rsValue*128)
+            maxvalue = (rsValue*128);
 	    TileEntity te = null;
             BlockPos left = null;
             switch (facing) {
