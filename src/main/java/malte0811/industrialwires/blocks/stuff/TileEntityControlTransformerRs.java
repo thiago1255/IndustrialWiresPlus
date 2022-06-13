@@ -61,7 +61,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
-public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
+public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -69,7 +69,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String EAST = "east";
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
-    private int maxvalue = 2048;
+    private int maxvalue = 128;
     private int redstoneChannel = 0;
     private int redstoneValueFine = 0;
     private int redstoneValueCoarse = 0;
@@ -104,7 +104,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public void update() {
         if (!world.isRemote) {  
-            maxvalue =  
+            int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+redstoneValueFine); 
+            maxvalue = (rsValue*128)
 	    TileEntity te = null;
             BlockPos left = null;
             switch (facing) {
@@ -239,6 +240,14 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	markDirty();
 	onChange();
 	this.markContainingBlockForUpdate(null);
+	return true;
+    }
+    
+    @Override
+    public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
+        if (!world.isRemote) {
+	    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformer", String.format("%d", maxvalue)));
+	}
 	return true;
     }
     
