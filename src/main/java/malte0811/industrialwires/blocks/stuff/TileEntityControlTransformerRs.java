@@ -173,7 +173,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override 
     public void removeCable(Connection connection) {
-        if(REDSTONE_CATEGORY.equals(connection.CableType.getCategory())) {
+        if(REDSTONE_CATEGORY.equals(connection.getCategory())) {
 	    wirers = false;
 	} else {
 	    wireenergy = false; 
@@ -182,7 +182,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        if(REDSTONE_CATEGORY.equals(con.CableType.getCategory())) {
+        if(REDSTONE_CATEGORY.equals(con.getCategory())) {
 	    return new Vec3d(1.2, 0.5, 0.5);
 	}  
 	return new Vec3d(0.5, 1.7, 0.5); 	
@@ -234,6 +234,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void onChange() { 
         redstoneValueCoarse = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel): 0;
 	redstoneValueFine = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel+1): 0;
+    }
+    
+    @Override
+    public void updateInput(byte[] signals) {
     }
 
 // GENERAL PROPERTYES: --------------------------------------       
