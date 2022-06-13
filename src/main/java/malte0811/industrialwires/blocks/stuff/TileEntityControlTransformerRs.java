@@ -18,6 +18,8 @@ import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
+import blusunrize.immersiveengineering.api.energy.wires.redstone.IRedstoneConnector;
+import blusunrize.immersiveengineering.api.energy.wires.redstone.RedstoneWireNetwork;
 import blusunrize.immersiveengineering.api.TargetingInfo;
 import blusunrize.immersiveengineering.api.energy.wires.*;
 import blusunrize.immersiveengineering.common.util.EnergyHelper;
@@ -59,7 +61,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
-public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
+public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -68,9 +70,13 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
     private int maxvalue = 2048;
-    private int redstonevalue = 0;
+    private int redstoneChannel = 0;
+    private int redstoneValueFine = 0;
+    private int redstoneValueCoarse = 0;
     private boolean wireenergy = false;
+    private boolean wirers = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
+    protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
 
 // NBT DATA: --------------------------------------
@@ -79,6 +85,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         super.readCustomNBT(nbt, descPacket);
         facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
         wireenergy = nbt.getBoolean("wireenergy");
+        wirers = nbt.getBoolean("wirers");
+	redstoneChannel = nbt.getInteger("redstoneChannel");
         energyStorage.readFromNBT(nbt);
     }
        
@@ -87,15 +95,16 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         super.writeCustomNBT(nbt, descPacket);
 	nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
         nbt.setBoolean("wireenergy", wireenergy);
+        nbt.setBoolean("wirers", wirers);
+	nbt.setInteger("redstoneChannel", redstoneChannel);
 	energyStorage.writeToNBT(nbt);
     }
 
 // ITICKABLE: --------------------------------------
     @Override
     public void update() {
-        if (!world.isRemote) {
-            redstonevalue = world.getRedstonePowerFromNeighbors(pos);    
-            maxvalue = ((redstonevalue + 1)*2048);  
+        if (!world.isRemote) {  
+            maxvalue =  
 	    TileEntity te = null;
             BlockPos left = null;
             switch (facing) {
@@ -141,30 +150,38 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-        if(wireenergy) { return false; }
-	if(!cableType.isEnergyWire()) { return false; }
-	if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
-	return limitType==null||WireApi.canMix(cableType, limitType);
+        if(wireenergy && HV_CATEGORY.equals(cableType.getCategory())) { return false; }
+        if(wirers && REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
+        if(!HV_CATEGORY.equals(cableType.getCategory()) && !REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
+	return true;
     }
 
     @Override
-    public WireType getCableLimiter(TargetingInfo target) { return limitType; }
-
-    @Override
     public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-        if(this.limitType==null) { this.limitType = cableType; }
-	wireenergy = true;
+	if(REDSTONE_CATEGORY.equals(cableType.getCategory())) {
+            wirers = true;
+	    RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
+	}
+	if(HV_CATEGORY.equals(cableType.getCategory())) { 
+	    wireenergy = true; 
+	}
     }
 
     @Override 
     public void removeCable(Connection connection) {
-        wireenergy = false;
-	limitType = null;
+        if(REDSTONE_CATEGORY.equals(connection.CableType.getCategory())) {
+	    wirers = false;
+	} else {
+	    wireenergy = false; 
+	}
     }
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        return new Vec3d(0.5, 1.7, 0.5);
+        if(REDSTONE_CATEGORY.equals(con.CableType.getCategory())) {
+	    return new Vec3d(1.2, 0.5, 0.5);
+	}  
+	return new Vec3d(0.5, 1.7, 0.5); 	
     }
     
 //ENERGY STRG: --------------------------------------       
@@ -198,7 +215,33 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
 
+// REDSTONE WIRE: -------------------------------------------
+    @Override
+    public void setNetwork(RedstoneWireNetwork net) {
+        wireNetwork = net;
+    }
+
+    @Override
+    public RedstoneWireNetwork getNetwork() {
+        return wireNetwork;
+    }
+
+    @Override
+    public void onChange() { 
+        redstoneValueCoarse = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel): 0;
+	redstoneValueFine = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel+1): 0;
+    }
+
 // GENERAL PROPERTYES: --------------------------------------       
+    @Override
+    public boolean hammerUseSide(EnumFacing side, EntityPlayer player, float hitX, float hitY, float hitZ) {
+        redstoneChannel = (redstoneChannel+1)%16;
+	markDirty();
+	onChange();
+	this.markContainingBlockForUpdate(null);
+	return true;
+    }
+    
     AxisAlignedBB aabb = null;
     @Override
     public AxisAlignedBB getBoundingBoxNoRot() { return new AxisAlignedBB(0, 0, 0, 1, 1, 1); }
