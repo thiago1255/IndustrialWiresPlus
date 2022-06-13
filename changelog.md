@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-25
+ - Redstone wire can be connected on Ct !
+
 ####Version 1.8-24
  - Wire can be connected on varistor
  - Control transformer is now working !
