@@ -50,6 +50,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
