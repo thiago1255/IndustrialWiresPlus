@@ -26,7 +26,6 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
 
@@ -66,7 +65,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
-public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable,  IHammerInteraction, IIEInternalFluxHandler, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
+public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -174,10 +173,12 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     }
 
     @Override 
-    public void removeCable(Connection connection) {
+    public void removeCable(ImmersiveNetHandler.Connection connection) {
         if(REDSTONE_CATEGORY.equals(connection.cableType)) {
 	    wirers = false;
-	} else if(HV_CATEGORY.equals(connection.cableType)){
+            super.removeCable(connection);
+	    wireNetwork.removeFromNetwork(this);
+	} else {
 	    wireenergy = false; 
 	}
     }
@@ -185,9 +186,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public Vec3d getConnectionOffset(Connection con) {
         if(REDSTONE_CATEGORY.equals(con.cableType)) {
-	    return new Vec3d(1.2, 0.5, 0.5);
-	}  
-	return new Vec3d(0.5, 1.7, 0.5); 	
+	    return new Vec3d(1.1, 0.5, 0.5);
+	} else {
+	    return new Vec3d(0.5, 1.7, 0.5); 
+        }	
     }
     
 //ENERGY STRG: --------------------------------------       
@@ -247,16 +249,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         return getWorld();
     }
 	
-// GENERAL PROPERTYES: --------------------------------------       
-    @Override
-    public boolean hammerUseSide(EnumFacing side, EntityPlayer player, float hitX, float hitY, float hitZ) {
-        redstoneChannel = (redstoneChannel+1)%16;
-	markDirty();
-	onChange();
-	this.markContainingBlockForUpdate(null);
-	return true;
-    }
-    
+// GENERAL PROPERTYES: --------------------------------------         
     @Override
     public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
