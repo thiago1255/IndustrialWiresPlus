@@ -78,9 +78,10 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
     public BlockPos endOfLeftConnection = null;
-    private boolean wire = false;
+    public boolean wire = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     boolean firstTick = true;
+    TileEntity tiEn = null;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -103,6 +104,14 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     @Override
     public void update() {
         if (!world.isRemote) { 
+	    BlockPos rigth = null;
+	    switch (facing) {
+	        case SOUTH: rigth = pos.offset(EnumFacing.WEST, -1); break;
+                case NORTH: rigth = pos.offset(EnumFacing.EAST, -1); break;
+	        case EAST: rigth = pos.offset(EnumFacing.SOUTH, -1); break;
+                case WEST: rigth = pos.offset(EnumFacing.NORTH, -1); break;
+	    }
+            tiEn = world.getTileEntity(rigth);
             if(energyStorage.getEnergyStored() > 0){
 	        int temp = this.transferEnergy(energyStorage.getEnergyStored(), true, 0);
 		    if(temp > 0){
@@ -142,9 +151,12 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     @Override
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
         if(wire) { return false; }
-	if(!cableType.isEnergyWire()) { return false; }
-	if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
-	return limitType==null||WireApi.canMix(cableType, limitType);
+        if(tiEn instanceof TileEntityControlTransformerRs) {
+	    if(((TileEntityControlTransformerRs)tiEn).wireenergy) {
+	        return ((TileEntityControlTransformerRs)tiEn).limitType == cableType;
+            }
+        }
+	return false;
     }
 
     @Override
@@ -170,9 +182,14 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
 
-    public int getMaxInput() { return 32768; }
+    public int getMaxInput() { 
+        if(tiEn instanceof TileEntityControlTransformerRs) {
+            return ((TileEntityControlTransformerRs)tiEn).maxvalue;
+        }
+	return 0;
+    }
 
-    public int getMaxOutput() { return 32768; }
+    public int getMaxOutput() { getMaxInput() }
 
     @Override
     public int outputEnergy(int amount, boolean simulate, int energyType) { return 0; }
