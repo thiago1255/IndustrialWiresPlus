@@ -73,11 +73,11 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String EAST = "east";
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
-    private int maxvalue = 128;
+    public int maxvalue = 128;
     private int redstoneChannel = 0;
     private int redstoneValueFine = 0;
     private int redstoneValueCoarse = 0;
-    private boolean wireenergy = false;
+    public boolean wireenergy = false;
     private boolean wirers = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
