@@ -109,8 +109,12 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public void update() {
         if (!world.isRemote) {  
+            int maxWire = 0;
+            if(HV_CATEGORY.equals(limitType)) { maxWire = 128; }  
+	    if(MV_CATEGORY.equals(limitType)) { maxWire = 32; } 
+	    if(LV_CATEGORY.equals(limitType)) { maxWire = 8; } 
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
-            maxvalue = (rsValue*128);
+            maxvalue = (rsValue*maxWire);
             BlockPos left = null;
             switch (facing) {
 	        case SOUTH: left = pos.offset(EnumFacing.EAST, -1); break;
