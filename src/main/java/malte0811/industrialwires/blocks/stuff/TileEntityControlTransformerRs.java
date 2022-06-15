@@ -82,6 +82,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
+    TileEntity te = null;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -108,9 +109,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public void update() {
         if (!world.isRemote) {  
-            int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+redstoneValueFine); 
+            int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
             maxvalue = (rsValue*128);
-	    TileEntity te = null;
             BlockPos left = null;
             switch (facing) {
 	        case SOUTH: left = pos.offset(EnumFacing.EAST, -1); break;
@@ -155,9 +155,12 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-        if(wireenergy && HV_CATEGORY.equals(cableType.getCategory())) { return false; }
+        if(wireenergy && cableType.isEnergyWire()) { return false; }
         if(wirers && REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
-        if(!HV_CATEGORY.equals(cableType.getCategory()) && !REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
+        if(!cableType.isEnergyWire() && !REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
+        if(te instanceof TileEntityControlTransformerNormal) {
+	    if(((TileEntityControlTransformerNormal)te).wire) { return false; }
+	}
 	return true;
     }
 
@@ -167,8 +170,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
             wirers = true;
 	    RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
 	}
-	if(HV_CATEGORY.equals(cableType.getCategory())) { 
+	if(cableType.isEnergyWire()) { 
 	    wireenergy = true; 
+            this.limitType = cableType;
 	}
     }
 
@@ -179,19 +183,23 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
             super.removeCable(connection);
 	    wireNetwork.removeFromNetwork(this);
 	} else {
+            limitType = null;
 	    wireenergy = false; 
 	}
     }
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        if(REDSTONE_CATEGORY.equals(con.cableType)) {
-	    return new Vec3d(1.1, 0.5, 0.5);
-	} else {
-	    return new Vec3d(0.5, 1.7, 0.5); 
-        }	
+        boolean isRs = REDSTONE_CATEGORY.equals(con.cableType);
+        Vec3d val = mat.apply(new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5)); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
+	return val;	
     }
     
+    @Override
+    public WireType getCableLimiter(TargetingInfo target) {
+        return limitType;
+    }
+
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
 
