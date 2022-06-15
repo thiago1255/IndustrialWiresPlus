@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####Version 1.8-26
+ - Prob. fixed some bugs.
+ - Now more wire types can be connected on control transformer !
+
 ####Version 1.8-25
  - Redstone wire can be connected on Ct !
 
