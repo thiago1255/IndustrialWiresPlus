@@ -189,7 +189,7 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 	return 0;
     }
 
-    public int getMaxOutput() { getMaxInput() }
+    public int getMaxOutput() { getMaxInput(); }
 
     @Override
     public int outputEnergy(int amount, boolean simulate, int energyType) { return 0; }
