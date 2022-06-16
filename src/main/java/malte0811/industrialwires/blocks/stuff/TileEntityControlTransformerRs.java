@@ -52,6 +52,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.model.TRSRTransformation;
+
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;
