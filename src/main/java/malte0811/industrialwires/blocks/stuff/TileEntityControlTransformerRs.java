@@ -117,9 +117,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void update() {
         if (!world.isRemote) {  
             int maxWire = 0;
-            if(HV_CATEGORY.equals(limitType)) { maxWire = 128; }  
-	    if(MV_CATEGORY.equals(limitType)) { maxWire = 32; } 
-	    if(LV_CATEGORY.equals(limitType)) { maxWire = 8; } 
+            if(WireType.HV_CATEGORY.equals(limitType)) { maxWire = 128; }  
+	    if(WireType.MV_CATEGORY.equals(limitType)) { maxWire = 32; } 
+	    if(WireType.LV_CATEGORY.equals(limitType)) { maxWire = 8; } 
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
             maxvalue = (rsValue*maxWire);
             BlockPos left = null;
@@ -177,19 +177,19 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-	if(REDSTONE_CATEGORY.equals(cableType.getCategory())) {
+	if(WireType.REDSTONE_CATEGORY.equals(cableType.getCategory())) {
             wirers = true;
 	    RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
 	}
 	if(cableType.isEnergyWire()) { 
 	    wireenergy = true; 
-            this.limitType = cableType;
+            limitType = cableType;
 	}
     }
 
     @Override 
     public void removeCable(ImmersiveNetHandler.Connection connection) {
-        if(REDSTONE_CATEGORY.equals(connection.cableType)) {
+        if(WireType.REDSTONE_CATEGORY.equals(connection.cableType)) {
 	    wirers = false;
             super.removeCable(connection);
 	    wireNetwork.removeFromNetwork(this);
@@ -201,15 +201,11 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        Matrix4 mat = new Matrix4(facing);
-        boolean isRs = REDSTONE_CATEGORY.equals(con.cableType);
-        Vec3d val = mat.apply(new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5)); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
+        boolean isRs = WireType.REDSTONE_CATEGORY.equals(con.cableType);
+        Vec3d val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
 	return val;	
     }
     
-    @Override
-    public WireType getCableLimiter(TargetingInfo target) { return limitType; }
-
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
 
