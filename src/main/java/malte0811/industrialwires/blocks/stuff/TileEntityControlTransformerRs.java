@@ -84,6 +84,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
     TileEntity te = null;
+    public WireType limitType = null;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -201,7 +202,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     }
     
     @Override
-    public WireType getCableLimiter(TargetingInfo target) { return public limitType; }
+    public WireType getCableLimiter(TargetingInfo target) { return limitType; }
 
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
