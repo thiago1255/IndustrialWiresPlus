@@ -201,6 +201,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
+        Matrix4 mat = new Matrix4(facing);
         boolean isRs = REDSTONE_CATEGORY.equals(con.cableType);
         Vec3d val = mat.apply(new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5)); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
 	return val;	
