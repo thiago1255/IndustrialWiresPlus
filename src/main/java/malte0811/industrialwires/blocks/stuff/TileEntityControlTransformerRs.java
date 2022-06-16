@@ -28,6 +28,7 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxH
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
+import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
@@ -200,9 +201,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     }
     
     @Override
-    public WireType getCableLimiter(TargetingInfo target) {
-        return limitType;
-    }
+    public WireType getCableLimiter(TargetingInfo target) { return public limitType; }
 
 //ENERGY STRG: --------------------------------------       
     public int getMaxStorage() { return 32768; }
