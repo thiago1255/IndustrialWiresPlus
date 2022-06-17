@@ -117,9 +117,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void update() {
         if (!world.isRemote) {  
             int maxWire = 0;
-            if(WireType.HV_CATEGORY.equals(limitType)) { maxWire = 128; }  
-	    if(WireType.MV_CATEGORY.equals(limitType)) { maxWire = 32; } 
-	    if(WireType.LV_CATEGORY.equals(limitType)) { maxWire = 8; } 
+            if(limitType == HV_CATEGORY) { maxWire = 128; }  
+	    if(limitType == MV_CATEGORY) { maxWire = 32; } 
+	    if(limitType == LV_CATEGORY) { maxWire = 8; } 
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
             maxvalue = (rsValue*maxWire);
             BlockPos left = null;
@@ -189,7 +189,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override 
     public void removeCable(ImmersiveNetHandler.Connection connection) {
-        if(WireType.REDSTONE_CATEGORY.equals(connection.cableType)) {
+        if(connection.cableType == REDSTONE_CATEGORY) {
 	    wirers = false;
             super.removeCable(connection);
 	    wireNetwork.removeFromNetwork(this);
@@ -201,7 +201,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        boolean isRs = WireType.REDSTONE_CATEGORY.equals(con.cableType);
+        boolean isRs = (con.cableType == REDSTONE_CATEGORY);
         Vec3d val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
 	return val;	
     }
