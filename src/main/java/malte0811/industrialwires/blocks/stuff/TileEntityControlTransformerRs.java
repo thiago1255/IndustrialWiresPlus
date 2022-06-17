@@ -124,8 +124,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         if (!world.isRemote) {  
             int maxWire = 0;
             if(limitType == WireType.STEEL) { maxWire = 128; }  
-	    if(limitType == WireType.ELECTRUM_INSULATED||WireType.ELECTRUM) { maxWire = 32; } 
-	    if(limitType == WireType.COPPER_INSULATED||WireType.COPPER) { maxWire = 8; } 
+	    if(limitType == WireType.ELECTRUM_INSULATED || limitType == WireType.ELECTRUM) { maxWire = 32; } 
+	    if(limitType == WireType.COPPER_INSULATED || limitType == WireType.COPPER) { maxWire = 8; } 
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
             maxvalue = (rsValue*maxWire);
             BlockPos left = null;
