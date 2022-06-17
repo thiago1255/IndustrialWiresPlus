@@ -70,6 +70,12 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.COPPER;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.COPPER_INSULATED;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM_INSULATED;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.STEEL;
+import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE;
 
 public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
 {
@@ -117,9 +123,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void update() {
         if (!world.isRemote) {  
             int maxWire = 0;
-            if(limitType == WireType.HV_CATEGORY) { maxWire = 128; }  
-	    if(limitType == WireType.MV_CATEGORY) { maxWire = 32; } 
-	    if(limitType == WireType.LV_CATEGORY) { maxWire = 8; } 
+            if(limitType == WireType.STEEL) { maxWire = 128; }  
+	    if(limitType == WireType.ELECTRUM_INSULATED||WireType.ELECTRUM) { maxWire = 32; } 
+	    if(limitType == WireType.COPPER_INSULATED||WireType.COPPER) { maxWire = 8; } 
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
             maxvalue = (rsValue*maxWire);
             BlockPos left = null;
@@ -189,7 +195,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override 
     public void removeCable(ImmersiveNetHandler.Connection connection) {
-        if(connection.cableType == WireType.REDSTONE_CATEGORY) {
+        if(connection.cableType == WireType.REDSTONE) {
 	    wirers = false;
             super.removeCable(connection);
 	    wireNetwork.removeFromNetwork(this);
@@ -201,7 +207,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        boolean isRs = (con.cableType == WireType.REDSTONE_CATEGORY);
+        boolean isRs = (con.cableType == WireType.REDSTONE);
         Vec3d val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
 	return val;	
     }
