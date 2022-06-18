@@ -210,10 +210,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         boolean isRs = (con.cableType == WireType.REDSTONE);
         Vec3d val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
         switch (facing) {
-	    case SOUTH: val = new Vec3d(isRs?0.4: 0.4, isRs?0.5: 1.7, isRs?-0.1: 0.5); break;
-            case NORTH: val = new Vec3d(isRs?0.6: 0.6, isRs?0.5: 1.7, isRs?1.1: 0.5); break;
-	    case EAST: val = new Vec3d(isRs?-0.1: 0.5, isRs?0.5: 1.7, isRs?0.4: 0.6); break;
-            case WEST: val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, isRs?0.6: 0.4); break;
+	    case SOUTH: val = new Vec3d(isRs?0.6: 0.6, isRs?0.5: 1.7, isRs?-0.15: 0.5); break;
+            case NORTH: val = new Vec3d(isRs?0.4: 0.4, isRs?0.5: 1.7, isRs?1.15: 0.5); break;
+	    case EAST: val = new Vec3d(isRs?-0.15: 0.5, isRs?0.5: 1.7, isRs?0.6: 0.4); break;
+            case WEST: val = new Vec3d(isRs?1.15: 0.5, isRs?0.5: 1.7, isRs?0.4: 0.6); break;
 	}
 	return val;	
     }
