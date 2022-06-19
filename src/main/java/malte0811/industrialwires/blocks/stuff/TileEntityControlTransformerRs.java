@@ -95,7 +95,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
     TileEntity te = null;
-    public WireType limitType = null;
+    public WireType electricWt = null;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -123,9 +123,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void update() {
         if (!world.isRemote) {  
             int maxWire = 0;
-            if(limitType == WireType.STEEL) { maxWire = 128; }  
-	    if(limitType == WireType.ELECTRUM_INSULATED || limitType == WireType.ELECTRUM) { maxWire = 32; } 
-	    if(limitType == WireType.COPPER_INSULATED || limitType == WireType.COPPER) { maxWire = 8; } 
+            if(electricWt == WireType.STEEL) { maxWire = 128; }  
+	    if(electricWt == WireType.ELECTRUM_INSULATED || electricWt == WireType.ELECTRUM) { maxWire = 32; } 
+	    if(electricWt == WireType.COPPER_INSULATED || electricWt == WireType.COPPER) { maxWire = 8; } 
             int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
             maxvalue = (rsValue*maxWire);
             BlockPos left = null;
@@ -189,7 +189,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	}
 	if(cableType.isEnergyWire()) { 
 	    wireenergy = true; 
-            limitType = cableType;
+            electricWt = cableType;
 	}
     }
 
@@ -201,6 +201,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    wireNetwork.removeFromNetwork(this);
 	} else {
             limitType = null;
+            electricWt = null;
 	    wireenergy = false; 
 	}
     }
