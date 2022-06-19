@@ -131,18 +131,6 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     
 //WIRE STUFF: --------------------------------------
     @Override
-    protected boolean canTakeLV() { return false; }
-        
-    @Override
-    protected boolean canTakeMV() { return false; }
-
-    @Override
-    protected boolean canTakeHV() { return true; }
- 
-    @Override
-    protected boolean isRelay() { return false; }
-
-    @Override
     public boolean allowEnergyToPass(Connection con) { return true; }
 
     @Override
@@ -153,7 +141,7 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
         if(wire) { return false; }
         if(tiEn instanceof TileEntityControlTransformerRs) {
 	    if(((TileEntityControlTransformerRs)tiEn).wireenergy) {
-	        return ((TileEntityControlTransformerRs)tiEn).limitType == cableType;
+	        return ((TileEntityControlTransformerRs)tiEn).electricWt == cableType;
             }
         }
 	return false;
@@ -189,7 +177,7 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 	return 0;
     }
 
-    public int getMaxOutput() { return getMaxInput(); }
+    public int getMaxOutput() { return this.getMaxInput(); }
 
     @Override
     public int outputEnergy(int amount, boolean simulate, int energyType) { return 0; }
@@ -198,9 +186,7 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     public boolean canConnectEnergy(EnumFacing from) { return false; }
 
     @Override
-    public FluxStorage getFluxStorage() {
-	return energyStorage;
-    }
+    public FluxStorage getFluxStorage() { return energyStorage; }
 
     @Override
     public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
