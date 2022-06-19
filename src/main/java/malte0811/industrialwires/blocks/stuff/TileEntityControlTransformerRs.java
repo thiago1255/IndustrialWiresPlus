@@ -85,7 +85,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String EAST = "east";
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
-    public int maxvalue = 128;
+    public int maxvalue = 8;
     private int redstoneChannel = 0;
     private int redstoneValueFine = 0;
     private int redstoneValueCoarse = 0;
@@ -137,10 +137,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    }
             te = world.getTileEntity(left);
 	    if(te instanceof TileEntityControlTransformerNormal) { 
-		if(this.energyStorage.getEnergyStored() > 0&&((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < getMaxStorage()){
-                    int energytoblock = Math.min(getMaxStorage()-((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored(), Math.min(this.energyStorage.getEnergyStored(), maxvalue));
-	            ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+energytoblock);
-                    this.energyStorage.modifyEnergyStored(-energytoblock);
+		if(this.energyStorage.getEnergyStored() > 0&&((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < this.getMaxStorage()){
+                    int energytoblock = Math.min(this.getMaxStorage()-((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored(), Math.min(this.energyStorage.getEnergyStored(), this.maxvalue));
+	            ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+this.energytoblock);
+                    this.energyStorage.modifyEnergyStored(-this.energytoblock);
 	        }
             }
 	}
@@ -186,6 +186,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	if(WireType.REDSTONE_CATEGORY.equals(cableType.getCategory())) {
             wirers = true;
 	    RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
+            this.onChange();
 	}
 	if(cableType.isEnergyWire()) { 
 	    wireenergy = true; 
@@ -211,10 +212,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         boolean isRs = (con.cableType == WireType.REDSTONE);
         Vec3d val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
         switch (facing) {
-	    case SOUTH: val = new Vec3d(isRs?0.6: 0.6, isRs?0.5: 1.7, isRs?-0.15: 0.5); break;
-            case NORTH: val = new Vec3d(isRs?0.4: 0.4, isRs?0.5: 1.7, isRs?1.15: 0.5); break;
-	    case EAST: val = new Vec3d(isRs?-0.15: 0.5, isRs?0.5: 1.7, isRs?0.6: 0.4); break;
-            case WEST: val = new Vec3d(isRs?1.15: 0.5, isRs?0.5: 1.7, isRs?0.4: 0.6); break;
+	    case SOUTH: val = new Vec3d(isRs?0.4: 0.6, isRs?0.5: 1.7, isRs?0: 0.5); break;
+            case NORTH: val = new Vec3d(isRs?0.6: 0.4, isRs?0.5: 1.7, isRs?1: 0.5); break;
+	    case EAST: val = new Vec3d(isRs?0: 0.5, isRs?0.5: 1.7, isRs?0.6: 0.4); break;
+            case WEST: val = new Vec3d(isRs?1: 0.5, isRs?0.5: 1.7, isRs?0.4: 0.6); break;
 	}
 	return val;	
     }
@@ -228,8 +229,10 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public int outputEnergy(int amount, boolean simulate, int energyType) {
+        if(energyType != 0) { return 0; }
         if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
-            int quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), Math.min(amount, maxvalue));
+            int quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), amount);
+	    quantityenergy = Math.min(quantityenergy, maxvalue);
 	    if(!simulate){
 	        this.energyStorage.modifyEnergyStored(+quantityenergy);
 	    }
