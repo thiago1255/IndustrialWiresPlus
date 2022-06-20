@@ -139,8 +139,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    if(te instanceof TileEntityControlTransformerNormal) { 
 		if(this.energyStorage.getEnergyStored() > 0&&((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < this.getMaxStorage()){
                     int energytoblock = Math.min(this.getMaxStorage()-((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored(), Math.min(this.energyStorage.getEnergyStored(), this.maxvalue));
-	            ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+this.energytoblock);
-                    this.energyStorage.modifyEnergyStored(-this.energytoblock);
+	            ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+energytoblock);
+                    this.energyStorage.modifyEnergyStored(-energytoblock);
 	        }
             }
 	}
