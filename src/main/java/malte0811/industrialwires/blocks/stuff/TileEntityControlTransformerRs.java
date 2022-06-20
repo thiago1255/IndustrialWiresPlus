@@ -283,9 +283,35 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-	    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformer", String.format("%d", maxvalue)));
+	    if (ApiUtils.compareToOreName(heldItem, "immersiveengineering:tool:2")) {
+	        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerValues", String.format("%d", maxvalue)));
+	    } else if (ApiUtils.compareToOreName(heldItem, "immersiveengineering:tool")){
+	        if(redstoneChannel == 14) { redstoneChannel = 0; }
+		else { redstoneChannel++; }
+		player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
+	    }
 	}
 	return true;
+    }
+    
+    protected String nameOfColorOfWire {
+        switch(redstoneChannel) {
+	    case 0: return "White - Orange"; break;
+	    case 1: return "Orange - Magenta"; break;
+	    case 2: return "Magenta - L. Blue"; break;
+	    case 3: return "L. Blue - Yellow"; break;
+	    case 4: return "Yellow - L. Green"; break;
+	    case 5: return "L. Green - Pink"; break;
+	    case 6: return "Pink - D. Gray"; break;
+	    case 7: return "D. Gray - L. Gray"; break;
+	    case 8: return "L. Gray - Cyan"; break;
+	    case 9: return "Cyan - Purple"; break;
+            case 10: return "Purple - D. Blue"; break;
+	    case 11: return "D. Blue - Brown"; break;
+	    case 12: return "Brown - D. Green"; break;
+	    case 13: return "D. Green - Red"; break;
+	    case 14: return "Red - Black"; break;
+	}
     }
     
     AxisAlignedBB aabb = null;
