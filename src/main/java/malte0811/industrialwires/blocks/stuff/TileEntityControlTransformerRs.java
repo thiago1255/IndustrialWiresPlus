@@ -312,6 +312,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    case 13: return "D. Green - Red";
 	    case 14: return "Red - Black";
 	}
+        return "ERROR";
     }
     
     AxisAlignedBB aabb = null;
