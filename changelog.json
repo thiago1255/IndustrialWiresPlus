@@ -73,6 +73,7 @@
         "1.8-23": " - More tests in control transformer.",
         "1.8-24": " - Wire can be connected on varistor - Control transformer is now working !",
         "1.8-25": " - Redstone wire can be connected on Ct !",
-        "1.8-26": " - Prob. fixed some bugs. - Now more wire types can be connected on control transformer !"
+        "1.8-26": " - Prob. fixed some bugs. - Now more wire types can be connected on control transformer !",
+        "1.8-27": " - Final version of Control transformer! - (Bugs fixed)"
     }
 }
