@@ -164,7 +164,14 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        return new Vec3d(0.5, 1.7, 0.5);
+        Vec3d val = new Vec3d(0.5, 1.7, 0.5);
+        switch (facing) {
+	    case SOUTH: val = new Vec3d(0.4, 1.7, 0.5); break;
+            case NORTH: val = new Vec3d(0.6, 1.7, 0.5); break;
+	    case EAST: val = new Vec3d(0.5, 1.7, 0.6); break;
+            case WEST: val = new Vec3d(0.5, 1.7, 0.4); break;
+	}
+	return val; 
     }
     
 //ENERGY STRG: --------------------------------------       
