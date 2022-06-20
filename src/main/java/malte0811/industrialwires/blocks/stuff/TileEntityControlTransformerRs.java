@@ -296,21 +296,21 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     
     protected String nameOfColorOfWire() {
         switch(redstoneChannel) {
-	    case 0: return "White - Orange"; break;
-	    case 1: return "Orange - Magenta"; break;
-	    case 2: return "Magenta - L. Blue"; break;
-	    case 3: return "L. Blue - Yellow"; break;
-	    case 4: return "Yellow - L. Green"; break;
-	    case 5: return "L. Green - Pink"; break;
-	    case 6: return "Pink - D. Gray"; break;
-	    case 7: return "D. Gray - L. Gray"; break;
-	    case 8: return "L. Gray - Cyan"; break;
-	    case 9: return "Cyan - Purple"; break;
-            case 10: return "Purple - D. Blue"; break;
-	    case 11: return "D. Blue - Brown"; break;
-	    case 12: return "Brown - D. Green"; break;
-	    case 13: return "D. Green - Red"; break;
-	    case 14: return "Red - Black"; break;
+	    case 0: return "White - Orange";
+	    case 1: return "Orange - Magenta";
+	    case 2: return "Magenta - L. Blue";
+	    case 3: return "L. Blue - Yellow";
+	    case 4: return "Yellow - L. Green";
+	    case 5: return "L. Green - Pink";
+	    case 6: return "Pink - D. Gray";
+	    case 7: return "D. Gray - L. Gray";
+	    case 8: return "L. Gray - Cyan";
+	    case 9: return "Cyan - Purple";
+            case 10: return "Purple - D. Blue";
+	    case 11: return "D. Blue - Brown";
+	    case 12: return "Brown - D. Green";
+	    case 13: return "D. Green - Red";
+	    case 14: return "Red - Black";
 	}
     }
     
