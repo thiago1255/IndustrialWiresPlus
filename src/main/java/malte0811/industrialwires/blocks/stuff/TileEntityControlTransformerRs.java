@@ -198,13 +198,17 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void removeCable(ImmersiveNetHandler.Connection connection) {
         if(connection.cableType == WireType.REDSTONE) {
 	    wirers = false;
-            super.removeCable(connection);
-	    wireNetwork.removeFromNetwork(this);
-	} else {
-            limitType = null;
+            wireNetwork.removeFromNetwork(this);
+            this.markDirty();
+	    if (world != null) {
+                IBlockState state = world.getBlockState(pos);
+	        world.notifyBlockUpdate(pos, state, state, 3);
+            }
+	} else {   
             electricWt = null;
 	    wireenergy = false; 
 	}
+	limitType = null;
     }
   
     @Override
