@@ -28,12 +28,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraft.block.state.BlockStateContainer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
-	public static final PropertyEnum<BlockTypes_GeneralStuff> type = PropertyEnum.create("type",BlockTypes_GeneralStuff.class);
+	public static final PropertyEnum<BlockTypes_GeneralStuff> type = PropertyEnum.create("type", BlockTypes_GeneralStuff.class);
 	public static final String NAME = "general_stuff";
 
 	public BlockGeneralStuff() {
@@ -52,7 +53,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
   
         @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL, type};
+		return new IProperty[] {IEProperties.FACING_HORIZONTAL, type};
 	}
 
 	@Override
@@ -88,6 +89,13 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		}
 		return null;
 	}
+	
+	@Nonnull
+	@Override
+	protected BlockStateContainer createBlockState() {
+	    BlockStateContainer base = super.createBlockState();
+	    return new ExtendedBlockState(this, base.getProperties().toArray(new IProperty[0]), new IUnlistedProperty[]{ PropertyComponents.INSTANCE, IEProperties.CONNECTIONS });
+	}
 
 	@Override
 	public BlockTypes_GeneralStuff[] getValues() {
@@ -105,11 +113,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		return super.getStateFromMeta(meta).withProperty(type, BlockTypes_GeneralStuff.values()[meta]);
 	}
 	
-	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-		return state.getValue(type)==BlockTypes_GeneralStuff.CONTROL_TRANSFORMER_RS;
-	}
-
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
