@@ -12,6 +12,7 @@ package malte0811.industrialwires.blocks.stuff;
 import blusunrize.immersiveengineering.api.IEProperties;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
+import malte0811.industrialwires.controlpanel.PropertyComponents;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
