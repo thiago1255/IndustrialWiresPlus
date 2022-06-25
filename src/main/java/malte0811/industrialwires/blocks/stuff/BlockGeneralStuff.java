@@ -81,21 +81,18 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		switch (state.getValue(type)) {
-			case CONTROL_TRANSFORMER_RS:
-				return new TileEntityControlTransformerRs();
-                        case CONTROL_TRANSFORMER_NORMAL:
-				return new TileEntityControlTransformerNormal();
-                        case VARISTOR:
-				return new TileEntityVaristor();
+			case CONTROL_TRANSFORMER_RS: return new TileEntityControlTransformerRs();
+            case CONTROL_TRANSFORMER_NORMAL: return new TileEntityControlTransformerNormal();
+            case VARISTOR: return new TileEntityVaristor();
+			default: return null;
 		}
-		return null;
 	}
 	
 	@Nonnull
 	@Override
 	protected BlockStateContainer createBlockState() {
 	    BlockStateContainer base = super.createBlockState();
-	    return new ExtendedBlockState(this, base.getProperties().toArray(new IProperty[0]), new IUnlistedProperty[]{ PropertyComponents.INSTANCE, IEProperties.CONNECTIONS });
+	    return new ExtendedBlockState(this, base.getProperties().toArray(new IProperty[0]), new IUnlistedProperty[]{IEProperties.MULTIBLOCKSLAVE, PropertyComponents.INSTANCE, IEProperties.CONNECTIONS });
 	}
 
 	@Override
