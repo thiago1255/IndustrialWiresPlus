@@ -3,6 +3,8 @@
 ####Version 1.8-27
  - Final version of Control transformer!
  - (Bugs fixed)
+ - Hammer can be used to change RS channels.
+ - Output in chat of Maximum value was removed.
 
 ####Version 1.8-26
  - Prob. fixed some bugs.
