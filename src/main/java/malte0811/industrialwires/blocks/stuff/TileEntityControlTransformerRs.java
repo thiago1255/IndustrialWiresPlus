@@ -28,8 +28,7 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
+import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
 import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
 
@@ -52,8 +51,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.model.TRSRTransformation;
 
@@ -77,7 +77,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.STEEL;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE;
 
-public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IPlayerInteraction, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector  
+public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -86,7 +86,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
     public int maxvalue = 8;
-    private int redstoneChannel = 0;
+    protected int redstoneChannel = 0;
     private int redstoneValueFine = 0;
     private int redstoneValueCoarse = 0;
     public boolean wireenergy = false;
@@ -199,7 +199,8 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         if(connection.cableType == WireType.REDSTONE) {
 	    wirers = false;
             wireNetwork.removeFromNetwork(this);
-            this.markDirty();
+            markDirty();
+			this.onChange();
 	    if (world != null) {
                 IBlockState state = world.getBlockState(pos);
 	        world.notifyBlockUpdate(pos, state, state, 3);
@@ -256,17 +257,16 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         
     @Override
     public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
+	
+	@Override
+	public boolean moveConnectionTo(Connection c, BlockPos newEnd) { return true; }
 
 // REDSTONE WIRE: -------------------------------------------
     @Override
-    public void setNetwork(RedstoneWireNetwork net) {
-        wireNetwork = net;
-    }
+    public void setNetwork(RedstoneWireNetwork net) { wireNetwork = net; }
 
     @Override
-    public RedstoneWireNetwork getNetwork() {
-        return wireNetwork;
-    }
+    public RedstoneWireNetwork getNetwork() { return wireNetwork; }
 
     @Override
     public void onChange() { 
@@ -275,29 +275,27 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     }
     
     @Override
-    public void updateInput(byte[] signals) {
-    }
+    public void updateInput(byte[] signals) { return; }
 
     @Override
-    public World getConnectorWorld() {
-        return getWorld();
-    }
+    public World getConnectorWorld() { return getWorld(); }
 	
-// GENERAL PROPERTYES: --------------------------------------         
-    @Override
-    public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote) {
-	    if (ApiUtils.compareToOreName(heldItem, "immersiveengineering:tool:2")) {
-	        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerValues", String.format("%d", maxvalue)));
-	    } else if (ApiUtils.compareToOreName(heldItem, "immersiveengineering:tool")){
-	        if(redstoneChannel == 14) { redstoneChannel = 0; }
-		else { redstoneChannel++; }
-		player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
-	    }
+// GENERAL PROPERTYES: --------------------------------------           
+	@Override
+	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
+	    if(Utils.isHammer(heldItem)&&!world.isRemote){
+		    if(redstoneChannel == 14) { 
+		        redstoneChannel = 0; 
+		    } else { 
+		        redstoneChannel++; 
+		    }
+		    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
+		    markDirty();
+		    this.onChange();
+		}
+		return true;
 	}
-	return true;
-    }
-    
+	
     protected String nameOfColorOfWire() {
         switch(redstoneChannel) {
 	    case 0: return "White - Orange";
@@ -310,12 +308,12 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    case 7: return "D. Gray - L. Gray";
 	    case 8: return "L. Gray - Cyan";
 	    case 9: return "Cyan - Purple";
-            case 10: return "Purple - D. Blue";
+        case 10: return "Purple - D. Blue";
 	    case 11: return "D. Blue - Brown";
 	    case 12: return "Brown - D. Green";
 	    case 13: return "D. Green - Red";
 	    case 14: return "Red - Black";
-	}
+	    }
         return "ERROR";
     }
     

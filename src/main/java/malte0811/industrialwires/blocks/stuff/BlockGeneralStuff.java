@@ -29,7 +29,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraft.block.state.BlockStateContainer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,7 +53,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
   
         @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {IEProperties.FACING_HORIZONTAL, type};
+		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL, type};
 	}
 
 	@Override
@@ -88,13 +87,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 		}
 	}
 	
-	@Nonnull
-	@Override
-	protected BlockStateContainer createBlockState() {
-	    BlockStateContainer base = super.createBlockState();
-	    return new ExtendedBlockState(this, base.getProperties().toArray(new IProperty[0]), new IUnlistedProperty[]{IEProperties.MULTIBLOCKSLAVE, PropertyComponents.INSTANCE, IEProperties.CONNECTIONS });
-	}
-
 	@Override
 	public BlockTypes_GeneralStuff[] getValues() {
 		return BlockTypes_GeneralStuff.values();
