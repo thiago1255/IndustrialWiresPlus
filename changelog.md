@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####version 19-00
+ - Added block to measure DC energy.
+
 ####Version 1.8-27
  - Final version of Control transformer!
  - (Bugs fixed)
