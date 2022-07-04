@@ -15,9 +15,8 @@ import net.minecraft.util.IStringSerializable;
 public enum BlockTypes_GeneralStuff implements IStringSerializable{
 	CONTROL_TRANSFORMER_RS,
 	CONTROL_TRANSFORMER_NORMAL,
-	//DC_BREAKER,
-        //DC_VOLTMETER,
-        VARISTOR;
+    VARISTOR,
+    POTENTIOMETER;
 
 	@Override
 	public String getName() {

@@ -153,13 +153,15 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
     @Override
     public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
         if(this.limitType==null) { this.limitType = cableType; }
-	wire = true;
+	    wire = true;
+	    markDirty();
     }
 
     @Override 
     public void removeCable(Connection connection) {
         wire = false;
-	limitType = null;
+	    limitType = null;
+	    markDirty();
     }
   
     @Override

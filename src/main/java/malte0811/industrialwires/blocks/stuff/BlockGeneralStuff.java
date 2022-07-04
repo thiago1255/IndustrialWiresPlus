@@ -26,6 +26,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -83,6 +85,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 			case CONTROL_TRANSFORMER_RS: return new TileEntityControlTransformerRs();
             case CONTROL_TRANSFORMER_NORMAL: return new TileEntityControlTransformerNormal();
             case VARISTOR: return new TileEntityVaristor();
+			case POTENTIOMETER: return new TileEntityPotentiometer();
 			default: return null;
 		}
 	}

@@ -14,7 +14,6 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.IEEnums.SideConfig;
 import blusunrize.immersiveengineering.api.Lib;
 import blusunrize.immersiveengineering.api.energy.wires.TileEntityImmersiveConnectable;
-import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
@@ -23,10 +22,6 @@ import blusunrize.immersiveengineering.api.energy.wires.WireType;
 import blusunrize.immersiveengineering.api.energy.wires.redstone.IRedstoneConnector;
 import blusunrize.immersiveengineering.api.energy.wires.redstone.RedstoneWireNetwork;
 import blusunrize.immersiveengineering.api.TargetingInfo;
-import blusunrize.immersiveengineering.api.energy.wires.*;
-import blusunrize.immersiveengineering.common.util.EnergyHelper;
-import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
-import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
@@ -34,6 +29,11 @@ import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
+import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
+import malte0811.industrialwires.IMixedConnector;
+import malte0811.industrialwires.wires.EnergyType;
+import malte0811.industrialwires.wires.MixedWireType;
+import malte0811.industrialwires.util.ConversionUtil;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,13 +42,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -60,19 +55,15 @@ import javax.annotation.Nonnull;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEGORY;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.COPPER;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.COPPER_INSULATED;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM_INSULATED;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.STEEL;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE;
+import static malte0811.industrialwires.wires.EnergyType.*;
+import static malte0811.industrialwires.wires.MixedWireType.ALL;
 
-public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
+public class TileEntityPotentiometer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IMixedConnector, IPlayerInteraction  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -80,87 +71,65 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String EAST = "east";
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
-    public int maxvalue = 8;
     protected int redstoneChannel = 0;
     private int redstoneValueFine = 0;
     private int redstoneValueCoarse = 0;
-    public boolean wireenergy = false;
     private boolean wirers = false;
-    public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
-    TileEntity te = null;
     public WireType electricWt = null;
-
+	private int dummy = 0;
+	public double energyToMeasure = 0;
+	public final ArrayList<Double> lastPackets = new ArrayList<>(25);
+	
 // NBT DATA: --------------------------------------
     @Override
     public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.readCustomNBT(nbt, descPacket);
         facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
-        wireenergy = nbt.getBoolean("wireenergy");
         wirers = nbt.getBoolean("wirers");
 	    redstoneChannel = nbt.getInteger("redstoneChannel");
-        energyStorage.readFromNBT(nbt);
+		dummy = nbt.getInteger("dummys");
     }
        
     @Override
     public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.writeCustomNBT(nbt, descPacket);
 	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
-        nbt.setBoolean("wireenergy", wireenergy);
         nbt.setBoolean("wirers", wirers);
 	    nbt.setInteger("redstoneChannel", redstoneChannel);
-	    energyStorage.writeToNBT(nbt);
+		nbt.setInteger("dummys", dummy);
     }
 
 // ITICKABLE: --------------------------------------
-    @Override
-    public void update() {
-        if (!world.isRemote) {  
-            int maxWire = 0;
-            if(electricWt == WireType.STEEL) { maxWire = 128; }  
-	    if(electricWt == WireType.ELECTRUM_INSULATED || electricWt == WireType.ELECTRUM) { maxWire = 32; } 
-	    if(electricWt == WireType.COPPER_INSULATED || electricWt == WireType.COPPER) { maxWire = 8; } 
-            int rsValue = (((redstoneValueCoarse*15)+redstoneValueCoarse)+(redstoneValueFine+1)); 
-            maxvalue = (rsValue*maxWire);
-            BlockPos left = null;
-            switch (facing) {
-	        case SOUTH: left = pos.offset(EnumFacing.EAST, -1); break;
-                case NORTH: left = pos.offset(EnumFacing.WEST, -1); break;
-	        case EAST: left = pos.offset(EnumFacing.NORTH, -1); break;
-                case WEST: left = pos.offset(EnumFacing.SOUTH, -1); break;
-	    }
-            te = world.getTileEntity(left);
-	    if(te instanceof TileEntityControlTransformerNormal) { 
-		if(this.energyStorage.getEnergyStored() > 0&&((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored() < this.getMaxStorage()){
-                    int energytoblock = Math.min(this.getMaxStorage()-((TileEntityControlTransformerNormal)te).energyStorage.getEnergyStored(), Math.min(this.energyStorage.getEnergyStored(), this.maxvalue));
-	            ((TileEntityControlTransformerNormal)te).energyStorage.modifyEnergyStored(+energytoblock);
-                    this.energyStorage.modifyEnergyStored(-energytoblock);
-	        }
-            }
-	}
-        else if(firstTick) {
-	    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
-	    if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
-	    firstTick = false;
-	}               
-    }
-    
+        @Override
+ 	    public void update() {
+		    if (isDummy()) { return; }
+		    if (!world.isRemote) { 
+			    if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) {
+				    getRsvalues();
+				}
+			    lastPackets.add(energyToMeasure);
+		        if(lastPackets.size() > 20) { lastPackets.remove(0); }
+		        energyToMeasure = 0;
+            } else if(firstTick) {
+		        Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
+		        if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
+		        firstTick = false;
+		    }               
+        }
+
 //WIRE STUFF: --------------------------------------
     @Override
-    public boolean allowEnergyToPass(Connection con) { return false; }
+    public boolean allowEnergyToPass(Connection con) { return true; }
 
     @Override
-    public boolean isEnergyOutput() { return true; }
+    public boolean isEnergyOutput() { return false; }
 
     @Override
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-        if(wireenergy && cableType.isEnergyWire()) { return false; }
         if(wirers && REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
         if(!cableType.isEnergyWire() && !REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
-        if(te instanceof TileEntityControlTransformerNormal) {
-	        if(((TileEntityControlTransformerNormal)te).wire) { return false; }
-	    }
 	    return true;
     }
 
@@ -169,10 +138,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    if(WireType.REDSTONE_CATEGORY.equals(cableType.getCategory())) {
             wirers = true;
 	        RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
-            this.onChange();
+			getRsvalues();
 	    }
 	    if(cableType.isEnergyWire()) { 
-	        wireenergy = true; 
             electricWt = cableType;
 	    }
 		limitType = null;
@@ -181,71 +149,48 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override 
     public void removeCable(ImmersiveNetHandler.Connection connection) {
-        if(connection.cableType == WireType.REDSTONE) {
-	    wirers = false;
-            wireNetwork.removeFromNetwork(this);
-			this.onChange();
-	    if (world != null) {
+	    if(connection.cableType == WireType.REDSTONE) {
+	        wirers = false;
+            /*wireNetwork.removeFromNetwork(this);
+		    this.onChange();
+	        if (world != null) {
                 IBlockState state = world.getBlockState(pos);
-	        world.notifyBlockUpdate(pos, state, state, 3);
-            }
-	} else {   
-            electricWt = null;
-	    wireenergy = false; 
-	}
-	limitType = null;
-	markDirty();
+	            world.notifyBlockUpdate(pos, state, state, 3);
+            }*/
+	    } else {   
+            electricWt = null; 
+	    }
+	    limitType = null;
+	    markDirty();
     }
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-        boolean isRs = (con.cableType == WireType.REDSTONE);
-        Vec3d val = new Vec3d(isRs?1.1: 0.5, isRs?0.5: 1.7, 0.5); //1.1, 0.5, 0.5 | 0.5, 1.7, 0.5
-        switch (facing) {
-	    case SOUTH: val = new Vec3d(isRs?0.4: 0.6, isRs?0.5: 1.7, isRs?0: 0.5); break;
-            case NORTH: val = new Vec3d(isRs?0.6: 0.4, isRs?0.5: 1.7, isRs?1: 0.5); break;
-	    case EAST: val = new Vec3d(isRs?0: 0.5, isRs?0.5: 1.7, isRs?0.6: 0.4); break;
-            case WEST: val = new Vec3d(isRs?1: 0.5, isRs?0.5: 1.7, isRs?0.4: 0.6); break;
-	}
-	return val;	
+		if (con.cableType == WireType.REDSTONE) {
+		    return new Vec3d(0.5, 0.1, 0.5);
+		}
+		//from IE current transformer:
+		int xDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getX()-getPos().getX(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getX()-getPos().getX(): 0;
+		int zDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getZ()-getPos().getZ(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getZ()-getPos().getZ(): 0;
+		if(facing.getAxis()==Axis.X) {
+			return new Vec3d(xDif > 0?1: 0, .5, .5);			
+		} else {
+			return new Vec3d(.5, .5, zDif > 0?1: 0);
+		}
     }
-    
-//ENERGY STRG: --------------------------------------       
-    public int getMaxStorage() { return 32768; }
-
-    public int getMaxInput() { return maxvalue; }
-
-    public int getMaxOutput() { return maxvalue; }
-
-    @Override
-    public int outputEnergy(int amount, boolean simulate, int energyType) {
-        if(energyType != 0) { return 0; }
-        if(amount > 0&&this.energyStorage.getEnergyStored() < getMaxStorage()){
-            int quantityenergy = Math.min(getMaxStorage()-this.energyStorage.getEnergyStored(), amount);
-	    quantityenergy = Math.min(quantityenergy, maxvalue);
-	    if(!simulate){
-	        this.energyStorage.modifyEnergyStored(+quantityenergy);
-	    }
-	    return quantityenergy;
-	}
-	return 0;
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) { return false; }
-
-    @Override
-    public FluxStorage getFluxStorage() { return energyStorage; }
-
-    @Override
-    public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing) { return null; } 
-        
-    @Override
-    public SideConfig getEnergySideConfig(EnumFacing facing) { return SideConfig.NONE; }   
 	
 	@Override
 	public boolean moveConnectionTo(Connection c, BlockPos newEnd) { return true; }
-
+	
+	@Override
+	public void onEnergyPassthrough(int amount) {
+		energyToMeasure += (int)amount;
+	}
+	
+	@Override
+	public double insertEnergy(double joules, boolean simulate, EnergyType type) { return 0; }
+	
+	
 // REDSTONE WIRE: -------------------------------------------
     @Override
     public void setNetwork(RedstoneWireNetwork net) { wireNetwork = net; }
@@ -254,21 +199,44 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public RedstoneWireNetwork getNetwork() { return wireNetwork; }
 
     @Override
-    public void onChange() { 
-        redstoneValueCoarse = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel): 0;
-	redstoneValueFine = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel+1): 0;
-    }
+    public void onChange() { return; }
     
     @Override
-    public void updateInput(byte[] signals) { return; }
+    public void updateInput(byte[] signals) {
+        signals[redstoneChannel] = (byte)Math.max(redstoneValueCoarse, signals[redstoneChannel]);
+        signals[(redstoneChannel+1)] = (byte)Math.max(redstoneValueFine, signals[(redstoneChannel+1)]);
+	}
 
     @Override
     public World getConnectorWorld() { return getWorld(); }
 	
+	private void getRsvalues() {
+	    if(lastPackets.size()==0) { return; }
+	    double maxJoule = ConversionUtil.joulesPerEu();
+		if((electricWt == MixedWireType.TIN) || (electricWt == MixedWireType.TIN_INSULATED)) { maxJoule *= 256;}
+		if((electricWt == MixedWireType.COPPER_IC2) || (electricWt == MixedWireType.COPPER_IC2_INSULATED)) { maxJoule *= 1024; }
+		if((electricWt == MixedWireType.GOLD) || (electricWt == MixedWireType.GOLD_INSULATED)) { maxJoule *= 4096; }
+		if(electricWt == MixedWireType.HV) { maxJoule *= 16384; }
+		if(electricWt == MixedWireType.GLASS) { maxJoule *= 65536; }
+		double sum = 0;
+		for(double transfer : lastPackets) {
+		    sum += transfer;
+		}
+		sum = sum/lastPackets.size();
+        sum = sum/maxJoule;
+		sum = Math.ceil(sum*256);
+        redstoneValueCoarse = 0;
+		redstoneValueFine = (int)sum;
+        for (redstoneValueFine = (int)sum; redstoneValueFine >= 16; redstoneValueFine -= 16) {
+            redstoneValueCoarse++;    
+        }
+        wireNetwork.updateValues();
+	}
 // GENERAL PROPERTYES: --------------------------------------           
 	@Override
 	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
-	    if(Utils.isHammer(heldItem)&&!world.isRemote){
+	    if(isDummy()) {return false;}
+		if(Utils.isHammer(heldItem)&&!world.isRemote){
 		    if(redstoneChannel == 14) { 
 		        redstoneChannel = 0; 
 		    } else { 
@@ -276,10 +244,17 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 		    }
 		    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
 		    markDirty();
-		    this.onChange();
+		    this.onChange();       
 			return true;
 		}
-		return false;
+        if(lastPackets.size()==0) { return false; }
+		double sum = 0;
+		for(double transfer : lastPackets) {
+		    sum += transfer;
+		}
+		String measuredEnergy = Utils.formatDouble(sum/lastPackets.size(), "0.###");
+        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerValues", String.format("%s", measuredEnergy)));
+        return true;
 	}
 	
     protected String nameOfColorOfWire() {
@@ -310,7 +285,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public AxisAlignedBB getBoundingBox() {
         if (aabb==null) { aabb = IBlockBoundsDirectional.super.getBoundingBox(); }
-	      return aabb;
+	    return aabb;
     }
 
     @Nonnull
@@ -331,6 +306,27 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
-    
+	
+// DUMMY BLOCKS: --------------------------------------
+        @Override
+	    public boolean isDummy() { return dummy != 0; }
+
+        @Override
+	    public void placeDummies(IBlockState state) {
+            for(int i = 1; i <= 1; i++) {
+			    world.setBlockState(pos.add(0, i, 0), state);
+			    ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, i, 0))).dummy = i;
+			    ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, i, 0))).facing = this.facing;
+		    }
+	    }
+
+        @Override
+	    public void breakDummies() {
+	        for(int i = 0; i <= 1; i++) {
+			    if(world.getTileEntity(getPos().add(0, -dummy, 0).add(0, i, 0)) instanceof TileEntityPotentiometer) {
+				    world.setBlockToAir(getPos().add(0, -dummy, 0).add(0, i, 0));
+				}
+		    }
+        }
 // FINISH OF THIS CLASS ------------------------------------------------------------------------
 }
