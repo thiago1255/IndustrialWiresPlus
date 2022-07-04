@@ -1,1 +1,0 @@
-**Chinese translation**: SihenZhang (Proofread by 3TUSK)
