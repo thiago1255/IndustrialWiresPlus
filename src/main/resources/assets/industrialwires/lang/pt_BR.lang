@@ -14,6 +14,7 @@ tile.industrialwires.general_hv.discharge_meter.name=Medidor de descarga elétri
 tile.industrialwires.general_stuff.control_transformer_rs.name=Transformador de controle (entrada)
 tile.industrialwires.general_stuff.control_transformer_normal.name=Transformador de controle (saída)
 tile.industrialwires.general_stuff.varistor.name=Varistor
+tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'metro
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Motor rotacional
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotacional para cinético
