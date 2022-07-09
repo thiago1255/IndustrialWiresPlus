@@ -65,12 +65,6 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.COPPER;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.COPPER_INSULATED;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM_INSULATED;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.STEEL;
-import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE;
 
 public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
 {
@@ -164,6 +158,14 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
+        if(con.cableType == WireType.REDSTONE) { return new Vec3d(0.5, 0.9, 0.5); }
+        int xDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getX()-getPos().getX(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getX()-getPos().getX(): 0;
+	int zDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getZ()-getPos().getZ(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getZ()-getPos().getZ(): 0;
+	if(facing.getAxis()==Axis.X) {
+	    return new Vec3d(.5, .4375, zDif > 0?.8125: .1875);
+	} else {
+	    return new Vec3d(xDif > 0?.8125: .1875, .4375, .5);
+	}
     }
     
     @Override
@@ -171,6 +173,9 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
         energyToMeasure += amount;
     }
 
+    @Override
+    public boolean moveConnectionTo(Connection c, BlockPos newEnd) { return true; }
+	
 // REDSTONE WIRE: -------------------------------------------
     @Override
     public void setNetwork(RedstoneWireNetwork net) { wireNetwork = net; }
@@ -193,18 +198,12 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     
     private void getRsvalues() {
         if(lastPackets.size()==0) { return; }
-	double maxJoule = ConversionUtil.joulesPerEu();
-	if((electricWt == MixedWireType.TIN) || (electricWt == MixedWireType.TIN_INSULATED)) { maxJoule *= 256;}
-	if((electricWt == MixedWireType.COPPER_IC2) || (electricWt == MixedWireType.COPPER_IC2_INSULATED)) { maxJoule *= 1024; }
-	if((electricWt == MixedWireType.GOLD) || (electricWt == MixedWireType.GOLD_INSULATED)) { maxJoule *= 4096; }
-	if(electricWt == MixedWireType.HV) { maxJoule *= 16384; }
-	if(electricWt == MixedWireType.GLASS) { maxJoule *= 65536; }
 	double sum = 0;
 	for(double transfer : lastPackets) {
             sum += transfer;
 	}
 	sum = sum/lastPackets.size();
-        sum = sum/maxJoule;
+        sum = sum/(int)electricWt.cableType.getTransferRate();
 	sum = Math.ceil(sum*256);
         redstoneValueCoarse = 0;
 	redstoneValueFine = (int)sum;
@@ -287,17 +286,17 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     @Override
     public void placeDummies(IBlockState state) {
         for(int i = 1; i <= 1; i++){
-	    world.setBlockState(pos.add(0, i, 0), state);
-            ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, i, 0))).dummy = i;
-	    ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, i, 0))).facing = this.facing;
+	    world.setBlockState(pos.add(0, -i, 0), state);
+            ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, -i, 0))).dummy = i;
+	    ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, -i, 0))).facing = this.facing;
         }
     }
 
     @Override
     public void breakDummies() {
         for(int i = 0; i <= 1; i++) {
-	    if(world.getTileEntity(getPos().add(0, -dummy, 0).add(0, i, 0)) instanceof TileEntityPotentiometer) {
-	        world.setBlockToAir(getPos().add(0, -dummy, 0).add(0, i, 0));
+	    if(world.getTileEntity(getPos().add(0, dummy, 0).add(0, -i, 0)) instanceof TileEntityPotentiometer) {
+	        world.setBlockToAir(getPos().add(0, dummy, 0).add(0, -i, 0));
 	    }
         }
     }
