@@ -67,7 +67,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
-public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
+public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable implements ITickable, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -205,7 +205,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
             sum += transfer;
 	}
 	sum = sum/lastPackets.size();
-        sum = sum/(int)electricWt.cableType.getTransferRate();
+        sum = sum/(int)electricWt.getTransferRate();
 	sum = Math.ceil(sum*256);
         redstoneValueCoarse = 0;
 	redstoneValueFine = (int)sum;
@@ -289,15 +289,15 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     public void placeDummies(IBlockState state) {
         for(int i = 1; i <= 1; i++){
 	    world.setBlockState(pos.add(0, -i, 0), state);
-            ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, -i, 0))).dummy = i;
-	    ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, -i, 0))).facing = this.facing;
+            ((TileEntityCurrentTransformer)world.getTileEntity(pos.add(0, -i, 0))).dummy = i;
+	    ((TileEntityCurrentTransformer)world.getTileEntity(pos.add(0, -i, 0))).facing = this.facing;
         }
     }
 
     @Override
     public void breakDummies() {
         for(int i = 0; i <= 1; i++) {
-	    if(world.getTileEntity(getPos().add(0, dummy, 0).add(0, -i, 0)) instanceof TileEntityPotentiometer) {
+	    if(world.getTileEntity(getPos().add(0, dummy, 0).add(0, -i, 0)) instanceof TileEntityCurrentTransformer) {
 	        world.setBlockToAir(getPos().add(0, dummy, 0).add(0, -i, 0));
 	    }
         }
