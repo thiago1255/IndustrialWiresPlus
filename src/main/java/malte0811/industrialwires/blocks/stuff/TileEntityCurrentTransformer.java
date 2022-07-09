@@ -83,6 +83,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     boolean firstTick = true;
     public WireType electricWt = null;
     public double energyToMeasure = 0;
+    private int dummy = 0;
     public final ArrayList<Double> lastPackets = new ArrayList<>(25);
 
 // NBT DATA: --------------------------------------
