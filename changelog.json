@@ -75,6 +75,7 @@
         "1.8-25": " - Redstone wire can be connected on Ct !",
         "1.8-26": " - Prob. fixed some bugs.\n - Now more wire types can be connected on control transformer !",
         "1.8-27": " - Final version of Control transformer!\n - (Bugs fixed) - Hammer can be used to change RS channels. - Output in chat of Maximum value was removed.",
-        "1.9-00": " - Added block to measure DC energy."
+        "1.9-00": " - Added block to measure DC energy.",
+        "1.9-01": " - Added block to measure AC energy, but with redtone output; (a version of IE's Energy meter)"
     }
 }
