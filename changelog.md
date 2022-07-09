@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####version 19-01
+ - Added block to measure AC energy, but with redtone output; (a version of IE's Energy meter)
+
 ####version 19-00
  - Added block to measure DC energy.
 
