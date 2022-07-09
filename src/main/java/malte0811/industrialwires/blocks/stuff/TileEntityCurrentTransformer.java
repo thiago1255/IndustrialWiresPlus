@@ -60,6 +60,7 @@ import javax.annotation.Nonnull;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.ArrayList;
 
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
