@@ -230,6 +230,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
 	    markDirty();      
 	    return true;
 	}
+        return false;
     }
 	
     protected String nameOfColorOfWire() {
