@@ -34,6 +34,7 @@ import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
+import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -67,7 +68,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
 
-public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable implements ITickable, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
+public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable implements IHasDummyBlocksIW, ITickable, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
