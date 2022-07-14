@@ -206,6 +206,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
             sum += transfer;
 	    }
 	    sum = sum/lastPackets.size();
+        if(electricWt == null) { return; }
         sum = sum/(int)electricWt.getTransferRate();
 	    sum = Math.ceil(sum*256);
         redstoneValueCoarse = 0;
