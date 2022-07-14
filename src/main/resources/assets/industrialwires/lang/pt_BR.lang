@@ -128,6 +128,7 @@ industrialwires.chat.maxSpeed=Velocidade máxima medida: %s
 industrialwires.chat.currSpeed=Velocidade atual: %s radianos/segundo = %s RPM
 industrialwires.chat.transformerValues=Valor máximo: %s
 industrialwires.chat.transformerRs=Canais (primário e secundário): %s
+industrialwires.chat.currentTransformer=Energia medida: %s IF
 
 death.attack.industrialwires.jacobs_ladder=%1$s foi eletrecutado por uma 'Jacob's Ladder'
 death.attack.industrialwires.marx=%1$s foi atingido por um raio de Gerador Marx
