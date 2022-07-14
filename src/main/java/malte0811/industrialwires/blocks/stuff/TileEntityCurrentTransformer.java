@@ -235,7 +235,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
             sum += transfer;
 	    }
 	    sum = sum/lastPackets.size();
-        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(transfer, "0.###"))));
+        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(sum, "0.###"))));
         return true;
     }
 	

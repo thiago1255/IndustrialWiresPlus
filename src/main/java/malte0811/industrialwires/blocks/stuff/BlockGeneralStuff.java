@@ -13,6 +13,7 @@ import blusunrize.immersiveengineering.api.IEProperties;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
 import malte0811.industrialwires.controlpanel.PropertyComponents;
+import malte0811.industrialwires.blocks.IPlacementCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -35,7 +36,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
+public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacementCheck{
 	public static final PropertyEnum<BlockTypes_GeneralStuff> type = PropertyEnum.create("type", BlockTypes_GeneralStuff.class);
 	public static final String NAME = "general_stuff";
 
@@ -94,12 +95,12 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
     @Override
 	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack) {
 		//int dummyCount = 0;
-        switch (state.getValue(type)) {
-            case POTENTIOMETER: 
+        switch (stack.getItemDamage()) {
+            case 3: 
                 if (!w.isAirBlock(pos.up(1))) {
 				    return false;
 			    }
-            case CURRENT_TRANSFORMER:
+			case 4:
 				if (!w.isAirBlock(pos.down(1))) {
 				    return false;
 			    }
