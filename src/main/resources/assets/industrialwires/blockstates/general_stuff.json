@@ -38,7 +38,7 @@
 				}
 			}
 		],
-                "inventory,type=varistor": [
+        "inventory,type=varistor": [
 			{
 				"model": "industrialwires:varistor.obj",
 				"transform": {
@@ -52,7 +52,7 @@
 				}
 			}
 		],
-		         "inventory,type=potentiometer": [
+		"inventory,type=potentiometer": [
 			{
 				"model": "industrialwires:potenciometro.obj",
 				"transform": {
@@ -66,7 +66,7 @@
 				}
 			}
 		],
-		         "inventory,type=current_transformer": [
+		"inventory,type=current_transformer": [
 			{
 				"model": "industrialwires:ct_rs.obj",
 				"transform": {
@@ -92,7 +92,7 @@
 		    },
 			"potentiometer": {
 				"model": "industrialwires:potenciometro.obj"
-		    }
+		    },
             "current_transformer": {
                 "model": "industrialwires:ct_rs.obj"
 		    }
