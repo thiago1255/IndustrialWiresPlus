@@ -301,7 +301,6 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
 			world.setBlockState(pos2, state);
 			TileEntity te = world.getTileEntity(pos2);
 			if (te instanceof TileEntityCurrentTransformer) {
-				((TileEntityCurrentTransformer) te).size = size;
 				((TileEntityCurrentTransformer) te).dummy = i;
 				((TileEntityCurrentTransformer) te).facing = facing;
 			}

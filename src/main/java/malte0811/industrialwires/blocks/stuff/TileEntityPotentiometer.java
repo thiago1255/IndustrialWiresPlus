@@ -318,7 +318,6 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 			world.setBlockState(pos2, state);
 			TileEntity te = world.getTileEntity(pos2);
 			if (te instanceof TileEntityPotentiometer) {
-				((TileEntityPotentiometer) te).size = size;
 				((TileEntityPotentiometer) te).dummy = i;
 				((TileEntityPotentiometer) te).facing = facing;
 			}
