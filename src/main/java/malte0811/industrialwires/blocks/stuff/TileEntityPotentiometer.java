@@ -313,20 +313,25 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 
     @Override
     public void placeDummies(IBlockState state) {
-        for(int i = 1; i <= 1; i++){
-	    world.setBlockState(pos.add(0, i, 0), state);
-            ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, i, 0))).dummy = i;
-	    ((TileEntityPotentiometer)world.getTileEntity(pos.add(0, i, 0))).facing = this.facing;
-	}
+        for (int i = 1; i <= 1; i++) {
+			BlockPos pos2 = pos.offset(EnumFacing.UP, i);
+			world.setBlockState(pos2, state);
+			TileEntity te = world.getTileEntity(pos2);
+			if (te instanceof TileEntityPotentiometer) {
+				((TileEntityPotentiometer) te).size = size;
+				((TileEntityPotentiometer) te).dummy = i;
+				((TileEntityPotentiometer) te).facing = facing;
+			}
+		}
     }
 
     @Override
     public void breakDummies() {
-        for(int i = 0; i <= 1; i++) {
-	    if(world.getTileEntity(getPos().add(0, -dummy, 0).add(0, i, 0)) instanceof TileEntityPotentiometer) {
-	        world.setBlockToAir(getPos().add(0, -dummy, 0).add(0, i, 0));
-	    }
-        }
+        for (int i = 0; i <= 1; i++) {
+			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.UP, i - dummy)) instanceof TileEntityPotentiometer) {
+				world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy));
+			}
+		}
     }
 // FINISH OF THIS CLASS ------------------------------------------------------------------------
 }

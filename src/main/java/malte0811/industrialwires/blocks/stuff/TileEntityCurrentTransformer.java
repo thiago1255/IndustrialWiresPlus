@@ -123,7 +123,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     
 //WIRE STUFF: --------------------------------------
     @Override
-    public boolean allowEnergyToPass(Connection con) { return false; }
+    public boolean allowEnergyToPass(Connection con) { return true; }
 
     @Override
     public boolean isEnergyOutput() { return true; }
@@ -296,20 +296,25 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
 
     @Override
     public void placeDummies(IBlockState state) {
-        for(int i = 1; i <= 1; i++){
-	    world.setBlockState(pos.add(0, -i, 0), state);
-            ((TileEntityCurrentTransformer)world.getTileEntity(pos.add(0, -i, 0))).dummy = i;
-	    ((TileEntityCurrentTransformer)world.getTileEntity(pos.add(0, -i, 0))).facing = this.facing;
-        }
+        for (int i = 1; i <= 1; i++) {
+			BlockPos pos2 = pos.offset(EnumFacing.DOWN, i);
+			world.setBlockState(pos2, state);
+			TileEntity te = world.getTileEntity(pos2);
+			if (te instanceof TileEntityCurrentTransformer) {
+				((TileEntityCurrentTransformer) te).size = size;
+				((TileEntityCurrentTransformer) te).dummy = i;
+				((TileEntityCurrentTransformer) te).facing = facing;
+			}
+		}
     }
 
     @Override
     public void breakDummies() {
-        for(int i = 0; i <= 1; i++) {
-	    if(world.getTileEntity(getPos().add(0, dummy, 0).add(0, -i, 0)) instanceof TileEntityCurrentTransformer) {
-	        world.setBlockToAir(getPos().add(0, dummy, 0).add(0, -i, 0));
-	    }
-        }
+        for (int i = 0; i <= 1; i++) {
+			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.DOWN, i - dummy)) instanceof TileEntityCurrentTransformer) {
+				world.setBlockToAir(pos.offset(EnumFacing.DOWN, i - dummy));
+			}
+		}
     }
     
 // FINISH OF THIS CLASS ------------------------------------------------------------------------
