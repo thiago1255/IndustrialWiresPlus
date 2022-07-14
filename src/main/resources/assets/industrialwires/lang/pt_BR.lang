@@ -15,6 +15,7 @@ tile.industrialwires.general_stuff.control_transformer_rs.name=Transformador de 
 tile.industrialwires.general_stuff.control_transformer_normal.name=Transformador de controle (saída)
 tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'metro
+tile.industrialwires.general_stuff.current_transformer.name=Transformador de corrente
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Motor rotacional
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotacional para cinético
