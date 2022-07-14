@@ -83,14 +83,36 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum {
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 	    switch (state.getValue(type)) {
 	        case CONTROL_TRANSFORMER_RS: return new TileEntityControlTransformerRs();
-                case CONTROL_TRANSFORMER_NORMAL: return new TileEntityControlTransformerNormal();
-                case VARISTOR: return new TileEntityVaristor();
-		case POTENTIOMETER: return new TileEntityPotentiometer();
-		case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
-		default: return null;
+            case CONTROL_TRANSFORMER_NORMAL: return new TileEntityControlTransformerNormal();
+            case VARISTOR: return new TileEntityVaristor();
+		    case POTENTIOMETER: return new TileEntityPotentiometer();
+		    case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
+		    default: return null;
 	    }
 	}
 	
+    @Override
+	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack) {
+		//int dummyCount = 0;
+        switch (state.getValue(type)) {
+            case POTENTIOMETER: 
+                if (!w.isAirBlock(pos.up(1))) {
+				    return false;
+			    }
+            case CURRENT_TRANSFORMER:
+				if (!w.isAirBlock(pos.down(1))) {
+				    return false;
+			    }
+			default: return true;
+		}
+		/*for (int i = 1; i <= dummyCount; i++) {
+			if (!w.isAirBlock(pos.up(i))) {
+				return false;
+			}
+		}
+		return true;*/
+	}
+
 	@Override
 	public BlockTypes_GeneralStuff[] getValues() {
 		return BlockTypes_GeneralStuff.values();

@@ -201,15 +201,15 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     
     private void getRsvalues() {
         if(lastPackets.size()==0) { return; }
-	double sum = 0;
-	for(double transfer : lastPackets) {
+	    double sum = 0;
+	    for(double transfer : lastPackets) {
             sum += transfer;
-	}
-	sum = sum/lastPackets.size();
+	    }
+	    sum = sum/lastPackets.size();
         sum = sum/(int)electricWt.getTransferRate();
-	sum = Math.ceil(sum*256);
+	    sum = Math.ceil(sum*256);
         redstoneValueCoarse = 0;
-	redstoneValueFine = (int)sum;
+	    redstoneValueFine = (int)sum;
         for (redstoneValueFine = (int)sum; redstoneValueFine >= 16; redstoneValueFine -= 16) {
             redstoneValueCoarse++;    
         }
@@ -220,36 +220,42 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     @Override
     public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
         if(isDummy()) {return false;}
-	if(Utils.isHammer(heldItem)&&!world.isRemote){
-	    if(redstoneChannel == 14) { 
-	        redstoneChannel = 0; 
-	    } else { 
-	        redstoneChannel++; 
+	    if(Utils.isHammer(heldItem)&&!world.isRemote){
+	        if(redstoneChannel == 14) { 
+	            redstoneChannel = 0; 
+	        } else { 
+	            redstoneChannel++; 
+	        }
+	        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
+	        markDirty();      
+	        return true;
 	    }
-	    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
-	    markDirty();      
-	    return true;
-	}
-        return false;
+        double sum = 0;
+	    for(double transfer : lastPackets) {
+            sum += transfer;
+	    }
+	    sum = sum/lastPackets.size();
+        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(transfer, "0.###"))));
+        return true;
     }
 	
     protected String nameOfColorOfWire() {
         switch(redstoneChannel) {
             case 0: return "White - Orange";
-	    case 1: return "Orange - Magenta";
-	    case 2: return "Magenta - L. Blue";
-	    case 3: return "L. Blue - Yellow";
-	    case 4: return "Yellow - L. Green";
-	    case 5: return "L. Green - Pink";
-	    case 6: return "Pink - D. Gray";
-	    case 7: return "D. Gray - L. Gray";
-	    case 8: return "L. Gray - Cyan";
-	    case 9: return "Cyan - Purple";
+	        case 1: return "Orange - Magenta";
+	        case 2: return "Magenta - L. Blue";
+	        case 3: return "L. Blue - Yellow";
+	        case 4: return "Yellow - L. Green";
+	        case 5: return "L. Green - Pink";
+	        case 6: return "Pink - D. Gray";
+	        case 7: return "D. Gray - L. Gray";
+	        case 8: return "L. Gray - Cyan";
+	        case 9: return "Cyan - Purple";
             case 10: return "Purple - D. Blue";
-	    case 11: return "D. Blue - Brown";
-	    case 12: return "Brown - D. Green";
-	    case 13: return "D. Green - Red";
-	    case 14: return "Red - Black";
+	        case 11: return "D. Blue - Brown";
+	        case 12: return "Brown - D. Green";
+	        case 13: return "D. Green - Red";
+	        case 14: return "Red - Black";
         }
         return "ERROR";
   }
