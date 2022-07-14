@@ -1,9 +1,12 @@
 ###Minecraft 1.12.2
 
-####version 19-02
+####version 1.9-03
+ - More bug fix
+
+####version 1.9-02
  - Bug fix uptade
 
-####version 19-01
+####version 1.9-01
  - Added block to measure AC energy, but with redtone output; (a version of IE's Energy meter)
 
 ####version 19-00
