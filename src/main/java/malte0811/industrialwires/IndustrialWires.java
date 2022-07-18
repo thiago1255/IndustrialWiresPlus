@@ -199,11 +199,12 @@ public class IndustrialWires {
 		GameRegistry.registerTileEntity(TileEntityUnfinishedPanel.class, new ResourceLocation(MODID, "unfinished_panel"));
 		GameRegistry.registerTileEntity(TileEntityComponentPanel.class, new ResourceLocation(MODID, "single_component_panel"));
 		GameRegistry.registerTileEntity(TileEntityDischargeMeter.class, new ResourceLocation(MODID, "discharge_meter"));
-                GameRegistry.registerTileEntity(TileEntityControlTransformerRs.class, new ResourceLocation(MODID, "te_control_transformer_rs"));
-                GameRegistry.registerTileEntity(TileEntityControlTransformerNormal.class, new ResourceLocation(MODID, "te_control_transformer_normal"));  
-                GameRegistry.registerTileEntity(TileEntityVaristor.class, new ResourceLocation(MODID, "te_varistor"));
-		GameRegistry.registerTileEntity(TileEntityPotentiometer.class, new ResourceLocation(MODID, "te_potentiometer")); 
-                GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
+        GameRegistry.registerTileEntity(TileEntityControlTransformerRs.class, new ResourceLocation(MODID, "te_control_transformer_rs"));
+        GameRegistry.registerTileEntity(TileEntityControlTransformerNormal.class, new ResourceLocation(MODID, "te_control_transformer_normal"));  
+        GameRegistry.registerTileEntity(TileEntityVaristor.class, new ResourceLocation(MODID, "te_varistor"));
+        GameRegistry.registerTileEntity(TileEntityPotentiometer.class, new ResourceLocation(MODID, "te_potentiometer")); 
+        GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
+        GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
 		
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
 		MARKER_TEXTURE = EntityDataManager.createKey(EntityBrokenPart.class, RES_LOC_SERIALIZER);
