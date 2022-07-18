@@ -15,7 +15,6 @@ import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
-import malte0811.industrialwires.controlpanel.PropertyComponents;
 import malte0811.industrialwires.blocks.IPlacementCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -60,7 +59,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
   
     @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_ALL, type};
+		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL, type};
 	}
 
 	@Override
@@ -92,7 +91,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
             case VARISTOR: return new TileEntityVaristor();
 		    case POTENTIOMETER: return new TileEntityPotentiometer();
 		    case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
-			case RS_CONTROLER: return new TileEntityRedstoneControler();
 		    default: return null;
 	    }
 	}
