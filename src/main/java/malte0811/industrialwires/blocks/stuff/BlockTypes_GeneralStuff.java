@@ -13,11 +13,12 @@ import malte0811.industrialwires.compat.Compat;
 import net.minecraft.util.IStringSerializable;
 
 public enum BlockTypes_GeneralStuff implements IStringSerializable{
-	CONTROL_TRANSFORMER_RS,
-	CONTROL_TRANSFORMER_NORMAL,
-        VARISTOR,
-        POTENTIOMETER,
-        CURRENT_TRANSFORMER;
+    CONTROL_TRANSFORMER_RS,
+    CONTROL_TRANSFORMER_NORMAL,
+    VARISTOR,
+    POTENTIOMETER,
+    CURRENT_TRANSFORMER,
+	RS_CONTROLER;
 
 	@Override
 	public String getName() {

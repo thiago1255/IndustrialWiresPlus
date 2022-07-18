@@ -19,8 +19,6 @@ import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
-import blusunrize.immersiveengineering.api.energy.wires.redstone.IRedstoneConnector;
-import blusunrize.immersiveengineering.api.energy.wires.redstone.RedstoneWireNetwork;
 import blusunrize.immersiveengineering.api.TargetingInfo;
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
@@ -29,11 +27,11 @@ import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
-import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import malte0811.industrialwires.IMixedConnector;
 import malte0811.industrialwires.wires.EnergyType;
 import malte0811.industrialwires.wires.MixedWireType;
 import malte0811.industrialwires.util.ConversionUtil;
+import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -63,7 +61,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE
 import static malte0811.industrialwires.wires.EnergyType.*;
 import static malte0811.industrialwires.wires.MixedWireType.ALL;
 
-public class TileEntityPotentiometer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IMixedConnector, IPlayerInteraction  
+public class TileEntityPotentiometer extends TileEntityImmersiveConnectable implements ITickable, IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IMixedConnector 
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -71,11 +69,9 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
     private static final String EAST = "east";
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
-    protected int redstoneChannel = 0;
-    private int redstoneValueFine = 0;
-    private int redstoneValueCoarse = 0;
+    public int redstoneValueFine = 0;
+    public int redstoneValueCoarse = 0;
     private boolean wirers = false;
-    protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
     public WireType electricWt = null;
     private int dummy = 0;
@@ -87,17 +83,13 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
     public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.readCustomNBT(nbt, descPacket);
         facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
-        wirers = nbt.getBoolean("wirers");
-	redstoneChannel = nbt.getInteger("redstoneChannel");
         dummy = nbt.getInteger("dummys");
     }
        
     @Override
     public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.writeCustomNBT(nbt, descPacket);
-	nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
-        nbt.setBoolean("wirers", wirers);
-	nbt.setInteger("redstoneChannel", redstoneChannel);
+        nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
         nbt.setInteger("dummys", dummy);
     }
 
@@ -128,54 +120,32 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 
     @Override
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-        if(wirers && REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
-        if(!cableType.isEnergyWire() && !REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
-	return true;
+        if(REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
+        if(!cableType.isEnergyWire()) { return false; }
+	    return true;
     }
 
     @Override
     public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-	    if(WireType.REDSTONE_CATEGORY.equals(cableType.getCategory())) {
-            wirers = true;
-	        RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
-			getRsvalues();
-	    }
-	    if(cableType.isEnergyWire()) { 
-            electricWt = cableType;
-	    }
-	    limitType = null;
-	    markDirty();
+        electricWt = cableType;
+	    limitType = cableType;
     }
 
     @Override 
-    public void removeCable(ImmersiveNetHandler.Connection connection) {
-	    if(connection.cableType == WireType.REDSTONE) {
-	        wirers = false;
-            /*wireNetwork.removeFromNetwork(this);
-		    this.onChange();
-	        if (world != null) {
-                IBlockState state = world.getBlockState(pos);
-	            world.notifyBlockUpdate(pos, state, state, 3);
-            }*/
-	    } else {   
-            electricWt = null; 
-	    }
+    public void removeCable(ImmersiveNetHandler.Connection connection) {  
+        electricWt = null; 
 	    limitType = null;
-	    markDirty();
     }
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
-		if (con.cableType == WireType.REDSTONE) {
-		    return new Vec3d(0.5, 0.1, 0.5);
-		}
 		//from IE current transformer:
 		int xDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getX()-getPos().getX(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getX()-getPos().getX(): 0;
 		int zDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getZ()-getPos().getZ(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getZ()-getPos().getZ(): 0;
 		if(facing.getAxis()==Axis.X) {
-			return new Vec3d(xDif > 0?1: 0, .5, .5);			
+			return new Vec3d(xDif > 0?0.9375: 0.0625, .5, .5);			
 		} else {
-			return new Vec3d(.5, .5, zDif > 0?1: 0);
+			return new Vec3d(.5, .5, zDif > 0?0.9375: 0.0625);
 		}
     }
 	
@@ -191,101 +161,46 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 	public double insertEnergy(double joules, boolean simulate, EnergyType type) { return 0; }
 	
 	
-// REDSTONE WIRE: -------------------------------------------
-    @Override
-    public void setNetwork(RedstoneWireNetwork net) { wireNetwork = net; }
+// REDSTONE STUFF: -------------------------------------------
 
-    @Override
-    public RedstoneWireNetwork getNetwork() { return wireNetwork; }
-
-    @Override
-    public void onChange() { return; }
-    
-    @Override
-    public void updateInput(byte[] signals) {
-        signals[redstoneChannel] = (byte)Math.max(redstoneValueCoarse, signals[redstoneChannel]);
-        signals[(redstoneChannel+1)] = (byte)Math.max(redstoneValueFine, signals[(redstoneChannel+1)]);
-    }
-
-    @Override
-    public World getConnectorWorld() { return getWorld(); }
 	
     private void getRsvalues() {
         if(lastPackets.size()==0) { return; }
-	double maxJoule = ConversionUtil.joulesPerEu();
-	if((electricWt == MixedWireType.TIN) || (electricWt == MixedWireType.TIN_INSULATED)) { maxJoule *= 256;}
-	if((electricWt == MixedWireType.COPPER_IC2) || (electricWt == MixedWireType.COPPER_IC2_INSULATED)) { maxJoule *= 1024; }
-	if((electricWt == MixedWireType.GOLD) || (electricWt == MixedWireType.GOLD_INSULATED)) { maxJoule *= 4096; }
-	if(electricWt == MixedWireType.HV) { maxJoule *= 16384; }
-	if(electricWt == MixedWireType.GLASS) { maxJoule *= 65536; }
-	double sum = 0;
-	for(double transfer : lastPackets) {
+	    double maxJoule = ConversionUtil.joulesPerEu();
+	    if((electricWt == MixedWireType.TIN) || (electricWt == MixedWireType.TIN_INSULATED)) { maxJoule *= 256;}
+	    if((electricWt == MixedWireType.COPPER_IC2) || (electricWt == MixedWireType.COPPER_IC2_INSULATED)) { maxJoule *= 1024; }
+	    if((electricWt == MixedWireType.GOLD) || (electricWt == MixedWireType.GOLD_INSULATED)) { maxJoule *= 4096; }
+	    if(electricWt == MixedWireType.HV) { maxJoule *= 16384; }
+	    if(electricWt == MixedWireType.GLASS) { maxJoule *= 65536; }
+	    double sum = 0;
+	    for(double transfer : lastPackets) {
             sum += transfer;
-	}
-	sum = sum/lastPackets.size();
+	    }
+	    sum = sum/lastPackets.size();
         sum = sum/maxJoule;
-	sum = Math.ceil(sum*256);
+	    sum = Math.ceil(sum*256);
         redstoneValueCoarse = 0;
-	redstoneValueFine = (int)sum;
+	    redstoneValueFine = (int)sum;
         for (redstoneValueFine = (int)sum; redstoneValueFine >= 16; redstoneValueFine -= 16) {
             redstoneValueCoarse++;    
         }
-        wireNetwork.updateValues();
     }
 // GENERAL PROPERTYES: --------------------------------------           
-	@Override
-	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
-	    if(isDummy()) {return false;}
-		if(Utils.isHammer(heldItem)&&!world.isRemote){
-		    if(redstoneChannel == 14) { 
-		        redstoneChannel = 0; 
-		    } else { 
-		        redstoneChannel++; 
-		    }
-		    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
-		    markDirty();
-		    this.onChange();       
-			return true;
-		}
-        if(lastPackets.size()==0) { return false; }
-		double sum = 0;
-		for(double transfer : lastPackets) {
-		    sum += transfer;
-		}
-		String measuredEnergy = Utils.formatDouble(sum/lastPackets.size(), "0.###");
-        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerValues", String.format("%s", measuredEnergy)));
-        return true;
-	}
-	
-    protected String nameOfColorOfWire() {
-        switch(redstoneChannel) {
-	    case 0: return "White - Orange";
-	    case 1: return "Orange - Magenta";
-	    case 2: return "Magenta - L. Blue";
-	    case 3: return "L. Blue - Yellow";
-	    case 4: return "Yellow - L. Green";
-	    case 5: return "L. Green - Pink";
-	    case 6: return "Pink - D. Gray";
-	    case 7: return "D. Gray - L. Gray";
-	    case 8: return "L. Gray - Cyan";
-	    case 9: return "Cyan - Purple";
-            case 10: return "Purple - D. Blue";
-	    case 11: return "D. Blue - Brown";
-	    case 12: return "Brown - D. Green";
-	    case 13: return "D. Green - Red";
-	    case 14: return "Red - Black";
-	    }
-        return "ERROR";
-    }
-    
     AxisAlignedBB aabb = null;
     @Override
-    public AxisAlignedBB getBoundingBoxNoRot() { return new AxisAlignedBB(0, 0, 0, 1, 1, 1); }
+    public AxisAlignedBB getBoundingBoxNoRot() { 
+        if(isDummy()) {
+            return new AxisAlignedBB(0.1875, 0, 0.1875, 0.8125, 1, 0.8125);
+        }
+        return new AxisAlignedBB(0.0625, 0.0625, 0.0625, 0.9375, 1, 0.9375); 
+    }
 
     @Override
     public AxisAlignedBB getBoundingBox() {
-        if (aabb==null) { aabb = IBlockBoundsDirectional.super.getBoundingBox(); }
-	    return aabb;
+        if(isDummy()) {
+            return new AxisAlignedBB(0.1875, 0, 0.1875, 0.8125, 1, 0.8125);
+        }
+        return new AxisAlignedBB(0.0625, 0.0625, 0.0625, 0.9375, 1, 0.9375);
     }
 
     @Nonnull
@@ -310,27 +225,24 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 // DUMMY BLOCKS: --------------------------------------
     @Override
     public boolean isDummy() { return dummy != 0; }
-
+    
     @Override
-    public void placeDummies(IBlockState state) {
-        for (int i = 1; i <= 1; i++) {
-			BlockPos pos2 = pos.offset(EnumFacing.UP, i);
-			world.setBlockState(pos2, state);
-			TileEntity te = world.getTileEntity(pos2);
-			if (te instanceof TileEntityPotentiometer) {
-				((TileEntityPotentiometer) te).dummy = i;
-				((TileEntityPotentiometer) te).facing = facing;
-			}
+	public void placeDummies(IBlockState state) {
+        BlockPos pos2 = pos.offset(EnumFacing.UP, 1);
+        world.setBlockState(pos2, state);
+        TileEntity te = world.getTileEntity(pos2);
+		if (te instanceof TileEntityPotentiometer) {
+		    ((TileEntityPotentiometer) te).dummy = 1;
+			((TileEntityPotentiometer) te).facing = this.facing;
 		}
     }
-
+    
     @Override
     public void breakDummies() {
-        for (int i = 0; i <= 1; i++) {
-			if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.UP, i - dummy)) instanceof TileEntityPotentiometer) {
-				world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy));
-			}
-		}
-    }
+	    for (int i = 0; i <= 1; i++) {
+		     if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.UP, i - dummy)) instanceof TileEntityPotentiometer) { world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy)); }
+	    }
+	}
+
 // FINISH OF THIS CLASS ------------------------------------------------------------------------
 }

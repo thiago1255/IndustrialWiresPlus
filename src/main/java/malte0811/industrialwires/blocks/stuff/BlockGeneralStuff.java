@@ -10,6 +10,9 @@
 package malte0811.industrialwires.blocks.stuff;
 
 import blusunrize.immersiveengineering.api.IEProperties;
+import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
+import blusunrize.immersiveengineering.common.util.Utils;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
 import malte0811.industrialwires.controlpanel.PropertyComponents;
@@ -20,6 +23,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.tileentity.TileEntity;
@@ -42,11 +46,11 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 
 	public BlockGeneralStuff() {
 		super(Material.IRON, NAME);
-                setHardness(3.0F);
+        setHardness(3.0F);
 		setResistance(15.0F);
 	}
       	
-        @Override
+    @Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
 		for (int i = 0; i < values.length; i++) {
@@ -54,9 +58,9 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 		}
 	}
   
-        @Override
+    @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL, type};
+		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_ALL, type};
 	}
 
 	@Override
@@ -88,6 +92,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
             case VARISTOR: return new TileEntityVaristor();
 		    case POTENTIOMETER: return new TileEntityPotentiometer();
 		    case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
+			case RS_CONTROLER: return new TileEntityRedstoneControler();
 		    default: return null;
 	    }
 	}
@@ -100,18 +105,19 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
                 if (!w.isAirBlock(pos.up(1))) {
 				    return false;
 			    }
+                break;
 			case 4:
 				if (!w.isAirBlock(pos.down(1))) {
 				    return false;
 			    }
-			default: return true;
+				break;
 		}
 		/*for (int i = 1; i <= dummyCount; i++) {
 			if (!w.isAirBlock(pos.up(i))) {
 				return false;
 			}
-		}
-		return true;*/
+		} */
+		return true;
 	}
 
 	@Override

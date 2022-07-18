@@ -20,8 +20,6 @@ import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
-import blusunrize.immersiveengineering.api.energy.wires.redstone.IRedstoneConnector;
-import blusunrize.immersiveengineering.api.energy.wires.redstone.RedstoneWireNetwork;
 import blusunrize.immersiveengineering.api.TargetingInfo;
 import blusunrize.immersiveengineering.api.energy.wires.*;
 import blusunrize.immersiveengineering.common.util.EnergyHelper;
@@ -30,7 +28,6 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxH
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
-import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IBlockBoundsIW.IBlockBoundsDirectional;
@@ -50,9 +47,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.model.TRSRTransformation;
 
@@ -72,7 +67,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.ELECTRUM
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.STEEL;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE;
 
-public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
+public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -81,11 +76,9 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     private static final String WEST = "west";
     EnumFacing facing = EnumFacing.NORTH;
     public int maxvalue = 8;
-    protected int redstoneChannel = 0;
-    private int redstoneValueFine = 0;
-    private int redstoneValueCoarse = 0;
+    public int redstoneValueFine = 0;
+    public int redstoneValueCoarse = 0;
     public boolean wireenergy = false;
-    private boolean wirers = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
     protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
@@ -98,7 +91,6 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         super.readCustomNBT(nbt, descPacket);
         facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
         wireenergy = nbt.getBoolean("wireenergy");
-        wirers = nbt.getBoolean("wirers");
 	    redstoneChannel = nbt.getInteger("redstoneChannel");
         energyStorage.readFromNBT(nbt);
     }
@@ -108,7 +100,6 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         super.writeCustomNBT(nbt, descPacket);
 	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
         nbt.setBoolean("wireenergy", wireenergy);
-        nbt.setBoolean("wirers", wirers);
 	    nbt.setInteger("redstoneChannel", redstoneChannel);
 	    energyStorage.writeToNBT(nbt);
     }
@@ -156,7 +147,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     @Override
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
         if(wireenergy && cableType.isEnergyWire()) { return false; }
-        if(wirers && REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
+        if(REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }        
         if(!cableType.isEnergyWire() && !REDSTONE_CATEGORY.equals(cableType.getCategory())) { return false; }
         if(te instanceof TileEntityControlTransformerNormal) {
 	        if(((TileEntityControlTransformerNormal)te).wire) { return false; }
@@ -166,35 +157,15 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 
     @Override
     public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-	    if(WireType.REDSTONE_CATEGORY.equals(cableType.getCategory())) {
-            wirers = true;
-	        RedstoneWireNetwork.updateConnectors(pos, world, getNetwork());
-            this.onChange();
-	    }
-	    if(cableType.isEnergyWire()) { 
-	        wireenergy = true; 
-            electricWt = cableType;
-	    }
-		limitType = null;
-		markDirty();
+	    wireenergy = true; 
+        electricWt = cableType;
     }
 
     @Override 
-    public void removeCable(ImmersiveNetHandler.Connection connection) {
-        if(connection.cableType == WireType.REDSTONE) {
-	    wirers = false;
-            wireNetwork.removeFromNetwork(this);
-			this.onChange();
-	    if (world != null) {
-                IBlockState state = world.getBlockState(pos);
-	        world.notifyBlockUpdate(pos, state, state, 3);
-            }
-	} else {   
-            electricWt = null;
+    public void removeCable(ImmersiveNetHandler.Connection connection) {  
+        electricWt = null;
 	    wireenergy = false; 
-	}
-	limitType = null;
-	markDirty();
+	    limitType = null;
     }
   
     @Override
@@ -246,63 +217,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	@Override
 	public boolean moveConnectionTo(Connection c, BlockPos newEnd) { return true; }
 
-// REDSTONE WIRE: -------------------------------------------
-    @Override
-    public void setNetwork(RedstoneWireNetwork net) { wireNetwork = net; }
-
-    @Override
-    public RedstoneWireNetwork getNetwork() { return wireNetwork; }
-
-    @Override
-    public void onChange() { 
-        redstoneValueCoarse = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel): 0;
-	redstoneValueFine = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel+1): 0;
-    }
-    
-    @Override
-    public void updateInput(byte[] signals) { return; }
-
-    @Override
-    public World getConnectorWorld() { return getWorld(); }
-	
-// GENERAL PROPERTYES: --------------------------------------           
-	@Override
-	public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
-	    if(Utils.isHammer(heldItem)&&!world.isRemote){
-		    if(redstoneChannel == 14) { 
-		        redstoneChannel = 0; 
-		    } else { 
-		        redstoneChannel++; 
-		    }
-		    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%s", nameOfColorOfWire())));
-		    markDirty();
-		    this.onChange();
-			return true;
-		}
-		return false;
-	}
-	
-    protected String nameOfColorOfWire() {
-        switch(redstoneChannel) {
-	    case 0: return "White - Orange";
-	    case 1: return "Orange - Magenta";
-	    case 2: return "Magenta - L. Blue";
-	    case 3: return "L. Blue - Yellow";
-	    case 4: return "Yellow - L. Green";
-	    case 5: return "L. Green - Pink";
-	    case 6: return "Pink - D. Gray";
-	    case 7: return "D. Gray - L. Gray";
-	    case 8: return "L. Gray - Cyan";
-	    case 9: return "Cyan - Purple";
-        case 10: return "Purple - D. Blue";
-	    case 11: return "D. Blue - Brown";
-	    case 12: return "Brown - D. Green";
-	    case 13: return "D. Green - Red";
-	    case 14: return "Red - Black";
-	    }
-        return "ERROR";
-    }
-    
+// GENERAL PROPERTYES: --------------------------------------              
     AxisAlignedBB aabb = null;
     @Override
     public AxisAlignedBB getBoundingBoxNoRot() { return new AxisAlignedBB(0, 0, 0, 1, 1, 1); }
