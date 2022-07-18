@@ -144,10 +144,10 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     
     @Override
     public void updateInput(byte[] signals) {
-	    if(te instanceof TileEntityCurrentTransformer) {
+	    if((te instanceof TileEntityCurrentTransformer)&&(facing == down)) {
 		    signals[redstoneChannel] = (byte)Math.max(((TileEntityCurrentTransformer)te).redstoneValueCoarse, signals[redstoneChannel]);
 			signals[(redstoneChannel+1)] = (byte)Math.max(((TileEntityCurrentTransformer)te).redstoneValueFine, signals[(redstoneChannel+1)]);
-		} else if(te instanceof TileEntityPotentiometer) {
+		} else if((te instanceof TileEntityPotentiometer)&&(facing == up)) {
 		    signals[redstoneChannel] = (byte)Math.max(((TileEntityPotentiometer)te).redstoneValueCoarse, signals[redstoneChannel]);
 			signals[(redstoneChannel+1)] = (byte)Math.max(((TileEntityPotentiometer)te).redstoneValueFine, signals[(redstoneChannel+1)]);
 		}
@@ -215,7 +215,7 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     public int getFacingLimitation() { return 0; }
 
     @Override
-    public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) { return false; }
+    public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) { return true; }
 
     @Override
     public boolean canHammerRotate(@Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EntityLivingBase entity) { return false; }
