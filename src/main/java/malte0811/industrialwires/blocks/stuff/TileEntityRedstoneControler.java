@@ -12,10 +12,16 @@ import blusunrize.immersiveengineering.ImmersiveEngineering;
 import blusunrize.immersiveengineering.api.IEProperties;
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.Lib;
+import blusunrize.immersiveengineering.api.energy.wires.*;
 import blusunrize.immersiveengineering.api.energy.wires.TileEntityImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.AbstractConnection;
+import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
 import blusunrize.immersiveengineering.api.energy.wires.redstone.IRedstoneConnector;
 import blusunrize.immersiveengineering.api.energy.wires.redstone.RedstoneWireNetwork;
+import blusunrize.immersiveengineering.api.TargetingInfo;
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
@@ -40,6 +46,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.model.TRSRTransformation;
 

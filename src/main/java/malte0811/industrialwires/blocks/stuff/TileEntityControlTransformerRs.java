@@ -80,7 +80,6 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public int redstoneValueCoarse = 0;
     public boolean wireenergy = false;
     public FluxStorage energyStorage = new FluxStorage(getMaxStorage());
-    protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
     boolean firstTick = true;
     TileEntity te = null;
     public WireType electricWt = null;
