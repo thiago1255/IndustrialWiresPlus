@@ -144,10 +144,10 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     
     @Override
     public void updateInput(byte[] signals) {
-	    if((te instanceof TileEntityCurrentTransformer)&&(facing == down)) {
+	    if((te instanceof TileEntityCurrentTransformer)&&(facing == EnumFacing.DOWN)) {
 		    signals[redstoneChannel] = (byte)Math.max(((TileEntityCurrentTransformer)te).redstoneValueCoarse, signals[redstoneChannel]);
 			signals[(redstoneChannel+1)] = (byte)Math.max(((TileEntityCurrentTransformer)te).redstoneValueFine, signals[(redstoneChannel+1)]);
-		} else if((te instanceof TileEntityPotentiometer)&&(facing == up)) {
+		} else if((te instanceof TileEntityPotentiometer)&&(facing == EnumFacing.UP)) {
 		    signals[redstoneChannel] = (byte)Math.max(((TileEntityPotentiometer)te).redstoneValueCoarse, signals[redstoneChannel]);
 			signals[(redstoneChannel+1)] = (byte)Math.max(((TileEntityPotentiometer)te).redstoneValueFine, signals[(redstoneChannel+1)]);
 		}
