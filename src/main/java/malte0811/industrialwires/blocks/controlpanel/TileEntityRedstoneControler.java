@@ -72,14 +72,14 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     @Override
     public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.readCustomNBT(nbt, descPacket);
-        facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
+        facing = EnumFacing.VALUES[nbt.getInteger("facing")];
 	    redstoneChannel = nbt.getInteger("redstoneChannel");
     }
        
     @Override
     public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.writeCustomNBT(nbt, descPacket);
-	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
+	    nbt.setInteger("facing", facing.getIndex());
 	    nbt.setInteger("redstoneChannel", redstoneChannel);
     }
 
