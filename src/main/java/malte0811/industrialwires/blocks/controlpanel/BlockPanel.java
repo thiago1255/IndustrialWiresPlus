@@ -92,6 +92,8 @@ public class BlockPanel extends BlockIWBase implements IMetaEnum {
 				return new TileEntityGeneralCP();
 			case OTHER_RS_WIRES:
 				return new TileEntityRSPanelOthers();
+			case RS_CONTROLER: 
+				return new TileEntityRedstoneControler();
 			default:
 				return null;
 		}
