@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####version 1.9-04
+ - Prob. all bugs fixed now that a separated block for redstone conections is needed.
+
 ####version 1.9-03
  - More bug fix
 
