@@ -87,7 +87,7 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     public void update() {
         if (!world.isRemote) {
 		        if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) { return; }
-                BlockPos sideBlock = pos.offset(EnumFacing.this.facing, -1);
+                BlockPos sideBlock = pos.offset(this.facing, 1);
                 te = world.getTileEntity(sideBlock);
 				if(te instanceof TileEntityCurrentTransformer|| te instanceof TileEntityPotentiometer) {
 				    wireNetwork.updateValues();

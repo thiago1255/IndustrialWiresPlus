@@ -89,8 +89,7 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
         super.readCustomNBT(nbt, descPacket);
         facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
-        wireenergy = nbt.getBoolean("wireenergy");
-	    redstoneChannel = nbt.getInteger("redstoneChannel");
+        wireenergy = nbt.getBoolean("wireenergy");;
         energyStorage.readFromNBT(nbt);
     }
        
@@ -99,7 +98,6 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
         super.writeCustomNBT(nbt, descPacket);
 	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
         nbt.setBoolean("wireenergy", wireenergy);
-	    nbt.setInteger("redstoneChannel", redstoneChannel);
 	    energyStorage.writeToNBT(nbt);
     }
 
