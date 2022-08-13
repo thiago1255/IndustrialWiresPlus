@@ -87,10 +87,10 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     @Override
     public void update() {
         if (!world.isRemote) {
-		        if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) { return; }
+                if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) { return; }
                 BlockPos sideBlock = pos.offset(this.facing, 1);
                 te = world.getTileEntity(sideBlock);
-				if(te instanceof TileEntityCurrentTransformer|| te instanceof TileEntityPotentiometer) {
+				if(te instanceof TileEntityCurrentTransformer || te instanceof TileEntityPotentiometer || te instanceof TileEntityRetifierValve) {
 				    wireNetwork.updateValues();
 				}
 	    }
@@ -137,8 +137,10 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
 	    if(te instanceof TileEntityControlTransformerRs) {
             ((TileEntityControlTransformerRs) te).redstoneValueCoarse = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel): 0;
 			((TileEntityControlTransformerRs) te).redstoneValueFine = wireNetwork!=null?wireNetwork.getPowerOutput(redstoneChannel+1): 0;
+		} else if(te instanceof TileEntityRetifierValve && wireNetwork!=null) {
+		    ((TileEntityRetifierValve) te).ignition = (wireNetwork.getPowerOutput(0) != 0);
 		} else {
-		    return;
+            return;
 		}
     }
     
@@ -148,8 +150,18 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
 		    signals[redstoneChannel] = (byte)Math.max(((TileEntityCurrentTransformer)te).redstoneValueCoarse, signals[redstoneChannel]);
 			signals[(redstoneChannel+1)] = (byte)Math.max(((TileEntityCurrentTransformer)te).redstoneValueFine, signals[(redstoneChannel+1)]);
 		} else if((te instanceof TileEntityPotentiometer)&&(facing == EnumFacing.UP)) {
-		    signals[redstoneChannel] = (byte)Math.max(((TileEntityPotentiometer)te).redstoneValueCoarse, signals[redstoneChannel]);
-			signals[(redstoneChannel+1)] = (byte)Math.max(((TileEntityPotentiometer)te).redstoneValueFine, signals[(redstoneChannel+1)]);
+		    signals[redstoneChannel] = (byte)Math.min(15, Math.max(((TileEntityPotentiometer)te).redstoneValueCoarse, signals[redstoneChannel]));
+			signals[(redstoneChannel+1)] = (byte)Math.min(15, Math.max(((TileEntityPotentiometer)te).redstoneValueFine, signals[(redstoneChannel+1)]));
+		} else if((te instanceof TileEntityRetifierValve)&&(facing == EnumFacing.DOWN)) {
+		    double value = ((TileEntityRetifierValve) te).temperature/49152;
+	        value = Math.ceil(value*256);
+            int redstoneValueCoarse = 0;
+	        int redstoneValueFine = 0;
+            for (redstoneValueFine = (int)value; redstoneValueFine >= 16; redstoneValueFine -= 16) {
+                redstoneValueCoarse++;    
+            }
+			signals[1] = (byte)Math.max(redstoneValueCoarse, signals[1]);
+			signals[2] = (byte)Math.max(redstoneValueFine, signals[2]);
 		}
 	}
 
@@ -169,8 +181,13 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
 		    markDirty();
 		    this.onChange();
 			return true;
+		} else if(te instanceof TileEntityPotentiometer) {
+		    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%i", ((TileEntityPotentiometer)te).redstoneValueFine)));
+			player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%i", ((TileEntityPotentiometer)te).redstoneValueCoarse)));
+            return true;
+		} else {
+		    return false;
 		}
-		return false;
 	}
 	
     protected String nameOfColorOfWire() {

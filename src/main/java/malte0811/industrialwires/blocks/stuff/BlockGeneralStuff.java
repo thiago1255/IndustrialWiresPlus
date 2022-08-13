@@ -11,7 +11,6 @@ package malte0811.industrialwires.blocks.stuff;
 
 import blusunrize.immersiveengineering.api.IEProperties;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
-import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
 import malte0811.industrialwires.blocks.BlockIWBase;
 import malte0811.industrialwires.blocks.IMetaEnum;
@@ -25,6 +24,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +48,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 		super(Material.IRON, NAME);
         setHardness(3.0F);
 		setResistance(15.0F);
+		lightOpacity = 0;
 	}
       	
     @Override
@@ -57,9 +59,14 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 		}
 	}
   
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.SOLID;
+	}
+		
     @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.FACING_HORIZONTAL, type};
+		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.BOOLEANS[0], IEProperties.FACING_HORIZONTAL, type};
 	}
 
 	@Override
@@ -81,6 +88,11 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
+	
+	@Override
+	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
 
 	@Nullable
 	@Override
@@ -91,13 +103,13 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
             case VARISTOR: return new TileEntityVaristor();
 		    case POTENTIOMETER: return new TileEntityPotentiometer();
 		    case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
+			case RETIFIER_VALVE: return new TileEntityRetifierValve();
 		    default: return null;
 	    }
 	}
 	
     @Override
 	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack) {
-		//int dummyCount = 0;
         switch (stack.getItemDamage()) {
             case 3: 
                 if (!w.isAirBlock(pos.up(1))) {
@@ -109,12 +121,14 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 				    return false;
 			    }
 				break;
+			case 5:
+				for (int i = 1; i <= 1; i++) {
+			        if (!w.isAirBlock(pos.down(i))) {
+				        return false;
+			        }
+				}
+				break;
 		}
-		/*for (int i = 1; i <= dummyCount; i++) {
-			if (!w.isAirBlock(pos.up(i))) {
-				return false;
-			}
-		} */
 		return true;
 	}
 
@@ -122,7 +136,18 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 	public BlockTypes_GeneralStuff[] getValues() {
 		return BlockTypes_GeneralStuff.values();
 	}
-
+    
+	@Nonnull
+	@Override
+	public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		state = super.getActualState(state, worldIn, pos);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileEntityRetifierValve) {
+			state = state.withProperty(IEProperties.BOOLEANS[0], ((TileEntityRetifierValve) te).active);
+		}
+		return state;
+	}
+	
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(type).ordinal();

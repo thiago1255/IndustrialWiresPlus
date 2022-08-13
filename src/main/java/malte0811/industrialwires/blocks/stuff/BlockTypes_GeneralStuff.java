@@ -17,7 +17,8 @@ public enum BlockTypes_GeneralStuff implements IStringSerializable{
     CONTROL_TRANSFORMER_NORMAL,
     VARISTOR,
     POTENTIOMETER,
-    CURRENT_TRANSFORMER;
+    CURRENT_TRANSFORMER,
+	RETIFIER_VALVE;
 	
 	@Override
 	public String getName() {

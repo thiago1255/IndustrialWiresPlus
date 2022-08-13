@@ -97,18 +97,12 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
     @Override
     public void update() {
         if (isDummy()) { return; }
-	if (!world.isRemote) { 
-	    if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) {
-	        getRsvalues();
-	    }
-	    lastPackets.add(energyToMeasure);
-	    if(lastPackets.size() > 20) { lastPackets.remove(0); }
-	    energyToMeasure = 0;
-        } else if(firstTick) {
-	    Set<Connection> conns = ImmersiveNetHandler.INSTANCE.getConnections(world, pos);
-            if(conns!=null) { for(Connection conn : conns) { if(pos.compareTo(conn.end) < 0&&world.isBlockLoaded(conn.end)) { this.markContainingBlockForUpdate(null); } } }
-	    firstTick = false;
-	}               
+	    if (!world.isRemote) { 
+	        if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) { getRsvalues(); }
+	        lastPackets.add(energyToMeasure);
+	        if(lastPackets.size() > 20) { lastPackets.remove(0); }
+	        energyToMeasure = 0;
+        }               
     }
 
 //WIRE STUFF: --------------------------------------
@@ -179,11 +173,16 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 	    sum = sum/lastPackets.size();
         sum = sum/maxJoule;
 	    sum = Math.ceil(sum*256);
-        redstoneValueCoarse = 0;
-	    redstoneValueFine = (int)sum;
-        for (redstoneValueFine = (int)sum; redstoneValueFine >= 16; redstoneValueFine -= 16) {
-            redstoneValueCoarse++;    
-        }
+        int redstoneValueCoarseInt = 0;
+	    int redstoneValueFineInt = (int)sum;
+		if(redstoneValueFineInt > 15) {
+            for (redstoneValueFineInt = (int)sum; redstoneValueFineInt >= 16; redstoneValueFineInt -= 16) {
+                redstoneValueCoarseInt++;    
+            }
+		}
+		redstoneValueCoarse = redstoneValueCoarseInt;
+		redstoneValueFine = redstoneValueFineInt;
+		//the use of 2 ints is to TileEntityRedstoneControler take ALWAYS a correct value
     }
 // GENERAL PROPERTYES: --------------------------------------           
     AxisAlignedBB aabb = null;
