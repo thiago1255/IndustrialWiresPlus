@@ -16,6 +16,7 @@ tile.industrialwires.general_stuff.control_transformer_normal.name=Transformador
 tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'metro
 tile.industrialwires.general_stuff.current_transformer.name=Transformador de corrente
+tile.industrialwires.general_stuff.retifier_valve.name=Válvula retifícadora
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Motor rotacional
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotacional para cinético
@@ -31,6 +32,7 @@ tile.industrialwires.control_panel.dummy.name=Base do painel
 tile.industrialwires.control_panel.creator.name=Montador de paíneis de controle
 tile.industrialwires.control_panel.unfinished.name=Painél de controle inacabado
 tile.industrialwires.control_panel.other_rs_wires.name=E/S de redstone para "outros"
+tile.industrialwires.control_panel.rs_controler.name=Controlador a redstone / repetidor
 
 item.industrialwires.ic2_wire_coil.tin.name=Bobina de fio de Estanho 
 item.industrialwires.ic2_wire_coil.copper.name=Bobina de fio de Cobre
@@ -60,7 +62,7 @@ item.industrialwires.key.key_ring.name=Chaveiro
 potion.industrialwires.tinnitus=Tinido
 
 industrialwires.subtitle.tinnitus=Tu estás com tinido
-industrialwires.subtitle.jacobs_ladder=HUM da jacob's ladder      
+industrialwires.subtitle.jacobs_ladder=HUMMM da jacob's ladder      
 industrialwires.subtitle.marx_bang=Descarga do gerador marx
 industrialwires.subtitle.marx_pop=Falha na descarga
 

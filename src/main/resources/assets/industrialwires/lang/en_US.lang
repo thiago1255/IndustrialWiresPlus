@@ -16,6 +16,7 @@ tile.industrialwires.general_stuff.control_transformer_rs.name=Control transform
 tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'meter
 tile.industrialwires.general_stuff.current_transformer.name=Current transformer
+tile.industrialwires.general_stuff.retifier_valve.name=Retifier valve
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Rotational Motor
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotational To Kinetic
@@ -31,6 +32,7 @@ tile.industrialwires.control_panel.dummy.name=Panel Connector
 tile.industrialwires.control_panel.creator.name=Control Panel Creator
 tile.industrialwires.control_panel.unfinished.name=Unfinished Control Panel
 tile.industrialwires.control_panel.other_rs_wires.name=Redstone Controller: Others
+tile.industrialwires.control_panel.rs_controler.name=Redstone Controller/Relay
 
 item.industrialwires.ic2_wire_coil.tin.name=Tin Wire Coil
 item.industrialwires.ic2_wire_coil.copper.name=Copper Wire Coil
