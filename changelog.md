@@ -1,5 +1,9 @@
 ###Minecraft 1.12.2
 
+####version 2.0-01
+ - Fixed itens withowt names.
+ - Fixed wires and textures offset.
+
 ####version 2.0-00
  - Added Retifier Valve (IF to EU converter)
 
