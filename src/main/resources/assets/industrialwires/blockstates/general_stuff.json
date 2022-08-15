@@ -42,12 +42,30 @@
 		],
 		"inventory,type=potentiometer": [
 			{
-				"model": "industrialwires:potenciometro.obj"
+				"model": "industrialwires:potenciometro.obj",
+				"transform": {
+					"scale": [ 0.5, 0.5, 0.5 ]
+				}
 			}
 		],
 		"inventory,type=current_transformer": [
 			{
-				"model": "industrialwires:ct_rs.obj"
+				"model": "industrialwires:ct_rs.obj",
+				"transform": {
+					"scale": [ 0.5, 0.5, 0.5 ]
+				}
+			}
+		],
+		"inventory,type=retifier_valve": [
+			{
+				"model": "forge:multi-layer",
+		        "custom": {
+					"Translucent": "industrialwires:general_stuff#glass",
+			        "Solid": "industrialwires:general_stuff#normal"
+		        },
+				"transform": {
+					"scale": [ 0.5, 0.5, 0.5 ]
+				}
 			}
 		],
 		"type": {
