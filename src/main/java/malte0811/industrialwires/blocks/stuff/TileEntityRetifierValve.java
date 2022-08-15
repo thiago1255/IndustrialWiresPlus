@@ -172,10 +172,10 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
     @Override
     public Vec3d getConnectionOffset(Connection con) {
 	    switch (facing) {
-		    case NORTH: return new Vec3d(1.25, -0.5, 0.5);
-			case SOUTH: return new Vec3d(-0.25, -0.5, 0.5);
-			case EAST: return new Vec3d(0.5, -0.5, 1.25);
-			case WEST: return new Vec3d(0.5, -0.5, -0.25);
+		    case NORTH: return new Vec3d(1.5, -0.5, 0.77);
+			case SOUTH: return new Vec3d(-0.5, -0.5, 0.23);
+			case EAST: return new Vec3d(0.23, -0.5, 1.5);
+			case WEST: return new Vec3d(0.77, -0.5, -0.5);
 		}
 		return new Vec3d(0.5, 0.5, 0.5);
     }
