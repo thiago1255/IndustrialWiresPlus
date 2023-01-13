@@ -1,5 +1,11 @@
 ###Minecraft 1.12.2
 
+####version 2.0-02
+ - Added animations for retifier valve:
+   - Ignition arc.
+   - Fan animation.
+ - Probaly make IC2 a optional dependency again.
+
 ####version 2.0-01
  - Fixed itens withowt names.
  - Fixed wires and textures offset.

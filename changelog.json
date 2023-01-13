@@ -5,7 +5,7 @@
         "1.10.2-recommended": "1.4-18",
         "1.11.2-latest": "1.5-19",
         "1.11.2-recommended": "1.5-19",
-        "1.12.2-latest": "1.9-04",
+        "1.12.2-latest": "2.0-02",
         "1.12.2-recommended": "1.8-27"
     },
     "1.10.2": {
@@ -74,11 +74,6 @@
         "1.8-24": " - Wire can be connected on varistor\n - Control transformer is now working !",
         "1.8-25": " - Redstone wire can be connected on Ct !",
         "1.8-26": " - Prob. fixed some bugs.\n - Now more wire types can be connected on control transformer !",
-        "1.8-27": " - Final version of Control transformer!\n - (Bugs fixed)\n - Hammer can be used to change RS channels.\n - Output in chat of Maximum value was removed.",
-		"1.9-00": " - Added block to measure DC energy.",
-		"1.9-01": " - Added block to measure AC energy, but with redtone output; (a version of IE's Energy meter)",
-		"1.9-02": " - Bug fix uptade",
-        "1.9-03": " - More bug fix",
-		"1.9-04": " - Prob. all bugs fixed now that a separated block for redstone conections is needed."
+        "1.8-27": " - Final version of Control transformer!\n - (Bugs fixed)\n - Hammer can be used to change RS channels.\n - Output in chat of Maximum value was removed."
     }
 }
