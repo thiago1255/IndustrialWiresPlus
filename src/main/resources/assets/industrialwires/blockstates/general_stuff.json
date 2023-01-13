@@ -25,6 +25,10 @@
 		 	"model": "industrialwires:retifier_valve_on_glass.obj",
 			"custom": {"flip-v": true}
 		}],
+		"fan": [{
+		 	"model": "industrialwires:retifier_valve_fan.obj",
+			"custom": {"flip-v": true}
+		}],
 		"inventory,type=control_transformer_rs": [
 			{
 				"model": "industrialwires:autotransformer_part_redstone.obj"
@@ -88,7 +92,12 @@
 				"model": "forge:multi-layer",
 		        "custom": {
 					"Translucent": "industrialwires:general_stuff#glass",
-			        "Solid": "industrialwires:general_stuff#normal"
+			        "Solid": "industrialwires:general_stuff#normal",
+					"_1dynamicrender":
+		            {
+			           "false":{},
+			           "true":{"model": "industrialwires:retifier_valve_fan.obj"}
+		            }
 		        }
 		    }
 		},
@@ -109,6 +118,11 @@
 			        "Solid": "industrialwires:general_stuff#base"
 		        }
 			}
+		},
+		"_1dynamicrender":
+		{
+			"false":{},
+			"true":{"model": "industrialwires:retifier_valve_fan.obj"}
 		},
 		"facing":
 		{
