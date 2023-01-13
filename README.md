@@ -4,17 +4,11 @@ ALREADY ADDED:
 
 - HV control transformer (read wiki)
 - Varistor (read wiki)
+- Retifier valve (wiki soon)
+- 2 digits energy meter
 
 THINGHS I PLAN +- ADD IN MY MODIFICATION OF MOD:
  
--More blocks to control the Max energy on cables (Potentiometer, Triodes, etc.)
-
--Current transformer with 2 redstone exit (to have 2 digits)
-
--More compat with the wires that mod add.
-
--Retifier Valve, to convert IF > EU, in a smaller scale (Need control temperature)
-
 -More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon), or pneumaticraft air)
 
 -MAYBE: Tesla Tower (Massive tesla coil with cool uses like energy transmission, or to summom lightning HAHAHA)
