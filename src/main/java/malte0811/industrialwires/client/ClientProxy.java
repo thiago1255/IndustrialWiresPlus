@@ -34,6 +34,7 @@ import malte0811.industrialwires.blocks.controlpanel.TileEntityRSPanel;
 import malte0811.industrialwires.blocks.converter.TileEntityMechMB;
 import malte0811.industrialwires.blocks.hv.TileEntityJacobsLadder;
 import malte0811.industrialwires.blocks.hv.TileEntityMarx;
+import malte0811.industrialwires.blocks.stuff.TileEntityRetifierValve;
 import malte0811.industrialwires.client.gui.GuiPanelComponent;
 import malte0811.industrialwires.client.gui.GuiPanelCreator;
 import malte0811.industrialwires.client.gui.GuiRSPanelConn;
@@ -96,6 +97,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoaderRegistry.registerLoader(new PanelModelLoader());
 		ModelLoaderRegistry.registerLoader(new MBIOModelLoader());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJacobsLadder.class, new TileRenderJacobsLadder());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRetifierValve.class, new TileRenderRetifierValve());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarx.class, new TileRenderMarx());
 		TileRenderMechMB tesr = new TileRenderMechMB();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechMB.class, tesr);

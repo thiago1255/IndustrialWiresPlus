@@ -25,7 +25,7 @@ import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
-import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
+import blusunrize.immersiveengineering.common.util.Utils; //optional
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
@@ -53,30 +53,42 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
+import net.minecraft.item.ItemStack; //optional
+import net.minecraft.util.text.TextComponentTranslation; //optional
 
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.*;
 import java.util.Set;
-import java.util.Optional;
 
+import static malte0811.industrialwires.IndustrialWires.hasIC2;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
 
-public class TileEntityRetifierValve extends TileEntityImmersiveConnectable implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IEnergySource, ITickable
+@Optional.InterfaceList({
+		@Optional.Interface(modid = "ic2", iface = "ic2.api.energy.tile.IEnergySource"),
+})
+
+public class TileEntityRetifierValve extends TileEntityImmersiveConnectable implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IEnergySource, ITickable, IPlayerInteraction
 {
 // VARIABLES/CONS.: --------------------------------------
-	private static final double MAX_TEMP = 49152;
-	private static final int MAX_ENERGY = 16384;
-    EnumFacing facing = EnumFacing.NORTH;
+	private final double MAX_TEMP = 49152;
+	private final int MAX_ENERGY = 16384;
+    public EnumFacing facing = EnumFacing.NORTH;
     private int dummy = 0;
 	public double temperature = 0;
+	public float fanAngle = 0;
 	private int storedEnergy = 0;
 	private boolean cabble = false;
 	public boolean active = true;
 	public boolean ignition = false;
+	public boolean fanWorking = false;
+    
+	public double offsetX = 0;
+	public double offsetZ = 0;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -88,6 +100,8 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 		storedEnergy = nbt.getInteger("eN");
 		cabble = nbt.getBoolean("cabble");
 		active = nbt.getBoolean("active");
+		fanAngle = nbt.getFloat("fan");
+		ignition = nbt.getBoolean("ign");
     }
        
     @Override
@@ -99,55 +113,62 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 		nbt.setInteger("eN", storedEnergy);
 		nbt.setBoolean("cabble", cabble);
 		nbt.setBoolean("active", active);
+		nbt.setFloat("fan", fanAngle);
+		nbt.setBoolean("ign", ignition);
     }
 // ITICKABLE ---------------------------------------
     @Override
     public void update() {
+	    ApiUtils.checkForNeedlessTicking(this);
+	    if(world.isRemote) {return;}
         if(this.isDummy()) {return;}
-        if(!world.isRemote) {
-            if(temperature > MAX_TEMP) { 
-                world.createExplosion(null, pos.getX(), pos.getY()-1, pos.getZ(), 8, true);
-				return;
-			}
-			if((ignition) && (storedEnergy > 192)) {
-			    storedEnergy -= 192;
-				temperature += 178.01;
-				if(active) { 
-				    active = false; 
-					markDirty();
-					active = false;
-					atualizar();
-				}
-                return;
-			}
-			if((temperature >= 19000) && (storedEnergy > 2)) {
-				temperature -= Math.min(2.39, MAX_TEMP-temperature); 
-			    if(!active) { 
-				    active = true;
-					markDirty();
-					active = true;
-					atualizar();
-				}
-				storedEnergy -= 2;
-				return;
-			} else {
-			    temperature -= Math.min(0.5, MAX_TEMP-temperature); 
-			    if(active) { 
-				    active = false; 
-					markDirty();
-					active = false;
-					atualizar();
-				}
-				return;
-            }
+		
+		activeCheck();
+		
+        if(temperature > MAX_TEMP) { 
+            world.createExplosion(null, pos.getX(), pos.getY()-1, pos.getZ(), 5, true);
+			return;
 		}
+		
+		if((ignition) && (storedEnergy > 192)) {
+		    storedEnergy -= 192;
+			temperature += 174.01;
+			fanWorking = false;
+			atualizar();
+            return;
+		}
+		if(storedEnergy > 2) {
+			temperature -= Math.min(2.39, MAX_TEMP-temperature); 
+			fanAngle += 18f;
+		    fanAngle %= 360;
+			storedEnergy -= 2;
+			fanWorking = true;
+			atualizar();
+		} else {
+		    temperature -= Math.min(0.5, MAX_TEMP-temperature); 
+			if(fanWorking == true) {
+			    fanWorking = false;
+				atualizar();
+			}
+        }
     }
+		
+	private void activeCheck()
+	{
+	  if(!active && temperature >= 19000) { 
+		active = true;
+	  } else if (active && temperature <= 19000){
+	    active = false;
+      }
+	}
 	
-	private void atualizar() {
+	public void atualizar() {
+	    markDirty();
 	    IBlockState state = world.getBlockState(pos);
 		world.notifyBlockUpdate(pos, state, state, 3);
 		world.addBlockEvent(pos, state.getBlock(), 255, 0);
 	}
+
 //WIRE STUFF: --------------------------------------
     @Override
     public boolean allowEnergyToPass(Connection con) { return true; }
@@ -212,27 +233,31 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 			return numberToReturn;
 		}
 		return 0;
-    }
+    } 
 
 // IC2 STUFF: -----------------------------------------------
     @Override
+	@Optional.Method(modid = "ic2")
 	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
 		//return true;
 		return side == facing.getOpposite();
 	}
     
 	@Override
+	@Optional.Method(modid = "ic2")
 	public int getSourceTier() {
 		return 4;
 	}
 	
 	@Override
+	@Optional.Method(modid = "ic2")
 	public double getOfferedEnergy() {
-	    if(!active) {return 0;}
+	    if(!active && ignition) {return 0;}
 		return ((storedEnergy - 3) / 4);
 	}
 	
 	@Override
+	@Optional.Method(modid = "ic2")
 	public void drawEnergy(double amount) { 
 		storedEnergy -= amount * 4;
 		temperature += amount / 100;
@@ -247,14 +272,14 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	
 	@Override
 	public void invalidate() {
-		if (!world.isRemote) { Compat.unloadIC2Tile.accept(this); }
+		if (!world.isRemote && IndustrialWires.hasIC2) { Compat.unloadIC2Tile.accept(this); }
 		super.invalidate();
 	}
 
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		if (!world.isRemote) { Compat.unloadIC2Tile.accept(this); }
+		if (!world.isRemote && IndustrialWires.hasIC2) { Compat.unloadIC2Tile.accept(this); }
 	}
     	
 // GENERAL PROPERTYES: --------------------------------------           	  
@@ -286,6 +311,30 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 
     @Override
     public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
+	
+	@Override
+    public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
+        if(isDummy()) {return false;}
+        if(side == EnumFacing.NORTH || side == EnumFacing.SOUTH){
+		  if (player.isSneaking()) {
+		    offsetX += 0.001;
+          } else {
+		    offsetX += 0.05;
+          }
+		  if(offsetX >= 3) { offsetX = 0; }
+          player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(offsetX, "0.###"))));
+		  return true;
+		} else {
+		  if (player.isSneaking()) {
+		    offsetZ += 0.001;
+          } else {
+		    offsetZ += 0.05;
+          }
+		  if(offsetZ >= 3) { offsetZ = 0; }
+          player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(offsetZ, "0.###"))));
+		  return true;
+		}
+    } 
 	
 // DUMMY BLOCKS: --------------------------------------
     @Override

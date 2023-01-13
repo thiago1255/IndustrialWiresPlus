@@ -187,6 +187,7 @@ public class IndustrialWires {
 			GameRegistry.registerTileEntity(TileEntityIEMotor.class, new ResourceLocation(MODID, "ieMotor"));
 			GameRegistry.registerTileEntity(TileEntityMechICtoIE.class, new ResourceLocation(MODID, "mechIcToIe"));
 			GameRegistry.registerTileEntity(TileEntityMechIEtoIC.class, new ResourceLocation(MODID, "mechIeToIc"));
+			GameRegistry.registerTileEntity(TileEntityRetifierValve.class, new ResourceLocation(MODID, "te_arc_valve"));
 		}
 		GameRegistry.registerTileEntity(TileEntityMechMB.class, new ResourceLocation(MODID, "mechMB"));
 		GameRegistry.registerTileEntity(TileEntityJacobsLadder.class, new ResourceLocation(MODID, "jacobsLadder"));
@@ -205,7 +206,6 @@ public class IndustrialWires {
         GameRegistry.registerTileEntity(TileEntityPotentiometer.class, new ResourceLocation(MODID, "te_potentiometer")); 
         GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
         GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
-		GameRegistry.registerTileEntity(TileEntityRetifierValve.class, new ResourceLocation(MODID, "te_arc_valve"));
 		
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
 		MARKER_TEXTURE = EntityDataManager.createKey(EntityBrokenPart.class, RES_LOC_SERIALIZER);
@@ -231,7 +231,7 @@ public class IndustrialWires {
 		event.getRegistry().register(new BlockHVMultiblocks());
 		event.getRegistry().register(new BlockMechanicalMB());
 		event.getRegistry().register(new BlockGeneralHV());
-                event.getRegistry().register(new BlockGeneralStuff());
+        event.getRegistry().register(new BlockGeneralStuff());
 	}
 
 	@SubscribeEvent

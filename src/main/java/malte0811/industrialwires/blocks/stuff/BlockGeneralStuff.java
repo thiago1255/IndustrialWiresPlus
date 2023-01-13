@@ -36,6 +36,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -66,7 +67,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 		
     @Override
 	protected IProperty<?>[] getProperties() {
-		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.BOOLEANS[0], IEProperties.FACING_HORIZONTAL, type};
+		return new IProperty[] {IEProperties.MULTIBLOCKSLAVE, IEProperties.BOOLEANS[0], IEProperties.DYNAMICRENDER, IEProperties.FACING_HORIZONTAL, type};
 	}
 
 	@Override
