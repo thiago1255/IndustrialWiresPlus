@@ -1,33 +1,32 @@
 THIS IS A FORK OF [THIS](https://github.com/malte0811/IndustrialWires), NOT MY MOD.
 
-ALREADY ADDED:
+# About this:
+## ALREADY ADDED:
 
-- HV control transformer (read wiki)
-- Varistor (read wiki)
-- Retifier valve (wiki soon)
-- 2 digits energy meter
+ - HV control transformer (read wiki)
+ - Varistor (read wiki)
+ - Retifier valve (wiki soon)
+ - 2 digits energy meter
 
-THINGHS I PLAN +- ADD IN MY MODIFICATION OF MOD:
- 
--More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon), or pneumaticraft air)
+## IN PROGRESS:
 
--MAYBE: Tesla Tower (Massive tesla coil with cool uses like energy transmission, or to summom lightning HAHAHA)
+ - Valve fabricator multiblock
 
--More thinghs related to valves (A fusor (only decorative and/or can light a big area, or maybe to transform H in He) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
+## THINGHS I PLAN +- ADD IN MY MODIFICATION OF MOD:
+
+ - More thinghs to mechanical multiblock (Maybe in/out of rotational energy of IE (or maybe from IT addon), or pneumaticraft air)
+ - MAYBE: Tesla Tower (Massive tesla coil with cool uses like energy transmission, or to summom lightning HAHAHA)
+ - More thinghs related to valves (A fusor (only decorative and/or can light a big area, or maybe to transform H in He) Sound related thinghs (an musical instrument that use energy and is controled with redstone to tones/time(to use control panels)) Neon tubes (A cool way to light thinghs, but we already have IE's fluorecent tubes)).
 
 
---Credits: 
+## Credits: 
 
- -thiago1255 (modify the mod)
+ - thiago1255 (modify the mod)
+ - [This team that made the original mod](https://github.com/malte0811/IndustrialWires/graphs/contributors)
+ - [Immersive engineering team for api and some examples](https://github.com/BluSunrize/ImmersiveEngineering/graphs/contributors)
+ - The textures and models are partially modified IE resources and partially made by thiago1255, malte0811 and C8H8O4.
 
- -[This team that made the original mod](https://github.com/malte0811/IndustrialWires/graphs/contributors)
-
- -[Immersive engineering team for api and some examples](https://github.com/BluSunrize/ImmersiveEngineering/graphs/contributors)
- 
- -The textures and models are partially modified IE resources and partially made by thiago1255, 
-malte0811 and C8H8O4.
-
------ORIGINAL README ABOVE:-----
+# Original readme above:
 
 #Industrial Wires
 ![](Screenshot.png)
