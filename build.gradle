@@ -1,7 +1,7 @@
 import groovy.json.JsonOutput
 
-def mainVersion = "2.0"
-def buildNumber = "02"
+def mainVersion = "2.1"
+def buildNumber = "00"
 
 // For those who want the bleeding edge
 buildscript {
@@ -154,7 +154,7 @@ class GenerateUpdateJSON extends DefaultTask {
     static def UNFINISHED_SUFFIX = " - UNFINISHED"
     static def RECOMMENDED = "-recommended"
     static def LATEST = "-latest"
-    static def CF_URL = "https://minecraft.curseforge.com/projects/industrial-wires"
+    static def CF_URL = "https://www.curseforge.com/minecraft/mc-mods/industrial-wires-plus"
 
     int compareVersions(String vA, String vB) {
         String[] vPartsA = vA.split("[\\D]")

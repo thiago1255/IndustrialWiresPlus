@@ -27,6 +27,7 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.blocks.hv.*;
  import malte0811.industrialwires.blocks.wire.*;
  import malte0811.industrialwires.blocks.stuff.*;
+ import malte0811.industrialwires.blocks.stuff.MultiblockValveFabricator;
  import malte0811.industrialwires.compat.Compat;
  import malte0811.industrialwires.controlpanel.PanelComponent;
  import malte0811.industrialwires.controlpanel.PanelUtils;
@@ -85,7 +86,7 @@ package malte0811.industrialwires;
  import static malte0811.industrialwires.wires.MixedWireType.*;
 
  @Mod(modid = IndustrialWires.MODID, version = IndustrialWires.VERSION, dependencies = "required-after:immersiveengineering@[0.12-86,);after:ic2;required-after:forge@[14.23.3.2694,)",
-		updateJSON = "https://raw.githubusercontent.com/thiago1255/IndustrialWiresPlus/MC1.12/changelog.json")
+        updateJSON = "https://raw.githubusercontent.com/thiago1255/IndustrialWiresPlus/MC1.12/changelog.json")
 @Mod.EventBusSubscriber
 public class IndustrialWires {
 	public static final String MODID = "industrialwires";
@@ -123,8 +124,10 @@ public class IndustrialWires {
 	public static BlockMechanicalMB mechanicalMB = null;
 	@GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralHV.NAME)
 	public static BlockGeneralHV generalHV = null;
-        @GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralStuff.NAME)
+    @GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralStuff.NAME)
 	public static BlockGeneralStuff generalStuff = null;
+	@GameRegistry.ObjectHolder(MODID+":"+ BlockStuffMultiblocks.NAME)
+	public static BlockStuffMultiblocks mBstuff = null;
 
 	@GameRegistry.ObjectHolder(MODID+":"+ItemIC2Coil.NAME)
 	public static ItemIC2Coil coil = null;
@@ -206,6 +209,7 @@ public class IndustrialWires {
         GameRegistry.registerTileEntity(TileEntityPotentiometer.class, new ResourceLocation(MODID, "te_potentiometer")); 
         GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
         GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
+		GameRegistry.registerTileEntity(TileEntityValveFabricator.class, new ResourceLocation(MODID, "te_valve_fabricator"));
 		
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
 		MARKER_TEXTURE = EntityDataManager.createKey(EntityBrokenPart.class, RES_LOC_SERIALIZER);
@@ -232,6 +236,7 @@ public class IndustrialWires {
 		event.getRegistry().register(new BlockMechanicalMB());
 		event.getRegistry().register(new BlockGeneralHV());
         event.getRegistry().register(new BlockGeneralStuff());
+		event.getRegistry().register(new BlockStuffMultiblocks());
 	}
 
 	@SubscribeEvent
@@ -267,6 +272,10 @@ public class IndustrialWires {
 	public void init(FMLInitializationEvent e) {
 		MultiblockMarx.INSTANCE = new MultiblockMarx();
 		MultiblockHandler.registerMultiblock(MultiblockMarx.INSTANCE);
+		
+		MultiblockValveFabricator.INSTANCE = new MultiblockValveFabricator();
+        MultiblockHandler.registerMultiblock(MultiblockValveFabricator.INSTANCE);
+		
 		MultiblockMechMB.INSTANCE = new MultiblockMechMB();
 		MultiblockHandler.registerMultiblock(MultiblockMechMB.INSTANCE);
 		MultiblockHandler.registerMultiblock(new MultiblockTemplateManual(EXAMPLE_MECHMB_LOC));

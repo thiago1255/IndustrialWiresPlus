@@ -1,0 +1,5 @@
+# Made in Blockbench 4.2.3
+newmtl m_0
+map_Ka industrialwires:blocks/vacuum_tube_fabricator
+newmtl m_1
+map_Ka industrialwires:blocks/conveyor 

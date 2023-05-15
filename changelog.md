@@ -1,31 +1,34 @@
 ###Minecraft 1.12.2
 
-####version 2.0-02
+####Version 2.1-00
+ - Added Vacuum tube fabricator (Multiblock, useless for now).
+
+####Version 2.0-02
  - Added animations for retifier valve:
    - Ignition arc.
    - Fan animation.
  - Probaly make IC2 a optional dependency again.
 
-####version 2.0-01
+####Version 2.0-01
  - Fixed itens withowt names.
  - Fixed wires and textures offset.
 
-####version 2.0-00
+####Version 2.0-00
  - Added Retifier Valve (IF to EU converter)
 
-####version 1.9-04
+####Version 1.9-04
  - Prob. all bugs fixed now that a separated block for redstone conections is needed.
 
-####version 1.9-03
+####Version 1.9-03
  - More bug fix
 
-####version 1.9-02
+####Version 1.9-02
  - Bug fix uptade
 
-####version 1.9-01
+####Version 1.9-01
  - Added block to measure AC energy, but with redtone output; (a version of IE's Energy meter)
 
-####version 19-00
+####Version 1.9-00
  - Added block to measure DC energy.
 
 ####Version 1.8-27
@@ -69,7 +72,6 @@
  - More translation in pt_BR.
  - Transformer now can be used !
  
-
 ####Version 1.8-16
  - More tests on TEs and blocks
 
