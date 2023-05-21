@@ -1,6 +1,6 @@
 /*
 || UNDER 'GNU General Public License v3.0'
-|| File made by thiago1255 based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
+|| File made by thiago based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
 ||
 || (check github for credits of this mods:)
 || IW: https://github.com/malte0811/IndustrialWires
@@ -41,6 +41,8 @@ import net.minecraftforge.common.property.Properties;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static malte0811.industrialwires.util.MiscUtils.offset;
+
 public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacementCheck{
 	public static final PropertyEnum<BlockTypes_GeneralStuff> type = PropertyEnum.create("type", BlockTypes_GeneralStuff.class);
 	public static final String NAME = "general_stuff";
@@ -56,10 +58,11 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
 		for (int i = 0; i < values.length; i++) {
+			if(i == 1) { continue; }
 		    list.add(new ItemStack(this, 1, i));
 		}
 	}
-  
+	
 	@Override
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.SOLID;
@@ -110,8 +113,18 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 	}
 	
     @Override
-	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack) {
+	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack, EntityPlayer p) {
         switch (stack.getItemDamage()) {
+			case 0:
+				if (!w.isAirBlock(pos.offset(EnumFacing.fromAngle(p.rotationYaw).rotateY(), 1))) {
+					return false;
+				}
+				break;
+		    case 1:
+				if (!w.isAirBlock(pos.offset(EnumFacing.fromAngle(p.rotationYaw).rotateY(), -1))) {
+					return false;
+				}
+				break;
             case 3: 
                 if (!w.isAirBlock(pos.up(1))) {
 				    return false;

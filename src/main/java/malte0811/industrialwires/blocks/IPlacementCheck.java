@@ -18,7 +18,8 @@ package malte0811.industrialwires.blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface IPlacementCheck {
-	boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack);
+	boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack, EntityPlayer p);
 }

@@ -1,6 +1,6 @@
 /*
 || UNDER 'GNU General Public License v3.0'
-|| File made by thiago1255 based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
+|| File made by thiago based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
 ||
 || (check github for credits of this mods:)
 || IW: https://github.com/malte0811/IndustrialWires
@@ -22,12 +22,16 @@ import blusunrize.immersiveengineering.ImmersiveEngineering;
 import blusunrize.immersiveengineering.api.tool.ConveyorHandler.IConveyorAttachable;
 import blusunrize.immersiveengineering.api.tool.ConveyorHandler;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.FluxStorage;
+import blusunrize.immersiveengineering.api.IEEnums.SideConfig;
 import blusunrize.immersiveengineering.common.IEContent;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
 import blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll;
 import blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsIE;
 import blusunrize.immersiveengineering.common.blocks.metal.*;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.ITileDrop;
+import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
+import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.common.util.ListUtils;
 import blusunrize.immersiveengineering.common.util.Utils;
 
@@ -67,7 +71,7 @@ import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll
 import static blusunrize.immersiveengineering.common.blocks.wooden.BlockTypes_TreatedWood.HORIZONTAL;
 import static malte0811.industrialwires.util.MiscUtils.offset;
 
-public class TileEntityValveFabricator extends TileEntityIWMultiblock implements ITickable, IBlockBoundsIW, IHasDummyBlocksIW
+public class TileEntityValveFabricator extends TileEntityIWMultiblock implements ITickable, IBlockBoundsIW, IPlayerInteraction, IHasDummyBlocksIW, IIEInternalFluxHandler
 {
     TileEntityValveFabricator(EnumFacing facing) {
 		this.facing = facing;
@@ -87,6 +91,17 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		return false;
 	}
 	
+	private boolean isPartEnergyInput() {
+	    if(mBpos[1] != 0) { return false; }
+		if( (mBpos[0] == 1) && (mBpos[2] == -1) ) { return true; }
+		return false;
+	}
+	
+	private boolean isPartRedstonePort() {
+	    return false;
+	}
+	
+	//utils
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket)
 	{
@@ -94,6 +109,9 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		facing = EnumFacing.byHorizontalIndex(in.getInteger(FACING));
 		mBpos = in.getIntArray("offsetMb");
 		isPartConveyorBool = isPartConveyorVoid();
+		if(!isDummy()) {
+		    energyStorage.readFromNBT(in);
+		}
 	}
 
 	@Override
@@ -102,12 +120,22 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		super.writeNBT(out, updatePacket);	
 		out.setIntArray("offsetMb", mBpos);
 		isPartConveyorBool = isPartConveyorVoid();
+		if(!isDummy()) {
+		    energyStorage.writeToNBT(out);
+		}
 	}
 
 	@Override
 	public void update(){
 	}
 	
+	@Override
+	public boolean interact(EnumFacing side, EntityPlayer player, EnumHand hand, ItemStack heldItem, float hitX, float hitY, float hitZ) {
+	    if(!isPartRedstonePort()) { return false; }
+		return true;
+	}
+	
+	//properties:
 	@Nonnull
 	@Override
 	protected BlockPos getOrigin() {
@@ -188,14 +216,49 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		return new Vec3i(3, 3, 3);
 	}
 	
+	//Energy:
+	public FluxStorage energyStorage = new FluxStorage(32000);
+	
+	@Nonnull
+	@Override
+	public FluxStorage getFluxStorage() {
+		if(isDummy()) {
+		    TileEntity tem = world.getTileEntity(getOrigin());
+		    if (tem instanceof TileEntityValveFabricator) {
+		        return ((TileEntityValveFabricator)tem).getFluxStorage();
+		    }
+		}
+		return energyStorage;
+	}
+	
+	@Nonnull
+	@Override
+	public SideConfig getEnergySideConfig(EnumFacing facing) {
+	    if(isPartEnergyInput()&&(facing==EnumFacing.UP)) {
+		    return SideConfig.INPUT;
+		}
+		return SideConfig.NONE;
+	}
+	
+	IEForgeEnergyWrapper wrapper = new IEForgeEnergyWrapper(this, EnumFacing.UP);
+
+	@Override
+	public IEForgeEnergyWrapper getCapabilityWrapper(EnumFacing facing)
+	{
+		if(isPartEnergyInput()&&(facing==EnumFacing.UP))
+			return wrapper;
+		return null;
+	}
+	
+	//Dummy blocks:
 	@Override
     public boolean isDummy() { return mBpos[0]!=0||mBpos[1]!=0||mBpos[2]!=0; }
 	   
     @Override
-	public void placeDummies(IBlockState state) { return; }
+	public void placeDummies(IBlockState state) { }
     
     @Override
-    public void breakDummies() { return; }
+    public void breakDummies() { }
 	
 	@Override
 	public boolean isLogicDummy() { return mBpos[0]!=0||mBpos[1]!=0||mBpos[2]!=0; }

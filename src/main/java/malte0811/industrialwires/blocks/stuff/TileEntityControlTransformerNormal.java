@@ -1,6 +1,6 @@
 /*
 || UNDER 'GNU General Public License v3.0'
-|| File made by thiago1255 based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
+|| File made by thiago based (copied a lot) of files of mods 'Industrial Wires', and 'Immersive Engineering'.
 ||
 || (check github for credits of this mods:)
 || IW: https://github.com/malte0811/IndustrialWires
@@ -68,8 +68,9 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.LV_CATEG
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.HV_CATEGORY;
 import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE_CATEGORY;
+import static malte0811.industrialwires.util.MiscUtils.offset;
 
-public class TileEntityControlTransformerNormal extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile  
+public class TileEntityControlTransformerNormal extends TileEntityImmersiveConnectable implements ITickable, IIEInternalFluxHandler, IBlockBoundsDirectional, IDirectionalTile, IHasDummyBlocksIW 
 {
 // VARIABLES/CONS.: --------------------------------------
     private static final String SOUTH = "south";
@@ -353,6 +354,28 @@ public class TileEntityControlTransformerNormal extends TileEntityImmersiveConne
 	protected Pair<Float, Consumer<Float>> getOwnEnergy()
 	{
 		return getEnergyForConnection(null);
+	}
+	
+// "Dummy blocks" ------------------------------------------------------------------------------
+	@Override
+    public boolean isDummy() { return false; }
+    
+    @Override
+	public void placeDummies(IBlockState state) { 
+	    BlockPos position = pos.offset(facing.rotateY(), -1);
+        world.setBlockState(position, IndustrialWires.generalStuff.getStateFromMeta(0));
+        TileEntity te = world.getTileEntity(position);
+		if (te instanceof TileEntityControlTransformerRs) {
+			((TileEntityControlTransformerRs) te).facing = this.facing;
+		}
+	}
+    
+    @Override
+    public void breakDummies() {
+	    BlockPos position = pos.offset(facing.rotateY(), -1);
+		if (world.getTileEntity(position) instanceof TileEntityControlTransformerRs) { 
+	        world.setBlockToAir(position); 
+		}
 	}
 
 // FINISH OF THIS CLASS ------------------------------------------------------------------------

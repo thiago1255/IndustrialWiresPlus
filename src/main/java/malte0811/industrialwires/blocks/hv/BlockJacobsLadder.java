@@ -154,7 +154,7 @@ public class BlockJacobsLadder extends BlockIWBase implements IMetaEnum, IPlacem
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack) {
+	public boolean canPlaceBlockAt(World w, BlockPos pos, ItemStack stack, EntityPlayer p) {
 		int dummyCount = LadderSize.values()[stack.getMetadata()].dummyCount;
 		for (int i = 1; i <= dummyCount; i++) {
 			if (!w.isAirBlock(pos.up(i))) {
