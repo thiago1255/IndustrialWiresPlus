@@ -223,11 +223,11 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
 	
 // DUMMY BLOCKS: --------------------------------------
     @Override
-    public boolean isDummy() { return dummy != 0; }
+    public boolean isDummy() { return dummy == 0; }
     
     @Override
 	public void placeDummies(IBlockState state) {
-        BlockPos pos2 = pos.offset(EnumFacing.UP, 1);
+        BlockPos pos2 = pos.offset(EnumFacing.DOWN, 1);
         world.setBlockState(pos2, state);
         TileEntity te = world.getTileEntity(pos2);
 		if (te instanceof TileEntityPotentiometer) {
@@ -239,7 +239,7 @@ public class TileEntityPotentiometer extends TileEntityImmersiveConnectable impl
     @Override
     public void breakDummies() {
 	    for (int i = 0; i <= 1; i++) {
-		     if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.UP, i - dummy)) instanceof TileEntityPotentiometer) { world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy)); }
+		     if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.DOWN, i - dummy)) instanceof TileEntityPotentiometer) { world.setBlockToAir(pos.offset(EnumFacing.DOWN, i - dummy)); }
 	    }
 	}
 

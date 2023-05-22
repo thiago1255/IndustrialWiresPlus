@@ -241,11 +241,11 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
 
 // DUMMY BLOCKS: --------------------------------------
     @Override
-    public boolean isDummy() { return dummy != 0; }
+    public boolean isDummy() { return dummy == 0; }
     
     @Override
 	public void placeDummies(IBlockState state) {
-        BlockPos pos2 = pos.offset(EnumFacing.DOWN, 1);
+        BlockPos pos2 = pos.offset(EnumFacing.UP, 1);
         world.setBlockState(pos2, state);
         TileEntity te = world.getTileEntity(pos2);
 		if (te instanceof TileEntityCurrentTransformer) {
@@ -257,7 +257,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
     @Override
     public void breakDummies() {
 	    for (int i = 0; i <= 1; i++) {
-		     if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.DOWN, i - dummy)) instanceof TileEntityCurrentTransformer) { world.setBlockToAir(pos.offset(EnumFacing.DOWN, i - dummy)); }
+		     if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.UP, i - dummy)) instanceof TileEntityCurrentTransformer) { world.setBlockToAir(pos.offset(EnumFacing.UP, i - dummy)); }
 	    }
 	}
 // FINISH OF THIS CLASS ------------------------------------------------------------------------

@@ -126,20 +126,25 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 				}
 				break;
             case 3: 
-                if (!w.isAirBlock(pos.up(1))) {
+                if (!w.isAirBlock(pos.down(1))) {
 				    return false;
 			    }
                 break;
 			case 4:
-				if (!w.isAirBlock(pos.down(1))) {
+				if (!w.isAirBlock(pos.up(1))) {
 				    return false;
 			    }
 				break;
 			case 5:
-				for (int i = 1; i <= 1; i++) {
-			        if (!w.isAirBlock(pos.down(i))) {
-				        return false;
-			        }
+			    EnumFacing facingFplayer = EnumFacing.fromAngle(p.rotationYaw);
+				for(int xx = 0; xx <= 1; xx++){
+		            for(int yy = 0; yy <= 1; yy++){
+			            for(int zz = 0; zz <= 1; zz++){
+							if(!w.isAirBlock(pos.offset(facingFplayer, xx).offset(facingFplayer.rotateY(), -zz).add(0, yy, 0))) {
+								return false;
+							}
+						}
+					}
 				}
 				break;
 		}

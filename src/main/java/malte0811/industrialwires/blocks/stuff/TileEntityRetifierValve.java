@@ -121,7 +121,7 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
     public void update() {
 	    ApiUtils.checkForNeedlessTicking(this);
 	    if(world.isRemote) {return;}
-        if(this.isDummy()) {return;}
+        if(isDummy()) {return;}
 		
 		activeCheck();
 		
@@ -338,26 +338,48 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	
 // DUMMY BLOCKS: --------------------------------------
     @Override
-    public boolean isDummy() { return dummy != 0; }
+    public boolean isDummy() { return dummy != 2; }
     
     @Override
 	public void placeDummies(IBlockState state) {
-        for(int i = 1; i <= 1; i++){
-            BlockPos pos2 = pos.offset(EnumFacing.DOWN, i);
-            world.setBlockState(pos2, state);
-            TileEntity te = world.getTileEntity(pos2);
-		    if (te instanceof TileEntityRetifierValve) {
-		        ((TileEntityRetifierValve) te).dummy = i;
-			    ((TileEntityRetifierValve) te).facing = this.facing;
-		    }
+        for(int xx = 0; xx <= 1; xx++){
+		    for(int yy = 0; yy <= 1; yy++){
+			    for(int zz = 0; zz <= 1; zz++){
+				    if((xx==0)&&(yy==0)&&(zz==0)) {continue;}
+					BlockPos position = pos.offset(facing, xx).offset(facing.rotateY(), -zz).add(0, yy, 0);
+                    world.setBlockState(position, state);
+                    TileEntity te = world.getTileEntity(position);
+		            if (te instanceof TileEntityRetifierValve) {
+		                ((TileEntityRetifierValve) te).dummy = (xx*1)+(yy*2)+(zz*4);
+			            ((TileEntityRetifierValve) te).facing = this.facing;
+		            }
+				}
+			}
 		}
     }
     
     @Override
     public void breakDummies() {
-	    for (int i = 0; i <= 1; i++) {
-		     if (i != dummy && world.getTileEntity(pos.offset(EnumFacing.DOWN, i - dummy)) instanceof TileEntityRetifierValve) { world.setBlockToAir(pos.offset(EnumFacing.DOWN, i - dummy)); }
-	    }
+	    if(dummy != 0) {
+		    TileEntity te = world.getTileEntity(pos.offset(facing, -(dummy & 1)).offset(facing.rotateY(), ((dummy >> 2) & 1)).add(0, -((dummy >> 1) & 1), 0));
+		    if (te instanceof TileEntityRetifierValve) {
+			    ((TileEntityRetifierValve) te).breakDummies(); 
+			}
+		    return;
+		}
+		for(int xx = 0; xx <= 1; xx++){
+		    for(int yy = 0; yy <= 1; yy++){
+			    for(int zz = 0; zz <= 1; zz++){
+				    if((xx==0)&&(yy==0)&&(zz==0)) {continue;}
+					BlockPos position = pos.offset(facing, xx).offset(facing.rotateY(), -zz).add(0, yy, 0);
+                    TileEntity te = world.getTileEntity(position);
+		            if (te instanceof TileEntityRetifierValve) {
+		                world.setBlockToAir(position);
+		            }
+				}
+			}
+		}
+		world.setBlockToAir(pos);
 	}
 // FINISH OF THIS CLASS ------------------------------------------------------------------------
 }

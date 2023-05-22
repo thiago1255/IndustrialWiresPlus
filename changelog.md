@@ -3,6 +3,7 @@
 ####Version 2.1-00
  - Added Vacuum tube fabricator (Multiblock, useless for now).
  - Control Transformer is only one block again.
+ - Fixed some dummy blocks.
 
 ####Version 2.0-02
  - Added animations for retifier valve:
