@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "industrialwires:general_stuff",
+    "data": 4
+  },
+  "pattern": [
+    "e",
+    "t"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "t": {
+	  "item": "immersiveengineering:connector",
+      "data": 11
+    },
+	"e": {
+	  "type": "industrialwires:ic2_item",
+      "name": "crafting",
+      "variant": "rubber"
+	}
+  }
+}

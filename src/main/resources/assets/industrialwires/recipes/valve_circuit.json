@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "industrialwires:stuff_crafting",
+    "data": 1
+  },
+  "pattern": [
+    "www",
+    "wci"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "w": {
+	  "item": "immersiveengineering:wirecoil",
+      "data": 6
+    },
+	"c": {
+	  "item": "immersiveengineering:material",
+	  "data": 27
+	},
+	"i": {
+	  "type": "forge:ore_dict", 
+	  "ore": "ingotIron"
+	}
+  }
+}

@@ -38,6 +38,7 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.items.ItemIC2Coil;
  import malte0811.industrialwires.items.ItemKey;
  import malte0811.industrialwires.items.ItemPanelComponent;
+ import malte0811.industrialwires.items.ItemCraftingStuff;
  import malte0811.industrialwires.mech_mb.EUCapability;
  import malte0811.industrialwires.mech_mb.MechMBPart;
  import malte0811.industrialwires.mech_mb.MultiblockMechMB;
@@ -135,6 +136,8 @@ public class IndustrialWires {
 	public static ItemPanelComponent panelComponent = null;
 	@GameRegistry.ObjectHolder(MODID+":"+ItemKey.ITEM_NAME)
 	public static ItemKey key = null;
+	@GameRegistry.ObjectHolder(MODID+":"+ItemCraftingStuff.NAME)
+	public static ItemCraftingStuff craftingStuff = null;
 
 
 	@GameRegistry.ObjectHolder("ic2:te")
@@ -248,6 +251,7 @@ public class IndustrialWires {
 		event.getRegistry().register(new ItemIC2Coil());
 		event.getRegistry().register(new ItemPanelComponent());
 		event.getRegistry().register(new ItemKey());
+		event.getRegistry().register(new ItemCraftingStuff());
 	}
 
 	@SubscribeEvent

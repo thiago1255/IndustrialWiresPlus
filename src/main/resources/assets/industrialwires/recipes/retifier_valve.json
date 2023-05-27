@@ -1,0 +1,38 @@
+{
+  "result": {
+    "item": "industrialwires:general_stuff",
+    "data": 5
+  },
+  "pattern": [
+    "sps",
+    "vmc",
+    "sws"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "s": {
+	  "type": "forge:ore_dict",
+      "ore": "plateSteel"
+	},
+	"p": {
+	  "item": "immersiveengineering:material",
+	  "data": 8
+	},
+	"v": {
+	  "item": "industrialwires:stuff_crafting",
+	  "data": 0
+	},
+	"m": {
+	  "item": "immersiveengineering:wirecoil",
+	  "data": 7
+	},
+	"c": {
+	  "item": "industrialwires:stuff_crafting",
+	  "data": 1
+	},
+	"w": {
+	  "type": "forge:ore_dict",
+      "ore": "plankTreatedWood"
+	}
+  }
+}

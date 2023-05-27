@@ -29,6 +29,7 @@ import malte0811.industrialwires.controlpanel.PanelComponent;
 import malte0811.industrialwires.items.ItemIC2Coil;
 import malte0811.industrialwires.items.ItemKey;
 import malte0811.industrialwires.items.ItemPanelComponent;
+import malte0811.industrialwires.items.ItemCraftingStuff;
 import malte0811.industrialwires.mech_mb.MechMBPart;
 import malte0811.industrialwires.wires.MixedWireType;
 import net.minecraft.block.properties.IProperty;
@@ -146,6 +147,11 @@ public class ClientEventHandler {
 				ModelBakery.registerItemVariants(IndustrialWires.coil, loc);
 				ModelLoader.setCustomModelResourceLocation(IndustrialWires.coil, meta, new ModelResourceLocation(loc, "inventory"));
 			}
+		}
+		for (int meta = 0; meta < ItemCraftingStuff.subNames.length; meta++) {
+			ResourceLocation loc = new ResourceLocation(IndustrialWires.MODID, "stuff_crafting/" + ItemCraftingStuff.subNames[meta]);
+			ModelBakery.registerItemVariants(IndustrialWires.craftingStuff, loc);
+			ModelLoader.setCustomModelResourceLocation(IndustrialWires.craftingStuff, meta, new ModelResourceLocation(loc, "inventory"));
 		}
 		for (int meta = 0; meta < ItemPanelComponent.types.length; meta++) {
 			ResourceLocation loc = new ResourceLocation(IndustrialWires.MODID, "panel_component/" + ItemPanelComponent.types[meta]);

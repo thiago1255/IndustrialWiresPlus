@@ -1,0 +1,42 @@
+{
+  "result": {
+    "item": "industrialwires:general_stuff",
+    "data": 0
+  },
+  "pattern": [
+    "hrh",
+    "oce",
+    "sms"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "h": {
+	  "item": "immersiveengineering:connector",
+      "data": 4
+    },
+	"r": {
+	  "type": "industrialwires:ic2_item",
+      "name": "crafting",
+      "variant": "rubber"
+	},
+	"o": {
+	  "type": "immersiveengineering:fluid",
+      "fluid": "creosote"
+    },
+	"c": {
+	  "item": "immersiveengineering:metal_decoration0",
+	  "data": 1
+    },
+	"e": {
+	  "item": "immersiveengineering:graphite_electrode"
+    },
+	"s": {
+	  "type": "forge:ore_dict",
+      "ore": "plateSteel"
+    },
+	"m": {
+	  "item": "immersiveengineering:material",
+	  "data": 8
+    }
+  }
+}

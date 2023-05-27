@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "industrialwires:general_stuff",
+    "data": 3
+  },
+  "pattern": [
+    " t ",
+    "ctc",
+    " a "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "t": {
+	  "item": "minecraft:hardened_clay"
+    },
+	"a": {
+	  "type": "forge:ore_dict",
+      "ore": "circuitAdvanced"
+	},
+	"c": {
+	  "type": "forge:ore_dict",
+      "ore": "itemDetectorCable"
+    }
+  }
+}
