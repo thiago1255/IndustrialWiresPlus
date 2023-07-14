@@ -10,7 +10,8 @@ THIS IS A FORK OF [THIS](https://github.com/malte0811/IndustrialWires), NOT MY M
 
 ## IN PROGRESS:
 
- - Valve fabricator multiblock
+ - ~~Valve fabricator multiblock~~
+ - Other recipes
 
 ## THINGHS I PLAN +- ADD IN MY MODIFICATION OF MOD:
 
