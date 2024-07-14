@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ItemCraftingStuff extends Item {
 	public final static String[] subNames = {
-			"mercury_valve", "valve_circuit", "valve_glass"
+			"mercury_valve", "valve_circuit", "valve_glass", "valve_component", "neon_component"
 	};
 	
 	public final static String NAME = "stuff_crafting";

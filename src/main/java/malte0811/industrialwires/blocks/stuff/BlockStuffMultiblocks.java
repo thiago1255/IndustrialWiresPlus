@@ -26,6 +26,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
@@ -66,6 +67,15 @@ public class BlockStuffMultiblocks extends BlockIWMultiblock implements IMetaEnu
 			return new TileEntityValveFabricator(state.getValue(IEProperties.FACING_HORIZONTAL));
 		}
 		return null;
+	}
+	
+	@Override
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		super.onEntityCollision(worldIn, pos, state, entityIn);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileEntityValveFabricator) {
+			((TileEntityValveFabricator) te).onEntityCollision(worldIn, entityIn);
+		}
 	}
 
 	@Override

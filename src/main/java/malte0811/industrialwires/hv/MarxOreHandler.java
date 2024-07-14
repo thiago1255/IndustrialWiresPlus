@@ -77,7 +77,7 @@ public class MarxOreHandler {
 		put(new OreInfo(new OreChecker(oreName), getOres(oreName), avgEnergy, maxYield, oreOut, meta));
 	}
 
-	public static void put(MarxOreHandler.OreInfo output) {
+	public static void put(MarxOreHandler.OreInfo output) { //used by CT
 		oreData.add(output);
 	}
 

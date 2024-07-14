@@ -119,7 +119,6 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 // ITICKABLE ---------------------------------------
     @Override
     public void update() {
-	    ApiUtils.checkForNeedlessTicking(this);
 	    if(world.isRemote) {return;}
         if(isDummy()) {return;}
 		

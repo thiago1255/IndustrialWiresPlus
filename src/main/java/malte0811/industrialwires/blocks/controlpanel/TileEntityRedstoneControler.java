@@ -181,13 +181,8 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
 		    markDirty();
 		    this.onChange();
 			return true;
-		} else if(te instanceof TileEntityPotentiometer) {
-		    player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%i", ((TileEntityPotentiometer)te).redstoneValueFine)));
-			player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.transformerRs", String.format("%i", ((TileEntityPotentiometer)te).redstoneValueCoarse)));
-            return true;
-		} else {
-		    return false;
 		}
+		return false;
 	}
 	
     protected String nameOfColorOfWire() {

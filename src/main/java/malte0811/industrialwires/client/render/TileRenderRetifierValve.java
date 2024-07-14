@@ -50,7 +50,7 @@ public class TileRenderRetifierValve extends TileEntitySpecialRenderer<TileEntit
 	
 	@Override
 	public void render(TileEntityRetifierValve tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		super.render(tile, x, y, z, partialTicks, destroyStage, alpha); //renderização padrão.
+		super.render(tile, x, y, z, partialTicks, destroyStage, alpha); //renderizacao padrao.
 		if (tile.isDummy()) {return;}
 		//based and copied from TileRenderJacobsLadder
 		if (tile.ignition)

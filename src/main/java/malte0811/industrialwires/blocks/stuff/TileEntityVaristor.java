@@ -111,34 +111,34 @@ public class TileEntityVaristor extends TileEntityImmersiveConnectable implement
 	}
 	
 	@Override
-        public boolean allowEnergyToPass(Connection con) { return false; }
+    public boolean allowEnergyToPass(Connection con) { return false; }
 
-        @Override
-        public boolean isEnergyOutput() { return true; }
+    @Override
+    public boolean isEnergyOutput() { return true; }
 
-        @Override
-        public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
-            if(wireenergy) { return false; }
+    @Override
+    public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
+        if(wireenergy) { return false; }
 	    if(!cableType.isEnergyWire()) { return false; }
 	    if(!HV_CATEGORY.equals(cableType.getCategory())) { return false; }
 	    return limitType==null||WireApi.canMix(cableType, limitType);
-        }
+    }
 
-        @Override
-        public WireType getCableLimiter(TargetingInfo target) { return limitType; }
+    @Override
+    public WireType getCableLimiter(TargetingInfo target) { return limitType; }
 
-        @Override
-        public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-            if(this.limitType==null) { this.limitType = cableType; }
+    @Override
+    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
+        if(this.limitType==null) { this.limitType = cableType; }
 	    wireenergy = true;
-        }
+    }
 
-        @Override 
-        public void removeCable(Connection connection) {
-            wireenergy = false;
+    @Override 
+    public void removeCable(Connection connection) {
+        wireenergy = false;
 	    limitType = null;
-        }
+    }
   
-        @Override
-        public Vec3d getConnectionOffset(Connection con) { return new Vec3d(0.5, 1, 0.5); }
+    @Override
+    public Vec3d getConnectionOffset(Connection con) { return new Vec3d(0.5, 1, 0.5); }
 }

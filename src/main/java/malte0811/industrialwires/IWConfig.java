@@ -41,6 +41,10 @@ public class IWConfig {
 	@Comment({"Set this to false to completely disable any conversion between IF and EU (default: true)"})
 	@RequiresMcRestart
 	public static boolean enableConversion = true;
+	
+	@Comment({"Set this to true so IE's tubes require Valve Fabricator to be crafted (default: true)"})
+	@RequiresMcRestart
+	public static boolean replaceIeTubes = true;
 
 	public static MechConversion mech;
 	@Comment({"The highest number of keys that can be put on one key ring"})

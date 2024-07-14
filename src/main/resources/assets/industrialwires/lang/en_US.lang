@@ -132,6 +132,10 @@ industrialwires.chat.transformerValues=Maximum value: %s
 industrialwires.chat.transformerRs=Channels (coarse and fine): %s
 industrialwires.chat.currentTransformer=Energy measured: %s IF
 
+industrialwires.ValveFabricator.confirmedTempId=Id %s confirmed
+industrialwires.ValveFabricator.askTempId=Please select an recipe id
+industrialwires.ValveFabricator.confirmedTempId=Id %s
+
 death.attack.industrialwires.jacobs_ladder=%1$s was electrocuted by a Jacob's Ladder
 death.attack.industrialwires.marx=%1$s was struck by lightning produced by a Marx generator
 

@@ -12,7 +12,9 @@ package malte0811.industrialwires.blocks.stuff;
 import blusunrize.immersiveengineering.common.blocks.BlockIEBase;
 
 public enum BlockTypes_StuffMultiblocks implements BlockIEBase.IBlockEnum {
-	VALVE_FABRICATOR;
+	VALVE_FABRICATOR,
+	GLASS_MELTER,
+	MELTER_HEATER;
 
 	@Override
 	public int getMeta() {
