@@ -1,7 +1,8 @@
 {
   "result": {
     "item": "industrialwires:control_panel",
-    "data": 7
+    "data": 7,
+    "count": 3
   },
   "pattern": [
     "r",

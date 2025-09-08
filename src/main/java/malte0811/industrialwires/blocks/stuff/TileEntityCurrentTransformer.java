@@ -28,6 +28,7 @@ import blusunrize.immersiveengineering.common.util.EnergyHelper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IEForgeEnergyWrapper;
 import blusunrize.immersiveengineering.common.util.EnergyHelper.IIEInternalFluxHandler;
 import blusunrize.immersiveengineering.common.util.Utils;
+import blusunrize.immersiveengineering.common.util.ChatUtils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
 import blusunrize.immersiveengineering.client.models.IOBJModelCallback;
@@ -194,7 +195,7 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
             sum += transfer;
 	    }
 	    sum = sum/lastPackets.size();
-        player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(sum, "0.###"))));
+        ChatUtils.sendServerNoSpamMessages(player,new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(sum, "0.###"))));
         return true;
     }
 	  

@@ -20,6 +20,7 @@ package malte0811.industrialwires;
  import blusunrize.immersiveengineering.api.MultiblockHandler;
  import blusunrize.immersiveengineering.api.energy.wires.WireApi;
  import com.google.common.collect.ImmutableMap;
+ import malte0811.industrialwires.IWFluids;
  import malte0811.industrialwires.blocks.BlockIWBase;
  import malte0811.industrialwires.blocks.TEDataFixer;
  import malte0811.industrialwires.blocks.controlpanel.*;
@@ -32,6 +33,8 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.controlpanel.PanelComponent;
  import malte0811.industrialwires.controlpanel.PanelUtils;
  import malte0811.industrialwires.crafting.Recipes;
+ import malte0811.industrialwires.crafting.RecipesValveFabricator;
+ import malte0811.industrialwires.crafting.RecipesSolidifier;
  import malte0811.industrialwires.entities.EntityBrokenPart;
  import malte0811.industrialwires.hv.MarxOreHandler;
  import malte0811.industrialwires.hv.MultiblockMarx;
@@ -48,6 +51,7 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.network.MessageTileSyncIW;
  import malte0811.industrialwires.util.CommandIW;
  import malte0811.industrialwires.util.MultiblockTemplateManual;
+ import malte0811.industrialwires.world.IWWorldGen;
  import net.minecraft.block.Block;
  import net.minecraft.creativetab.CreativeTabs;
  import net.minecraft.item.Item;
@@ -69,6 +73,7 @@ package malte0811.industrialwires;
  import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
  import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
  import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  import net.minecraftforge.fml.common.network.NetworkRegistry;
  import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -79,7 +84,15 @@ package malte0811.industrialwires;
 
  import java.util.ArrayList;
  import java.util.List;
+ import java.io.File;
+ import java.io.FileWriter;
+ import java.io.InputStreamReader;
+ import java.io.BufferedReader;
+ import java.io.IOException;
+ import java.util.stream.Collectors;
 
+ import static malte0811.industrialwires.IWConfig.replaceIeTubes;
+ import static malte0811.industrialwires.IWFluids.fluidsArray;
  import static malte0811.industrialwires.blocks.wire.BlockTypes_IC2_Connector.*;
  import static malte0811.industrialwires.entities.EntityBrokenPart.MARKER_TEXTURE;
  import static malte0811.industrialwires.entities.EntityBrokenPart.RES_LOC_SERIALIZER;
@@ -163,12 +176,15 @@ public class IndustrialWires {
 	@SidedProxy(clientSide = "malte0811.industrialwires.client.ClientProxy", serverSide = "malte0811.industrialwires.CommonProxy")
 	public static CommonProxy proxy;
 	public static boolean hasIC2;
+	public static boolean hasII;
+	public static boolean hasCT;
 	public static boolean hasTechReborn;
 	public static boolean isOldIE;
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		hasIC2 = Loader.isModLoaded("ic2");
+		hasII = Loader.isModLoaded("immersiveintelligence");
+		hasCT = Loader.isModLoaded("crafttweaker");
 		hasTechReborn = Loader.isModLoaded("techreborn");
 		{
 			double ieThreshold = 12.74275;
@@ -213,7 +229,9 @@ public class IndustrialWires {
         GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
         GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
 		GameRegistry.registerTileEntity(TileEntityValveFabricator.class, new ResourceLocation(MODID, "te_valve_fabricator"));
-		
+		GameRegistry.registerTileEntity(TileEntitySolidifier.class, new ResourceLocation(MODID, "te_solidifier"));
+
+		IWFluids.fluidsInit();
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
 		MARKER_TEXTURE = EntityDataManager.createKey(EntityBrokenPart.class, RES_LOC_SERIALIZER);
 		EntityRegistry.registerModEntity(new ResourceLocation(MODID, "broken_part"), EntityBrokenPart.class,
@@ -224,6 +242,18 @@ public class IndustrialWires {
 		MarxOreHandler.preInit();
 		// This has to run before textures are stitched, i.e. in preInit
 		MechMBPart.preInit();
+		
+		//remove/replace existing recipes
+		if(replaceIeTubes && hasCT) {
+			try {
+				File script = new File(new File("scripts"), "replaceIeTubes.zs");
+				if(script.exists()) {return;}
+				script.createNewFile();
+				FileWriter fw = new FileWriter(script);
+				fw.write(new BufferedReader(new InputStreamReader(IndustrialWires.class.getResourceAsStream("/assets/industrialwires/replaceIeTubes.zs"))).lines().collect(Collectors.joining("\n")));
+				fw.close();
+			} catch (IOException erro) { erro.printStackTrace(); }
+		}
 	}
 
 	@SubscribeEvent
@@ -240,6 +270,13 @@ public class IndustrialWires {
 		event.getRegistry().register(new BlockGeneralHV());
         event.getRegistry().register(new BlockGeneralStuff());
 		event.getRegistry().register(new BlockStuffMultiblocks());
+		for(Block fluid : fluidsArray) { event.getRegistry().register(fluid.setRegistryName(createRegistryName(fluid.getTranslationKey()))); }
+	}
+	//from IEContent.java
+	private static ResourceLocation createRegistryName(String unlocalized) {
+		unlocalized = unlocalized.substring(unlocalized.indexOf("industrial"));
+		unlocalized = unlocalized.replaceFirst("\\.", ":");
+		return new ResourceLocation(unlocalized);
 	}
 
 	@SubscribeEvent
@@ -338,10 +375,17 @@ public class IndustrialWires {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
         PanelUtils.PANEL_ITEM = Item.getItemFromBlock(panel);
-        proxy.postInit();
+        proxy.postInit();		
+		GameRegistry.registerWorldGenerator(new IWWorldGen(), 3);
+		RecipesValveFabricator.init();
+		RecipesSolidifier.init();
 	}
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandIW());
+	}
+	@Mod.EventHandler
+	public void serverStarted(FMLServerStartedEvent event) {
+		IWFluids.refreshFluidReferences();
 	}
 }

@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "industrialwires:stuff_crafting",
+    "data": 6
+  },
+  "pattern": [
+    "l l",
+    " g ",
+	"c c"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "l": {
+	  "type": "forge:ore_dict",
+      "ore": "nuggetLead"
+    },
+	"g": {
+	  "item": "immersiveengineering:graphite_electrode"
+	},
+	"c": {
+	  "type": "forge:ore_dict",
+      "ore": "nuggetCopper"
+	}
+  }
+}

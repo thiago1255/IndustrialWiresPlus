@@ -75,6 +75,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static net.minecraft.item.ItemStack.areItemStacksEqual;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDecoration0.LIGHT_ENGINEERING;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDecoration0.HEAVY_ENGINEERING;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDecoration0.RS_ENGINEERING;
@@ -83,9 +84,10 @@ import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_Met
 import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll.STEEL;
 import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll.IRON;
 import static blusunrize.immersiveengineering.common.blocks.wooden.BlockTypes_TreatedWood.HORIZONTAL;
+import static blusunrize.immersiveengineering.api.energy.DieselHandler.isValidDrillFuel;
 import static malte0811.industrialwires.util.MiscUtils.offset;
 
-public class TileEntityValveFabricator extends TileEntityIWMultiblock implements ITickable, IBlockBoundsIW, IPlayerInteraction, IHasDummyBlocksIW, IIEInternalFluxHandler, IIEInventory, IFluidHandler
+public class TileEntityValveFabricator extends TileEntityIWMultiblock implements ITickable, IBlockBoundsIW, IPlayerInteraction, IHasDummyBlocksIW, IIEInternalFluxHandler, IIEInventory
 {
     TileEntityValveFabricator(EnumFacing facing) {
 		this.facing = facing;
@@ -106,9 +108,7 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	
 	public RecipeData recipe = null;
 	
-	public boolean isPartConveyorBool = isPartConveyorVoid();
-	
-	public boolean active = false;
+	public boolean isPartConveyorBool = false;
 	
 	public int tempId = 0;
 	public boolean confirmedId = false;
@@ -118,6 +118,8 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	public FluidTank fuelTank = new FluidTank(10000);
 	
 	public FluidTank internalTank = new FluidTank(10000);
+	
+	public TileEntityValveFabricator masterTe = null;
 	
 	private boolean isPartConveyorVoid() {
 	    if(mBpos[1] != 0) { return false; }
@@ -144,81 +146,73 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
 		super.readNBT(in, updatePacket);
-		facing = EnumFacing.byHorizontalIndex(in.getInteger(FACING));
+		facing = EnumFacing.byHorizontalIndex(in.getByte("facing"));
 		mBpos = in.getIntArray("offsetMb");
-		isPartConveyorBool = isPartConveyorVoid();
-		if(!isDummy()) {
-		    ticksPassed = in.getInteger("ticksPassed");
-			recipeId = in.getInteger("recipeId");
-		    if (recipeId != 0) {
-		        recipe = RecipesValveFabricator.getRecipeById(recipeId);
-		    }
-			ticksNeeded = recipe.time;
-		    energyStorage.readFromNBT(in);
-			fuelTank.readFromNBT(in.getCompoundTag("fuelTank"));
-		    internalTank.readFromNBT(in.getCompoundTag("internalTank"));
-			inventory = Utils.readInventory(in.getTagList("inventory", 10), 2);
-			inverted = in.getBoolean("inverted");
+		ticksPassed = in.getInteger("ticksPassed");
+		recipeId = in.getInteger("recipeId");
+		if (recipeId != 0) {
+		    recipe = RecipesValveFabricator.getRecipeById(recipeId);
 		}
+		if(recipe != null) {
+			ticksNeeded = recipe.time;
+		}
+		energyStorage.readFromNBT(in);
+		fuelTank.readFromNBT(in.getCompoundTag("fuelTank"));
+		internalTank.readFromNBT(in.getCompoundTag("internalTank"));
+		inventory = Utils.readInventory(in.getTagList("inventory", 10), 2);
+		inverted = in.getBoolean("inverted");
 	}
 
 	@Override
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
-		super.writeNBT(out, updatePacket);	
+		super.writeNBT(out, updatePacket);
+		out.setByte("facing",  (byte) facing.getHorizontalIndex());
 		out.setIntArray("offsetMb", mBpos);
-		isPartConveyorBool = isPartConveyorVoid();
-		if(!isDummy()) {
-		    out.setInteger("ticksPassed", ticksPassed);
-		    out.setInteger("recipeId", recipeId);
-		    energyStorage.writeToNBT(out);
-			out.setTag("fuelTank", fuelTank.writeToNBT(new NBTTagCompound()));
-		    out.setTag("internalTank", internalTank.writeToNBT(new NBTTagCompound()));
-			out.setTag("inventory", Utils.writeInventory(inventory));
-			out.setBoolean("inverted", inverted);
-		}
+		out.setInteger("ticksPassed", ticksPassed);
+		out.setInteger("recipeId", recipeId);
+		energyStorage.writeToNBT(out);
+		out.setTag("fuelTank", fuelTank.writeToNBT(new NBTTagCompound()));
+		out.setTag("internalTank", internalTank.writeToNBT(new NBTTagCompound()));
+		out.setTag("inventory", Utils.writeInventory(inventory));
+		out.setBoolean("inverted", inverted);
 	}
 
 	@Override
 	public void update() {
+		if(masterTe == null && world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
+			masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
+			isPartConveyorBool = isPartConveyorVoid();
+		}
 	    if(world.isRemote) {return;}
-        if(isDummy()) {return;}
 		if(recipe == null) {return;}
-		
 		if((world.getRedstonePowerFromNeighbors(pos.offset(facing, 1).offset(facing.rotateY(), -1).add(0, -1, 0)) != 0) != inverted) {return;}
 		
-		if(ticksPassed != 0 && active) {
+		if(ticksPassed != 0) {
 		    ticksPassed += 1;
 		    if(ticksPassed >= ticksNeeded) {
 			    ticksPassed = 0;
-				Utils.dropStackAtPos(world, pos.offset(facing.rotateY(), -1), recipe.output.get(), facing.getOpposite().rotateY()); //conveyor -1
+				Utils.dropStackAtPos(world, pos.offset(facing.rotateY(), -2), recipe.output.get(), facing.getOpposite().rotateY()); //conveyor -1
 			}
 			atualizar(); //Update to render.
 			return;
 		}
-		if(
-		    active &&
-		    inventory.get(0) == recipe.inputGlass.get() &&
-			inventory.get(1) == recipe.inputComponent.get() &&
-			energyStorage.getEnergyStored() >= recipe.energy &&
-			fuelTank.getFluid().getFluid() == recipe.fuel.get().getFluid() &&
-			fuelTank.getFluidAmount() >= recipe.fuel.get().amount &&
-			( recipe.internal.get() == null
-			    ?internalTank.getFluid().getFluid() == recipe.internal.get().getFluid() && internalTank.getFluidAmount() >= recipe.internal.get().amount
-				:true
-			)
-		) {
-		    ticksPassed = 1; //Should be the first.
-		    inventory.set(0, ItemStack.EMPTY);
-			inventory.set(1, ItemStack.EMPTY);
-			fuelTank.drain(recipe.fuel.get().amount, true);
-			if(recipe.internal.get() != null) {
-			    internalTank.drain(recipe.internal.get().amount, true);
-			}
-			energyStorage.modifyEnergyStored(-recipe.energy);
-			atualizar(); //Update to render.
-		}	
+		
+		if(!areItemStacksEqual(inventory.get(0), recipe.inputComponent.get())) {return;} 
+		if(!areItemStacksEqual(inventory.get(1), recipe.inputGlass.get())) {return;}
+		if(energyStorage.getEnergyStored() < recipe.energy) {return;}
+		if(fuelTank.getFluidAmount() < recipe.fuel) {return;}
+		if(recipe.internal != null) {
+			if(internalTank.getFluidAmount() < recipe.internal.get().amount) {return;}
+			internalTank.drain(recipe.internal.get().amount, true);
+		}
+		ticksPassed = 1; //Should be the first.
+		inventory.set(0, ItemStack.EMPTY);
+		inventory.set(1, ItemStack.EMPTY);
+		fuelTank.drain(recipe.fuel, true);
+		energyStorage.modifyEnergyStored(-recipe.energy);
+		atualizar(); //Update to render.
 	}
-	
+
 	public void atualizar() {
 	    this.markDirty();
 	    IBlockState state = world.getBlockState(pos);
@@ -228,14 +222,10 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	
 	@Override
 	public boolean interact(EnumFacing side, EntityPlayer player, EnumHand hand, ItemStack heldItem, float hitX, float hitY, float hitZ) {
+		if(masterTe == null) {return false;}
 	    if(!isPartRedstonePort()) {return false;}
 		if(world.isRemote) {return false;}
 		if(!Utils.isHammer(heldItem)) {return false;}
-		
-		TileEntityValveFabricator masterTe = null;
-		if(world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
-		    masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
-		}else{ return false; }
 		
 		if(masterTe.recipeId == 0) {
 			if(player.isSneaking()) {
@@ -246,22 +236,27 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 					player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".ValveFabricator.confirmedTempId", String.format("%s", tempId)));
 				} else {
 				    confirmedId = true;
-					player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".ValveFabricator.askTempId"));
+					player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".ValveFabricator.askTempId", String.format("%s", tempId)));
 				}
 			} else {
-			    confirmedId = false;
-				for(tempId++; tempId < RecipesValveFabricator.getMaxId()+1; tempId++) {
-					if(RecipesValveFabricator.getRecipeById(tempId) != null) {continue;}
-                }
-				if(tempId > RecipesValveFabricator.getMaxId()) {tempId = 0;}
+				int max_id = RecipesValveFabricator.getMaxId();
+				confirmedId = false;
+				do {
+					tempId++;
+					if(tempId > max_id) {tempId = 1;}
+				} while (RecipesValveFabricator.getRecipeById(tempId) == null);
 				player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".ValveFabricator.selectedTempId", String.format("%s", tempId)));
 			}
 			return true;
 		}
 		
-		masterTe.inverted = !masterTe.inverted;
-		masterTe.markDirty();
-		ChatUtils.sendServerNoSpamMessages(player, new TextComponentTranslation(Lib.CHAT_INFO+"rsControl."+(masterTe.inverted?"invertedOn": "invertedOff")));
+		if (player.isSneaking()) {
+			masterTe.inverted = !masterTe.inverted;
+			masterTe.markDirty();
+			ChatUtils.sendServerNoSpamMessages(player, new TextComponentTranslation(Lib.CHAT_INFO+"rsControl."+(masterTe.inverted?"invertedOn": "invertedOff")));
+		} else {
+			ChatUtils.sendServerNoSpamMessages(player, new TextComponentTranslation(IndustrialWires.MODID + ".ValveFabricator.confirmedTempId", String.format("%s", masterTe.recipeId)));
+		}
 		return true;
 	}
 	
@@ -338,12 +333,10 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	
 	@Override
 	public AxisAlignedBB getBoundingBox() {
+		if(isPartConveyorBool){
+			return new AxisAlignedBB(0, 0, 0, 1, 0.0625, 1);
+		}
 		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-	}
-	
-    @Override
-	public Vec3i getSize() {
-		return new Vec3i(3, 3, 3);
 	}
 	
 	//Energy: ======================================================================
@@ -352,12 +345,7 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	@Nonnull
 	@Override
 	public FluxStorage getFluxStorage() {
-		if(isDummy()) {
-		    TileEntity tem = world.getTileEntity(getOrigin());
-		    if (tem instanceof TileEntityValveFabricator) {
-		        return ((TileEntityValveFabricator)tem).getFluxStorage();
-		    }
-		}
+		if(isDummy() && masterTe != null) {return masterTe.getFluxStorage();}
 		return energyStorage;
 	}
 	
@@ -379,7 +367,49 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		return null;
 	}
     
-    //Fluidhandler: ======================================================================== Based on: TileEntityWoodenBarrel.java
+    //Fluidhandler: ======================================================================== Based on: TileEntityWoodenBarrel.java[
+	
+	TheFluidHandler thefluidhandler = new TheFluidHandler(this);
+	
+	static class TheFluidHandler implements IFluidHandler {
+		TileEntityValveFabricator tevf;
+
+		TheFluidHandler(TileEntityValveFabricator tevf) { this.tevf = tevf; }
+		
+		@Override
+		public FluidStack drain(FluidStack resource, boolean doDrain) {return null;}
+		@Override
+		public FluidStack drain(int maxDrain, boolean doDrain) {return null;}
+	
+		@Override
+		public int fill(FluidStack resource, boolean doFill) {
+			if(tevf.masterTe == null) {return 0;}
+			if(resource==null || !tevf.isPartFluidInput() || tevf.masterTe.recipe == null) {return 0;}
+			int i = 0;
+			if(tevf.mBpos[1] == 1) {
+				if(!isValidDrillFuel(resource.getFluid())) {return 0;}
+				i = tevf.masterTe.fuelTank.fill(resource, doFill);
+			} else {
+				if(tevf.masterTe.recipe.internal == null) {return 0;}
+				if(tevf.masterTe.recipe.internal.get().getFluid() != resource.getFluid()) {return 0;}
+				i = tevf.masterTe.internalTank.fill(resource, doFill);
+			}
+			if(i > 0) { tevf.masterTe.markDirty(); }
+			return i;
+		}
+
+		@Override
+		public IFluidTankProperties[] getTankProperties() {
+			IFluidTankProperties[] array = new IFluidTankProperties[2];
+			if(tevf.masterTe == null) {
+				array[0] = new FluidTankProperties(tevf.fuelTank.getFluid(), tevf.fuelTank.getCapacity());
+				array[1] = new FluidTankProperties(tevf.internalTank.getFluid(), tevf.internalTank.getCapacity());
+			}
+			array[0] = new FluidTankProperties(tevf.masterTe.fuelTank.getFluid(), tevf.masterTe.fuelTank.getCapacity());
+			array[1] = new FluidTankProperties(tevf.masterTe.internalTank.getFluid(), tevf.masterTe.internalTank.getCapacity());
+			return array;
+		}
+	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
@@ -391,64 +421,11 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidInput() && facing == this.facing) {
-			TileEntityValveFabricator masterTe = null;
-			if(world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
-		   		masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
-			} else {return super.getCapability(capability, facing);}
-			if(mBpos[1]==1) {
-				return (T)masterTe.fuelTank;
-			} else {
-				return (T)masterTe.internalTank;
-			}
+		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && masterTe != null && isPartFluidInput() && facing.getOpposite() == this.facing) {
+			return (T)thefluidhandler;
 		}
 		return super.getCapability(capability, facing);
 	}
-	
-	@Override
-	public int fill(FluidStack resource, boolean doFill) {
-		TileEntityValveFabricator masterTe = null;
-		if(world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
-		    masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
-		} else { return 0; }
-		if( resource==null || !isPartFluidInput() || masterTe.recipe == null || 
-			( mBpos[1] == 1
-				?masterTe.recipe.fuel.get().getFluid() != resource.getFluid()
-				:masterTe.recipe.internal.get().getFluid() != resource.getFluid()
-			)
-		) { return 0; }
-
-		final int i = mBpos[1]==1 ?masterTe.fuelTank.fill(resource, doFill) :masterTe.internalTank.fill(resource, doFill);
-		if(i > 0) {
-			masterTe.markDirty();
-			//masterTe.markContainingBlockForUpdate(null);
-		}
-		return i;
-	}
-
-	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {return null;}
-
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {return null;}
-
-	@Override
-	public IFluidTankProperties[] getTankProperties() {
-		TileEntityValveFabricator masterTe = null;
-		if(world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
-		    masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
-		} else {
-			IFluidTankProperties[] array = new IFluidTankProperties[2];
-			array[0] = new FluidTankProperties(fuelTank.getFluid(), fuelTank.getCapacity());
-			array[1] = new FluidTankProperties(internalTank.getFluid(), internalTank.getCapacity());
-			return array;
-		}
-		IFluidTankProperties[] array = new IFluidTankProperties[2];
-		array[0] = new FluidTankProperties(masterTe.fuelTank.getFluid(), masterTe.fuelTank.getCapacity());
-		array[1] = new FluidTankProperties(masterTe.internalTank.getFluid(), masterTe.internalTank.getCapacity());
-		return array;
-	}
-
     
 	//Recipes: =============================================================================
 	@Override
@@ -463,30 +440,26 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
     @Override
 	public void doGraphicalUpdates(int slot) {}
 	
-	public void onEntityCollision(World world, Entity entity) {
-	    if(world.isRemote || entity==null || entity.isDead) {return;}
-		if(!isPartConveyorVoid()) {return;}
+	public void entityInteractionWithBlock(World world, Entity entity) {
+	    if(world.isRemote || entity==null) {return;}
+		if(!isPartConveyorBool) {return;}
 		if(mBpos[2]==-1) {return;}
 		
-		if(!(entity instanceof EntityItem) || ((EntityItem)entity).getItem().isEmpty()) {return;}
+		if(!(entity instanceof EntityItem)) {return;}
 		ItemStack stack = ((EntityItem)entity).getItem();
 		if(stack.isEmpty()) {return;}
 		
-		TileEntityValveFabricator masterTe = null;
-		if(world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
-		    masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
-		}else{ return; }
-		if(masterTe.ticksPassed != 0) {return;}
+		if(masterTe == null) {return;}
 		if(masterTe.recipe == null) {return;}
+		if(masterTe.ticksPassed != 0) {return;}
 		
-		final int itemsCount = mBpos[2]==1?masterTe.recipe.inputGlass.get().getCount():masterTe.recipe.inputComponent.get().getCount(); //if mBpos[2]==1, glass, else component
-		final Item itemData = mBpos[2]==1?masterTe.recipe.inputGlass.get().getItem():masterTe.recipe.inputComponent.get().getItem();
-		if(stack.getItem() != itemData){return;}
+		final ItemStack itemData = mBpos[0]==0?masterTe.recipe.inputComponent.get():masterTe.recipe.inputGlass.get();
+		if(stack.getItem() != itemData.getItem()){return;}
 
-		if(masterTe.inventory.get(mBpos[2]==1?0:1).getCount() >= itemsCount) {return;}
+		if(masterTe.inventory.get(mBpos[0]).getCount() >= itemData.getCount()) {return;}
 		stack.shrink(1);
 		if(stack.getCount() <= 0) { entity.setDead(); }
-		masterTe.inventory.set(mBpos[2]==1?0:1, new ItemStack(itemData, inventory.get(mBpos[2]==1?0:1)==ItemStack.EMPTY?1:inventory.get(mBpos[2]==1?0:1).getCount()+1));
+		masterTe.inventory.set(mBpos[0], new ItemStack(itemData.getItem(), inventory.get(mBpos[0])==ItemStack.EMPTY?1:inventory.get(mBpos[0]).getCount()+1, itemData.getMetadata()));
 	}
 	
 	//Dummy blocks: ========================================================================
@@ -502,3 +475,24 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	@Override
 	public boolean isLogicDummy() { return mBpos[0]!=0||mBpos[1]!=0||mBpos[2]!=0; }
 }
+
+/*if( //fuelTank.getFluid().getFluid() == recipe.fuel.get().getFluid() && //internalTank.getFluid().getFluid() == recipe.internal.get().getFluid() &&
+		    inventory.get(0) == recipe.inputGlass.get() &&
+			inventory.get(1) == recipe.inputComponent.get() &&
+			energyStorage.getEnergyStored() >= recipe.energy &&
+			fuelTank.getFluidAmount() >= recipe.fuel.get().amount &&
+			( recipe.internal == null
+			    ?internalTank.getFluidAmount() >= recipe.internal.get().amount
+				:true
+			)
+		) {
+		    ticksPassed = 1; //Should be the first.
+		    inventory.set(0, ItemStack.EMPTY);
+			inventory.set(1, ItemStack.EMPTY);
+			fuelTank.drain(recipe.fuel.get().amount, true);
+			if(recipe.internal != null) {
+			    internalTank.drain(recipe.internal.get().amount, true);
+			}
+			energyStorage.modifyEnergyStored(-recipe.energy);
+			atualizar(); //Update to render.
+		}*/

@@ -17,6 +17,8 @@ tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'metro
 tile.industrialwires.general_stuff.current_transformer.name=Transformador de corrente
 tile.industrialwires.general_stuff.retifier_valve.name=Válvula retifícadora
+tile.industrialwires.general_stuff.mercury_ore.name=Minério de Mercúrio
+tile.industrialwires.general_stuff.solidifier.name=Solidificador
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Motor rotacional
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotacional para cinético
@@ -33,6 +35,18 @@ tile.industrialwires.control_panel.creator.name=Montador de paíneis de controle
 tile.industrialwires.control_panel.unfinished.name=Painél de controle inacabado
 tile.industrialwires.control_panel.other_rs_wires.name=E/S de redstone para "outros"
 tile.industrialwires.control_panel.rs_controler.name=Controlador a redstone / repetidor
+
+tile.industrialwires.fluidMercury.name=Mercúrio Liquido
+tile.industrialwires.fluidGlassInsulator.name=Vidro Isolador Derretido
+tile.industrialwires.fluidGlassValve.name=Vidro para Válvulas Derretido
+tile.industrialwires.fluidGlassFiber.name=Fibra de Vidro Derretida
+
+item.industrialwires.stuff_crafting.mercury_valve.name=Válvula de Mercúrio
+item.industrialwires.stuff_crafting.valve_circuit.name=Controlador do Retíficador
+item.industrialwires.stuff_crafting.valve_glass.name=Vidro para Tubos®
+item.industrialwires.stuff_crafting.valve_component.name=Componente para Tubo Eletrônico
+item.industrialwires.stuff_crafting.neon_component.name=Componente Fluorescente
+item.industrialwires.stuff_crafting.advanced_component.name=Componente para Tubo Avançado
 
 item.industrialwires.ic2_wire_coil.tin.name=Bobina de fio de Estanho 
 item.industrialwires.ic2_wire_coil.copper.name=Bobina de fio de Cobre
@@ -121,7 +135,6 @@ industrialwires.tooltip.power_tier=Nível de poder: %s
 industrialwires.tooltip.energy_per_tick=%s EU/t=%s IF/t
 industrialwires.tooltip.transfer_rate=Queima em %s EU/t (%s IF/t)
 industrialwires.tooltip.input_rate=%s EU/t (%s IF/t) por conector
-
 
 industrialwires.chat.tooLong=Essa bobina não tem fio suficiente para essa conecção
 industrialwires.chat.stackSize=Conecção somente possivel com o 'stack' de itens em 1

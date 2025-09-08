@@ -1,0 +1,21 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "forge:fluid",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+		"mercury": [{
+			"custom": { "fluid": "mercury" }
+		}],
+		"glassinsulator": [{
+			"custom": { "fluid": "glassinsulator" }
+		}],
+		"glassvalve": [{
+			"custom": { "fluid": "glassvalve" }
+		}],
+		"glassfiber": [{
+			"custom": { "fluid": "glassfiber" }
+		}]
+	}
+}

@@ -72,6 +72,27 @@
 				}
 			}
 		],
+		"inventory,type=mercury_ore": [
+			{
+				"model": "industrialwires:iw_six_sides",
+				"textures": {
+					"bottom": "industrialwires:blocks/mercury_ore",
+					"top": "industrialwires:blocks/mercury_ore",
+					"north": "industrialwires:blocks/mercury_ore",
+					"south": "industrialwires:blocks/mercury_ore",
+					"west": "industrialwires:blocks/mercury_ore",
+					"east": "industrialwires:blocks/mercury_ore"
+				}
+			}
+		],
+		"inventory,type=solidifier": [
+			{
+				"model": "industrialwires:solidifier.obj",
+				"transform": {
+					"scale": [ 0.5, 0.5, 0.5 ]
+				}
+			}
+		],
 		"type": {
 			"control_transformer_rs": {
 				"model": "industrialwires:autotransformer_part_redstone.obj"
@@ -99,6 +120,20 @@
 			           "true":{"model": "industrialwires:retifier_valve_fan.obj"}
 		            }
 		        }
+		    },
+			"mercury_ore": {
+				"model": "industrialwires:iw_six_sides",
+				"textures": {
+					"bottom": "industrialwires:blocks/mercury_ore",
+					"top": "industrialwires:blocks/mercury_ore",
+					"north": "industrialwires:blocks/mercury_ore",
+					"south": "industrialwires:blocks/mercury_ore",
+					"west": "industrialwires:blocks/mercury_ore",
+					"east": "industrialwires:blocks/mercury_ore"
+				}
+			},
+			"solidifier": {
+                "model": "industrialwires:solidifier.obj"
 		    }
 		},
         "_0multiblockslave":

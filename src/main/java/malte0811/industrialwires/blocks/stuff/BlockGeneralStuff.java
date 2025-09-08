@@ -75,27 +75,27 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 
 	@Override
 	public boolean isTopSolid(IBlockState state) {
-		return false;
+		return (getMetaFromState(state) == 6);
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		return false;
+		return (getMetaFromState(state) == 6);
 	}
 
 	@Override
 	public boolean isFullBlock(IBlockState state) {
-		return false;
+		return (getMetaFromState(state) == 6);
 	}
 
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		return false;
+		return (getMetaFromState(state) == 6);
 	}
 	
 	@Override
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return false;
+		return (getMetaFromState(state) == 6);
 	}
 
 	@Nullable
@@ -108,6 +108,7 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 		    case POTENTIOMETER: return new TileEntityPotentiometer();
 		    case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
 			case RETIFIER_VALVE: return new TileEntityRetifierValve();
+			case SOLIDIFIER: return new TileEntitySolidifier();
 		    default: return null;
 	    }
 	}
@@ -147,6 +148,11 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 					}
 				}
 				break;
+			case 7:
+				if (!w.isAirBlock(pos.up(1))) {
+				    return false;
+			    }
+				break;
 		}
 		return true;
 	}
@@ -180,6 +186,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 	
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
-		return true;
+		return (getMetaFromState(state) != 6);
 	}
 }

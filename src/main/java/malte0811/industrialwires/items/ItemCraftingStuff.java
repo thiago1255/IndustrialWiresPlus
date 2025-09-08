@@ -15,9 +15,17 @@ import net.minecraft.util.*;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+import static malte0811.industrialwires.IndustrialWires.hasII;
+
 public class ItemCraftingStuff extends Item {
 	public final static String[] subNames = {
-			"mercury_valve", "valve_circuit", "valve_glass", "valve_component", "neon_component"
+			"mercury_valve"       //0
+			,"valve_circuit"      //1
+			,"valve_glass"        //2
+			,"valve_component"    //3
+			,"neon_component"     //4
+			,"advanced_component" //5 
+			,"retifier_component" //6
 	};
 	
 	public final static String NAME = "stuff_crafting";
@@ -31,11 +39,11 @@ public class ItemCraftingStuff extends Item {
 		IndustrialWires.items.add(this);
 	}
 
-
 	@Override
 	public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
 		if (isInCreativeTab(tab)) {
 			for (int i = 0; i < subNames.length; i++) {
+				if(!hasII && subNames[i] == "advanced_component") {continue;}
 				subItems.add(new ItemStack(this, 1, i));
 			}
 		}

@@ -17,6 +17,8 @@ tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'meter
 tile.industrialwires.general_stuff.current_transformer.name=Current transformer
 tile.industrialwires.general_stuff.retifier_valve.name=Retifier valve
+tile.industrialwires.general_stuff.mercury_ore.name=Mercury Ore
+tile.industrialwires.general_stuff.solidifier.name=Solidifier
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Rotational Motor
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotational To Kinetic
@@ -33,6 +35,18 @@ tile.industrialwires.control_panel.creator.name=Control Panel Creator
 tile.industrialwires.control_panel.unfinished.name=Unfinished Control Panel
 tile.industrialwires.control_panel.other_rs_wires.name=Redstone Controller: Others
 tile.industrialwires.control_panel.rs_controler.name=Redstone Controller/Relay
+
+tile.industrialwires.fluidMercury.name=Liquid Mercury
+tile.industrialwires.fluidGlassInsulator.name=Melted Insulator Glass
+tile.industrialwires.fluidGlassValve.name=Melted Valve Glass
+tile.industrialwires.fluidGlassFiber.name=Melted Glass Fiber
+
+item.industrialwires.stuff_crafting.mercury_valve.name=Mercury Valve
+item.industrialwires.stuff_crafting.valve_circuit.name=Retifier Controller
+item.industrialwires.stuff_crafting.valve_glass.name=Tube Glass™
+item.industrialwires.stuff_crafting.valve_component.name=Electron Tube Component
+item.industrialwires.stuff_crafting.neon_component.name=Fluorescent Component
+item.industrialwires.stuff_crafting.advanced_component.name=Advanced Tube Component
 
 item.industrialwires.ic2_wire_coil.tin.name=Tin Wire Coil
 item.industrialwires.ic2_wire_coil.copper.name=Copper Wire Coil
@@ -133,8 +147,8 @@ industrialwires.chat.transformerRs=Channels (coarse and fine): %s
 industrialwires.chat.currentTransformer=Energy measured: %s IF
 
 industrialwires.ValveFabricator.confirmedTempId=Id %s confirmed
-industrialwires.ValveFabricator.askTempId=Please select an recipe id
-industrialwires.ValveFabricator.confirmedTempId=Id %s
+industrialwires.ValveFabricator.askTempId=Confirm id %s ?
+industrialwires.ValveFabricator.selectedTempId=Temp. id %s
 
 death.attack.industrialwires.jacobs_ladder=%1$s was electrocuted by a Jacob's Ladder
 death.attack.industrialwires.marx=%1$s was struck by lightning produced by a Marx generator

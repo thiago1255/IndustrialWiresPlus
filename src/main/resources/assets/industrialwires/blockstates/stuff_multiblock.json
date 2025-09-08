@@ -29,9 +29,31 @@
 				}
 			}
 		],
+		"inventory,type=melter": [
+			{
+				"model": "industrialwires:melter.obj",
+				"transform": {
+					"scale": 0.375,
+					"rotation": [
+						{
+							"x": 20
+						},
+						{
+							"y": 135
+						}
+					],
+					"translation": [
+						0.15, 0, 0
+					]
+				}
+			}
+		],
 		"type": {
 			"valve_fabricator": {
 				"model": "industrialwires:vacuum_tube_fabricator.obj"
+			},
+			"melter": {
+				"model": "industrialwires:melter.obj"
 			}
 		},
 		"_0multiblockslave":

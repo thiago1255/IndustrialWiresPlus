@@ -134,8 +134,6 @@ public class TileRenderRetifierValve extends TileEntitySpecialRenderer<TileEntit
 
 		ClientUtils.bindAtlas();
 		GlStateManager.pushMatrix();
-		double offsetZ = tile.offsetZ;
-		double offsetX = tile.offsetX;
 		if(tile.facing == EnumFacing.SOUTH) {
 		    GlStateManager.translate(x+8/16f, y+2/16f, z);
 		} else if (tile.facing == EnumFacing.NORTH) {

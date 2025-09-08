@@ -21,6 +21,7 @@ import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import com.google.common.collect.ImmutableMap;
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.BlockIWBase;
+import malte0811.industrialwires.blocks.BlockIWFluid;
 import malte0811.industrialwires.blocks.IMetaEnum;
 import malte0811.industrialwires.blocks.controlpanel.TileEntityPanel;
 import malte0811.industrialwires.blocks.hv.BlockHVMultiblocks;
@@ -32,9 +33,11 @@ import malte0811.industrialwires.items.ItemPanelComponent;
 import malte0811.industrialwires.items.ItemCraftingStuff;
 import malte0811.industrialwires.mech_mb.MechMBPart;
 import malte0811.industrialwires.wires.MixedWireType;
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -42,6 +45,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -56,6 +60,7 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJModel;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -69,6 +74,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static malte0811.industrialwires.client.render.TileRenderMechMB.BASE_MODELS;
+import static malte0811.industrialwires.IWFluids.fluidsArray;
 
 @Mod.EventBusSubscriber(modid = IndustrialWires.MODID, value = Side.CLIENT)
 @SideOnly(Side.CLIENT)
@@ -193,6 +199,7 @@ public class ClientEventHandler {
 						getPropertyString(properties));
 			}
 		});
+		for(Block fluid : fluidsArray) { mapFluidState(fluid, ((BlockIWFluid)fluid).getFluid()); }
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -221,5 +228,29 @@ public class ClientEventHandler {
 				throw new RuntimeException(e);
 			}
 		}
+	}
+	
+	//from client proxy of IE
+	private static void mapFluidState(Block block, Fluid fluid) {
+		Item item = Item.getItemFromBlock(block);
+		FluidStateMapper mapper = new FluidStateMapper(fluid);
+		if(item!=Items.AIR) {
+			ModelLoader.registerItemVariants(item);
+			ModelLoader.setCustomMeshDefinition(item, mapper);
+		}
+		ModelLoader.setCustomStateMapper(block, mapper);
+	}
+	static class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition {
+		public final ModelResourceLocation location;
+
+		public FluidStateMapper(Fluid fluid) { this.location = new ModelResourceLocation(IndustrialWires.MODID+":fluid_block", fluid.getName()); }
+
+		@Nonnull
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) { return location; }
+
+		@Nonnull
+		@Override
+		public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack) { return location; }
 	}
 }

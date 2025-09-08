@@ -25,7 +25,6 @@ import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.*;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 import blusunrize.immersiveengineering.common.util.chickenbones.Matrix4;
-import blusunrize.immersiveengineering.common.util.Utils; //optional
 
 import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
@@ -39,10 +38,8 @@ import ic2.api.energy.tile.IEnergyAcceptor;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -53,8 +50,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
-import net.minecraft.item.ItemStack; //optional
-import net.minecraft.util.text.TextComponentTranslation; //optional
 
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.common.Optional;
@@ -72,7 +67,7 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.MV_CATEG
 		@Optional.Interface(modid = "ic2", iface = "ic2.api.energy.tile.IEnergySource"),
 })
 
-public class TileEntityRetifierValve extends TileEntityImmersiveConnectable implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IEnergySource, ITickable, IPlayerInteraction
+public class TileEntityRetifierValve extends TileEntityImmersiveConnectable implements IHasDummyBlocksIW, IBlockBoundsDirectional, IDirectionalTile, IEnergySource, ITickable
 {
 // VARIABLES/CONS.: --------------------------------------
 	private final double MAX_TEMP = 49152;
@@ -82,13 +77,10 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	public double temperature = 0;
 	public float fanAngle = 0;
 	private int storedEnergy = 0;
-	private boolean cabble = false;
-	public boolean active = true;
+	private boolean cabble = true;
+	public boolean active = false;
 	public boolean ignition = false;
 	public boolean fanWorking = false;
-    
-	public double offsetX = 0;
-	public double offsetZ = 0;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -179,15 +171,14 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
     public boolean canConnectCable(WireType cableType, TargetingInfo target, Vec3i offset) {
         if(isDummy()) { return false; }     
         if(!MV_CATEGORY.equals(cableType.getCategory())) { return false; }
-		if(cabble) {return false;}
-	    return true;
+	    return cabble;
     }
 
     @Override
-    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) { limitType = cableType; cabble = true; }
+    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) { limitType = cableType; cabble = false; }
 
     @Override 
-    public void removeCable(ImmersiveNetHandler.Connection connection) { limitType = null; cabble = false;}
+    public void removeCable(ImmersiveNetHandler.Connection connection) { limitType = null; cabble = true;}
   
     @Override
     public Vec3d getConnectionOffset(Connection con) {
@@ -310,30 +301,6 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 
     @Override
     public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
-	
-	@Override
-    public boolean interact(@Nonnull EnumFacing side, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull ItemStack heldItem, float hitX, float hitY, float hitZ) {
-        if(isDummy()) {return false;}
-        if(side == EnumFacing.NORTH || side == EnumFacing.SOUTH){
-		  if (player.isSneaking()) {
-		    offsetX += 0.001;
-          } else {
-		    offsetX += 0.05;
-          }
-		  if(offsetX >= 3) { offsetX = 0; }
-          player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(offsetX, "0.###"))));
-		  return true;
-		} else {
-		  if (player.isSneaking()) {
-		    offsetZ += 0.001;
-          } else {
-		    offsetZ += 0.05;
-          }
-		  if(offsetZ >= 3) { offsetZ = 0; }
-          player.sendMessage(new TextComponentTranslation(IndustrialWires.MODID + ".chat.currentTransformer", String.format("%s", Utils.formatDouble(offsetZ, "0.###"))));
-		  return true;
-		}
-    } 
 	
 // DUMMY BLOCKS: --------------------------------------
     @Override

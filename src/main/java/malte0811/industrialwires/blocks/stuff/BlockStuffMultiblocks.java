@@ -63,8 +63,10 @@ public class BlockStuffMultiblocks extends BlockIWMultiblock implements IMetaEnu
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		switch (state.getValue(type)) {
-		case VALVE_FABRICATOR:
-			return new TileEntityValveFabricator(state.getValue(IEProperties.FACING_HORIZONTAL));
+			case VALVE_FABRICATOR:
+				return new TileEntityValveFabricator(state.getValue(IEProperties.FACING_HORIZONTAL));
+			case MELTER:
+				return new TileEntityMelter(state.getValue(IEProperties.FACING_HORIZONTAL));
 		}
 		return null;
 	}
@@ -74,7 +76,7 @@ public class BlockStuffMultiblocks extends BlockIWMultiblock implements IMetaEnu
 		super.onEntityCollision(worldIn, pos, state, entityIn);
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (te instanceof TileEntityValveFabricator) {
-			((TileEntityValveFabricator) te).onEntityCollision(worldIn, entityIn);
+			((TileEntityValveFabricator) te).entityInteractionWithBlock(worldIn, entityIn);
 		}
 	}
 
