@@ -29,6 +29,7 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.blocks.wire.*;
  import malte0811.industrialwires.blocks.stuff.*;
  import malte0811.industrialwires.blocks.stuff.MultiblockValveFabricator;
+ import malte0811.industrialwires.blocks.stuff.MultiblockMelter;
  import malte0811.industrialwires.compat.Compat;
  import malte0811.industrialwires.controlpanel.PanelComponent;
  import malte0811.industrialwires.controlpanel.PanelUtils;
@@ -100,7 +101,7 @@ package malte0811.industrialwires;
  import static malte0811.industrialwires.wires.MixedWireType.*;
 
  @Mod(modid = IndustrialWires.MODID, version = IndustrialWires.VERSION, dependencies = "required-after:immersiveengineering@[0.12-86,);after:ic2;required-after:forge@[14.23.3.2694,)",
-        updateJSON = "https://raw.githubusercontent.com/thiago1255/IndustrialWiresPlus/MC1.12/changelog.json")
+	updateJSON = "https://raw.githubusercontent.com/thiago1255/IndustrialWiresPlus/MC1.12/changelog.json")
 @Mod.EventBusSubscriber
 public class IndustrialWires {
 	public static final String MODID = "industrialwires";
@@ -138,7 +139,7 @@ public class IndustrialWires {
 	public static BlockMechanicalMB mechanicalMB = null;
 	@GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralHV.NAME)
 	public static BlockGeneralHV generalHV = null;
-    @GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralStuff.NAME)
+	@GameRegistry.ObjectHolder(MODID+":"+ BlockGeneralStuff.NAME)
 	public static BlockGeneralStuff generalStuff = null;
 	@GameRegistry.ObjectHolder(MODID+":"+ BlockStuffMultiblocks.NAME)
 	public static BlockStuffMultiblocks mBstuff = null;
@@ -222,20 +223,19 @@ public class IndustrialWires {
 		GameRegistry.registerTileEntity(TileEntityUnfinishedPanel.class, new ResourceLocation(MODID, "unfinished_panel"));
 		GameRegistry.registerTileEntity(TileEntityComponentPanel.class, new ResourceLocation(MODID, "single_component_panel"));
 		GameRegistry.registerTileEntity(TileEntityDischargeMeter.class, new ResourceLocation(MODID, "discharge_meter"));
-        GameRegistry.registerTileEntity(TileEntityControlTransformerRs.class, new ResourceLocation(MODID, "te_control_transformer_rs"));
-        GameRegistry.registerTileEntity(TileEntityControlTransformerNormal.class, new ResourceLocation(MODID, "te_control_transformer_normal"));  
-        GameRegistry.registerTileEntity(TileEntityVaristor.class, new ResourceLocation(MODID, "te_varistor"));
-        GameRegistry.registerTileEntity(TileEntityPotentiometer.class, new ResourceLocation(MODID, "te_potentiometer")); 
-        GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
-        GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
+		GameRegistry.registerTileEntity(TileEntityControlTransformerRs.class, new ResourceLocation(MODID, "te_control_transformer_rs"));
+		GameRegistry.registerTileEntity(TileEntityControlTransformerNormal.class, new ResourceLocation(MODID, "te_control_transformer_normal"));  
+		GameRegistry.registerTileEntity(TileEntityVaristor.class, new ResourceLocation(MODID, "te_varistor"));
+		GameRegistry.registerTileEntity(TileEntityPotentiometer.class, new ResourceLocation(MODID, "te_potentiometer")); 
+		GameRegistry.registerTileEntity(TileEntityCurrentTransformer.class, new ResourceLocation(MODID, "te_ct"));
+		GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
 		GameRegistry.registerTileEntity(TileEntityValveFabricator.class, new ResourceLocation(MODID, "te_valve_fabricator"));
 		GameRegistry.registerTileEntity(TileEntitySolidifier.class, new ResourceLocation(MODID, "te_solidifier"));
 
 		IWFluids.fluidsInit();
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
 		MARKER_TEXTURE = EntityDataManager.createKey(EntityBrokenPart.class, RES_LOC_SERIALIZER);
-		EntityRegistry.registerModEntity(new ResourceLocation(MODID, "broken_part"), EntityBrokenPart.class,
-				"broken_part", 0, this, 64, 5, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(MODID, "broken_part"), EntityBrokenPart.class,"broken_part", 0, this, 64, 5, true);
 
 		proxy.preInit();
 		Compat.preInit();
@@ -268,7 +268,7 @@ public class IndustrialWires {
 		event.getRegistry().register(new BlockHVMultiblocks());
 		event.getRegistry().register(new BlockMechanicalMB());
 		event.getRegistry().register(new BlockGeneralHV());
-        event.getRegistry().register(new BlockGeneralStuff());
+		event.getRegistry().register(new BlockGeneralStuff());
 		event.getRegistry().register(new BlockStuffMultiblocks());
 		for(Block fluid : fluidsArray) { event.getRegistry().register(fluid.setRegistryName(createRegistryName(fluid.getTranslationKey()))); }
 	}
@@ -313,10 +313,13 @@ public class IndustrialWires {
 	public void init(FMLInitializationEvent e) {
 		MultiblockMarx.INSTANCE = new MultiblockMarx();
 		MultiblockHandler.registerMultiblock(MultiblockMarx.INSTANCE);
-		
+
 		MultiblockValveFabricator.INSTANCE = new MultiblockValveFabricator();
-        MultiblockHandler.registerMultiblock(MultiblockValveFabricator.INSTANCE);
-		
+		MultiblockHandler.registerMultiblock(MultiblockValveFabricator.INSTANCE);
+
+		MultiblockMelter.INSTANCE = new MultiblockMelter();
+		MultiblockHandler.registerMultiblock(MultiblockMelter.INSTANCE);
+
 		MultiblockMechMB.INSTANCE = new MultiblockMechMB();
 		MultiblockHandler.registerMultiblock(MultiblockMechMB.INSTANCE);
 		MultiblockHandler.registerMultiblock(new MultiblockTemplateManual(EXAMPLE_MECHMB_LOC));
@@ -374,8 +377,8 @@ public class IndustrialWires {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
-        PanelUtils.PANEL_ITEM = Item.getItemFromBlock(panel);
-        proxy.postInit();		
+		PanelUtils.PANEL_ITEM = Item.getItemFromBlock(panel);
+		proxy.postInit();
 		GameRegistry.registerWorldGenerator(new IWWorldGen(), 3);
 		RecipesValveFabricator.init();
 		RecipesSolidifier.init();

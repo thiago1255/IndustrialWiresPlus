@@ -17,7 +17,7 @@ import blusunrize.immersiveengineering.api.MultiblockHandler;
 import blusunrize.immersiveengineering.api.MultiblockHandler.IMultiblock;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import blusunrize.immersiveengineering.common.IEContent;
-import blusunrize.immersiveengineering.common.util.Utils.isBlockAt;
+import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.client.ClientUtils;
 
 import malte0811.industrialwires.IEObjects;
@@ -44,25 +44,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import static blusunrize.immersiveengineering.api.IEProperties.*;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDevice1.FLUID_PIPE;
 import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll.IRON;
+import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll.STEEL;
 import static blusunrize.immersiveengineering.common.blocks.stone.BlockTypes_StoneDecoration.ALLOYBRICK;
 import static malte0811.industrialwires.IEObjects.*;
 import static malte0811.industrialwires.util.MiscUtils.offset;
 
-public class MultiblockValveFabricator implements IMultiblock {
+public class MultiblockMelter implements IMultiblock {
 	public static MultiblockValveFabricator INSTANCE;
 	private static final ItemStack[][][] structure = new ItemStack[3][2][2];
 	
 	public MultiblockValveFabricator() {
-		private static final ItemStack iron = new ItemStack(IEContent.blockSheetmetal, 1, IRON.getMeta());
-		private static final ItemStack pipe = new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta());
-		private static final ItemStack brick = new ItemStack(IEContent.blockStoneDecoration, 1, ALLOYBRICK.getMeta());
+		ItemStack iron = new ItemStack(IEContent.blockSheetmetal, 1, IRON.getMeta());
+		ItemStack pipe = new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta());
+		ItemStack brick = new ItemStack(IEContent.blockStoneDecoration, 1, ALLOYBRICK.getMeta());
 		//structure [height] [length] [width] //up forward right
 		//1st layer
 		structure[0][0][0] = iron;
 		structure[0][0][1] = iron;
 
 		structure[0][1][0] = iron;
-	    structure[0][1][1] = iron;
+		structure[0][1][1] = iron;
 		//2nd layer
 		structure[1][0][0] = pipe;
 		structure[1][0][1] = iron;
@@ -126,7 +127,7 @@ public class MultiblockValveFabricator implements IMultiblock {
 		 *BlockPos position = pos.offset(dir, l).offset(dir.rotateY(), ww).add(0, h, 0); "[h] [l] [w] | [up] [forward] [right]"
 		 *if(!Utils.isBlockAt(world, position, IEContent.blockMetalDecoration0, BlockTypes_MetalDecoration0.RS_ENGINEERING.getMeta())) {return false;}
 		 *if(!ConveyorHandler.isConveyor(world, position, ImmersiveEngineering.MODID+":conveyor", null)) {return false;}
-         */
+		*/
 		//^from MultiblockAutoWorkbench.java^\\
 		//layer 1
 		if(!Utils.isBlockAt(world,
@@ -222,8 +223,8 @@ public class MultiblockValveFabricator implements IMultiblock {
 	public IngredientStack[] getTotalMaterials()
 	{
 		return new IngredientStack[]{
-		    new IngredientStack(new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 7, STEEL.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 7, STEEL.getMeta())),
 			new IngredientStack(new ItemStack(IEContent.blockStoneDecoration, 4, ALLOYBRICK.getMeta()))
 		};
 	}

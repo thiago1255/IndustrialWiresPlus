@@ -62,33 +62,33 @@ public class MultiblockValveFabricator implements IMultiblock {
 	private static final ItemStack[][][] structure = new ItemStack[3][3][3];
 	
 	public MultiblockValveFabricator() {
-       //structure [height] [length] [width] //up forward right
-	   //1st layer
-	   structure[0][0][0] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
-	   structure[0][0][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
-	   structure[0][0][2] = new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta());//pump
-		   
-	   structure[0][1][0] = new ItemStack(IEContent.blockTreatedWood, 1, HORIZONTAL.getMeta());//wood
-	   structure[0][1][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, HEAVY_ENGINEERING.getMeta());//he
-	   structure[0][1][2] = new ItemStack(IEContent.blockTreatedWood, 1, HORIZONTAL.getMeta());//wood
-		   
-	   structure[0][2][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
-	   structure[0][2][2] = new ItemStack(IEContent.blockMetalDecoration0, 1, RS_ENGINEERING.getMeta());//rs
+		//structure [height] [length] [width] //up forward right
+		//1st layer
+		structure[0][0][0] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
+		structure[0][0][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
+		structure[0][0][2] = new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta());//pump
 
-	   //2nd layer
-	   structure[1][0][0] = new ItemStack(IEContent.blockSheetmetal, 1, STEEL.getMeta());//steel
-	   structure[1][0][1] = new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta());//pipe
-	   structure[1][0][2] = new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta());//pump
-		   
-	   structure[1][1][0] = ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor");//conv
-	   structure[1][1][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, HEAVY_ENGINEERING.getMeta());//he
-	   structure[1][1][2] = ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor");//conv
-		   
-	   structure[1][2][1] = ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor");//conv
-	   structure[1][2][2] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
-		   
-       //3rd layer
-	   structure[2][1][1] = new ItemStack(IEContent.blockSheetmetal, 1, BlockTypes_MetalsAll.IRON.getMeta());//iron
+		structure[0][1][0] = new ItemStack(IEContent.blockTreatedWood, 1, HORIZONTAL.getMeta());//wood
+		structure[0][1][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, HEAVY_ENGINEERING.getMeta());//he
+		structure[0][1][2] = new ItemStack(IEContent.blockTreatedWood, 1, HORIZONTAL.getMeta());//wood
+
+		structure[0][2][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
+		structure[0][2][2] = new ItemStack(IEContent.blockMetalDecoration0, 1, RS_ENGINEERING.getMeta());//rs
+
+		//2nd layer
+		structure[1][0][0] = new ItemStack(IEContent.blockSheetmetal, 1, STEEL.getMeta());//steel
+		structure[1][0][1] = new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta());//pipe
+		structure[1][0][2] = new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta());//pump
+
+		structure[1][1][0] = ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor");//conv
+		structure[1][1][1] = new ItemStack(IEContent.blockMetalDecoration0, 1, HEAVY_ENGINEERING.getMeta());//he
+		structure[1][1][2] = ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor");//conv
+
+		structure[1][2][1] = ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor");//conv
+		structure[1][2][2] = new ItemStack(IEContent.blockMetalDecoration0, 1, LIGHT_ENGINEERING.getMeta());//le
+
+		//3rd layer
+		structure[2][1][1] = new ItemStack(IEContent.blockSheetmetal, 1, BlockTypes_MetalsAll.IRON.getMeta());//iron
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ public class MultiblockValveFabricator implements IMultiblock {
 			return true;
 		}
 		if (stack == ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor")) {
-		    ImmersiveEngineering.proxy.drawConveyorInGui("immersiveengineering:conveyor", EnumFacing.EAST);
+			ImmersiveEngineering.proxy.drawConveyorInGui("immersiveengineering:conveyor", EnumFacing.EAST);
 		}
 			return false;
 	}
@@ -149,7 +149,7 @@ public class MultiblockValveFabricator implements IMultiblock {
 		 *BlockPos position = pos.offset(dir, l).offset(dir.rotateY(), ww).add(0, h, 0); "[h] [l] [w] | [up] [forward] [right]"
 		 *if(!Utils.isBlockAt(world, position, IEContent.blockMetalDecoration0, BlockTypes_MetalDecoration0.RS_ENGINEERING.getMeta())) {return false;}
 		 *if(!ConveyorHandler.isConveyor(world, position, ImmersiveEngineering.MODID+":conveyor", null)) {return false;}
-         */
+		*/
 		//^from MultiblockAutoWorkbench.java^\\
 		//layer 1
 		BlockPos position = pos.offset(side, -1).offset(side.rotateY(), 1).add(0, -1, 0);
@@ -191,7 +191,7 @@ public class MultiblockValveFabricator implements IMultiblock {
 		position = pos.offset(side, 1).offset(side.rotateY(), -1);
 		if(!Utils.isBlockAt(world, position, IEContent.blockMetalDecoration0, LIGHT_ENGINEERING.getMeta())) {return false;}
 		
-        //layer 3
+		//layer 3
 		position = pos.offset(side, 0).offset(side.rotateY(), 0).add(0, 1, 0);
 		if(!Utils.isBlockAt(world, position, IEContent.blockSheetmetal, IRON.getMeta())) {return false;}
 		
@@ -227,15 +227,15 @@ public class MultiblockValveFabricator implements IMultiblock {
 	}
 	
 	static final IngredientStack[] materials = new IngredientStack[]{
-		    new IngredientStack(Utils.copyStackWithAmount(ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor"), 3)),
+			new IngredientStack(Utils.copyStackWithAmount(ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor"), 3)),
 			new IngredientStack(new ItemStack(IEContent.blockMetalDecoration0, 1, RS_ENGINEERING.getMeta())),
 			new IngredientStack(new ItemStack(IEContent.blockMetalDecoration0, 2, HEAVY_ENGINEERING.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockMetalDecoration0, 4, LIGHT_ENGINEERING.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockTreatedWood, 2, HORIZONTAL.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 1, STEEL.getMeta())),
-		    new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 1, IRON.getMeta()))
+			new IngredientStack(new ItemStack(IEContent.blockMetalDecoration0, 4, LIGHT_ENGINEERING.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockTreatedWood, 2, HORIZONTAL.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 1, STEEL.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 1, IRON.getMeta()))
 	};
 
 	@Override
