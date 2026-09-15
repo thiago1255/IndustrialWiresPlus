@@ -101,23 +101,23 @@ public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyB
 	}
 	
 	@Nonnull
-    @Override
-    public EnumFacing getFacing() { return facing; }
+	@Override
+	public EnumFacing getFacing() { return facing; }
 
-    @Override
-    public void setFacing(@Nonnull EnumFacing facing) { this.facing = facing; }
+	@Override
+	public void setFacing(@Nonnull EnumFacing facing) { this.facing = facing; }
 
-    @Override
-    public int getFacingLimitation() { return 2; }
+	@Override
+	public int getFacingLimitation() { return 2; }
 
-    @Override
-    public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) { return false; }
+	@Override
+	public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) { return false; }
 
-    @Override
-    public boolean canHammerRotate(@Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EntityLivingBase entity) { return false; }
+	@Override
+	public boolean canHammerRotate(@Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EntityLivingBase entity) { return false; }
 
-    @Override
-    public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
+	@Override
+	public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
 
 	// INVENTORY: -----------------------------------------
 	@Override
@@ -147,7 +147,7 @@ public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyB
 	@Override
 	public int getSlotLimit(int slot) { return 64; }
 
-    @Override
+	@Override
 	public void doGraphicalUpdates(int slot) {}
 	
 	IItemHandler theoutputhandler = new IEInventoryHandler(1, this, 0, false, true);
@@ -192,21 +192,21 @@ public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyB
 
 	// DUMMY BLOCKS: --------------------------------------
 	@Override
-    public boolean isDummy() { return dummy; }
-    
-    @Override
+	public boolean isDummy() { return dummy; }
+
+	@Override
 	public void placeDummies(IBlockState state) {
-        BlockPos pos2 = pos.offset(EnumFacing.UP, 1);
-        world.setBlockState(pos2, state);
-        TileEntity te = world.getTileEntity(pos2);
+		BlockPos pos2 = pos.offset(EnumFacing.UP, 1);
+		world.setBlockState(pos2, state);
+		TileEntity te = world.getTileEntity(pos2);
 		if (te instanceof TileEntitySolidifier) {
-		    ((TileEntitySolidifier) te).dummy = true;
+			((TileEntitySolidifier) te).dummy = true;
 			((TileEntitySolidifier) te).facing = this.facing;
 		}
-    }
-    
-    @Override
-    public void breakDummies() {
+	}
+
+	@Override
+	public void breakDummies() {
 		if (world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:1)) instanceof TileEntitySolidifier) {
 			world.setBlockToAir(pos.offset(EnumFacing.UP, dummy?-1:1)); 
 		}
