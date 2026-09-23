@@ -76,24 +76,24 @@ import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
 import static malte0811.industrialwires.util.MiscUtils.offset;
 
-public class TileEntityValveMelter extends TileEntityIWMultiblock implements ITickable, IBlockBoundsIW, IPlayerInteraction, IHasDummyBlocksIW, IIEInventory {
-    TileEntityValveMelter(EnumFacing facing) {
+public class TileEntityMelter extends TileEntityIWMultiblock implements ITickable, IBlockBoundsIW, IPlayerInteraction, IHasDummyBlocksIW, IIEInventory {
+	TileEntityMelter(EnumFacing facing) {
 		this.facing = facing;
 	}
-	public TileEntityValveMelter() {}
-	
+	public TileEntityMelter() {}
+
 	public int[] mBpos = new int[3];
-	
+
 	public NonNullList<ItemStack> inventory = NonNullList.withSize(2, ItemStack.EMPTY); //0-glass 1-component
-	
+
 	public FluidTank outputTank = new FluidTank(10000);
-	
-	public TileEntityValveMelter masterTe = null;
-	
+
+	public TileEntityMelter masterTe = null;
+
 	private boolean isPartFluidInput() {
-	    return mBpos[1] == 1 || (mBpos[0] == -1 && mBpos[1] == -1 && mBpos[2] == 1);
+		return mBpos[1] == 1 || (mBpos[0] == -1 && mBpos[1] == -1 && mBpos[2] == 1);
 	}
-	
+
 	//utils ===============================================================================
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
@@ -120,12 +120,12 @@ public class TileEntityValveMelter extends TileEntityIWMultiblock implements ITi
 
 	@Override
 	public void update() {
-		if(masterTe == null && world.getTileEntity(getOrigin()) instanceof TileEntityValveMelter) {
-			masterTe = (TileEntityValveMelter)world.getTileEntity(getOrigin());
+		if(masterTe == null && world.getTileEntity(getOrigin()) instanceof TileEntityMelter) {
+			masterTe = (TileEntityMelter)world.getTileEntity(getOrigin());
 		}
-	    if(world.isRemote) {return;}
+		if(world.isRemote) {return;}
 	}
-	
+
 	@Override
 	public boolean interact(EnumFacing side, EntityPlayer player, EnumHand hand, ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if(masterTe == null) {return false;}
@@ -133,50 +133,50 @@ public class TileEntityValveMelter extends TileEntityIWMultiblock implements ITi
 
 		return true;
 	}
-	
+
 	//properties: ====================================================================================
 	@Nonnull
 	@Override
 	protected BlockPos getOrigin() {
 		return pos.offset(facing, -mBpos[0]).offset(facing.rotateY(), -mBpos[2]).add(0, -mBpos[1], 0);
 	}
-	
+
 	@Override
 	public IBlockState getOriginalBlock() {
 	    return Utils.getStateFromItemStack(MultiblockValveFabricator.INSTANCE.getStructureManual()[mBpos[1]+1][mBpos[0]+1][(-mBpos[2])+1]);
 	}
-	
+
 	@Override
 	public ItemStack getOriginalItem() {
 		return MultiblockMelter.INSTANCE.getStructureManual()[mBpos[1]+1][mBpos[0]+1][(-mBpos[2])+1];
 	}
-	
+
 	@Override
 	public void disassemble() {
-        if(world.isRemote) {return;}	
-	
-	    if (isDummy()) {
-		    if(formed) {
-			    TileEntity tem = world.getTileEntity(getOrigin());
-			    if (tem instanceof TileEntityValveMelter) {
-			        TileEntityValveMelter tevfm = (TileEntityValveMelter)tem;
-			    	if(!tevfm.isDummy()) {
-			    	    tevfm.disassemble();
-			    	}
-			    }
+		if(world.isRemote) {return;}
+
+		if (isDummy()) {
+			if(formed) {
+				TileEntity tem = world.getTileEntity(getOrigin());
+				if (tem instanceof TileEntityMelter) {
+					TileEntityMelter tevfm = (TileEntityMelter)tem;
+					if(!tevfm.isDummy()) {
+						tevfm.disassemble();
+					}
+				}
 			}
 			return;
 		}
-		
+
 		if (!formed) { return; }
-		
+
 		for(int yy = -1; yy <= 2; yy++) {
-		    if(yy==2) {
-			    formed = false;
+			if(yy==2) {
+				formed = false;
 				markDirty();
 				ItemStack drop = new ItemStack(IEContent.blockMetalDevice0, 1, FLUID_PUMP.getMeta());
 				BlockPos positionDrop = pos.offset(facing, -1).offset(facing.rotateY(), -1);
-		        world.spawnEntity(new EntityItem(world, positionDrop.getX()+.5,positionDrop.getY()+.5,positionDrop.getZ()+.5, drop));
+				world.spawnEntity(new EntityItem(world, positionDrop.getX()+.5,positionDrop.getY()+.5,positionDrop.getZ()+.5, drop));
 				drop = Utils.copyStackWithAmount(ConveyorHandler.getConveyorStack(ImmersiveEngineering.MODID+":conveyor"), 3);
 				positionDrop = pos.offset(facing, 1).offset(facing.rotateY(), 1);
 				world.spawnEntity(new EntityItem(world, positionDrop.getX()+.5,positionDrop.getY()+.5,positionDrop.getZ()+.5, drop));
@@ -185,54 +185,54 @@ public class TileEntityValveMelter extends TileEntityIWMultiblock implements ITi
 			}
 			for(int zz = 1; zz >= -1; zz--) {
 				for(int xx = -1; xx <= 1; xx++) {
-				    if((zz==1)&&(xx==1)) { continue; }
+					if((zz==1)&&(xx==1)) { continue; }
 					if((yy==1)&&((xx!=0)||(zz!=0))) { continue; }
 					if((xx==0)&&((yy==0)&&(zz==0))) { continue; }
 					BlockPos position = pos.offset(facing, xx).offset(facing.rotateY(), zz).add(0, yy, 0);
 					TileEntity te = world.getTileEntity(position);
-			        if (te instanceof TileEntityValveMelter) {
-					    TileEntityValveMelter tevf = (TileEntityValveMelter)te;
+					if (te instanceof TileEntityMelter) {
+						TileEntityMelter tevf = (TileEntityMelter)te;
 						tevf.formed = false;
 						tevf.markDirty();
 						if(((xx == -1)&&(zz == -1))||tevf.isPartConveyorBool) {
-						    world.setBlockToAir(position);
+							world.setBlockToAir(position);
 						} else {
-					        world.setBlockState(position, tevf.getOriginalBlock());
+							world.setBlockState(position, tevf.getOriginalBlock());
 						}
-			        } 
-		        }
+					} 
+				}
 			}
 		}
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox() { return new AxisAlignedBB(0, 0, 0, 1, 1, 1); }
-    
-    //Fluids and items =====================================================================
-    
+
+	//Fluids and items =====================================================================
+
 	//Recipes: =============================================================================
 	@Override
 	public NonNullList<ItemStack> getInventory() { return this.inventory; }
-	
+
 	@Override
 	public boolean isStackValid(int slot, ItemStack stack) { return true; }
-	
+
 	@Override
 	public int getSlotLimit(int slot) { return 64; }
 
-    @Override
+	@Override
 	public void doGraphicalUpdates(int slot) {}
-	
+
 	//Dummy blocks: ========================================================================
 	@Override
-    public boolean isDummy() { return mBpos[0]!=0||mBpos[1]!=0||mBpos[2]!=0; }
-	   
-    @Override
+	public boolean isDummy() { return mBpos[0]!=0||mBpos[1]!=0||mBpos[2]!=0; }
+
+	@Override
 	public void placeDummies(IBlockState state) { }
-    
-    @Override
-    public void breakDummies() { }
-	
+
+	@Override
+	public void breakDummies() { }
+
 	@Override
 	public boolean isLogicDummy() { return mBpos[0]!=0||mBpos[1]!=0||mBpos[2]!=0; }
 }

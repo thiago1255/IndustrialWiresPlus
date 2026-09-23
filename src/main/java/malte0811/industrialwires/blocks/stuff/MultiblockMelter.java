@@ -50,10 +50,10 @@ import static malte0811.industrialwires.IEObjects.*;
 import static malte0811.industrialwires.util.MiscUtils.offset;
 
 public class MultiblockMelter implements IMultiblock {
-	public static MultiblockValveFabricator INSTANCE;
+	public static MultiblockMelter INSTANCE;
 	private static final ItemStack[][][] structure = new ItemStack[3][2][2];
 	
-	public MultiblockValveFabricator() {
+	public MultiblockMelter() {
 		ItemStack iron = new ItemStack(IEContent.blockSheetmetal, 1, IRON.getMeta());
 		ItemStack pipe = new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta());
 		ItemStack brick = new ItemStack(IEContent.blockStoneDecoration, 1, ALLOYBRICK.getMeta());

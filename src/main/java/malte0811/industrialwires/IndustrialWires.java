@@ -231,6 +231,7 @@ public class IndustrialWires {
 		GameRegistry.registerTileEntity(TileEntityRedstoneControler.class, new ResourceLocation(MODID, "te_rs_controler"));
 		GameRegistry.registerTileEntity(TileEntityValveFabricator.class, new ResourceLocation(MODID, "te_valve_fabricator"));
 		GameRegistry.registerTileEntity(TileEntitySolidifier.class, new ResourceLocation(MODID, "te_solidifier"));
+		GameRegistry.registerTileEntity(TileEntityMelter.class, new ResourceLocation(MODID, "te_melter"));
 
 		IWFluids.fluidsInit();
 		DataSerializers.registerSerializer(RES_LOC_SERIALIZER);
@@ -242,7 +243,7 @@ public class IndustrialWires {
 		MarxOreHandler.preInit();
 		// This has to run before textures are stitched, i.e. in preInit
 		MechMBPart.preInit();
-		
+
 		//remove/replace existing recipes
 		if(replaceIeTubes && hasCT) {
 			try {
