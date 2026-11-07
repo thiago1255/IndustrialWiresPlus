@@ -1,4 +1,4 @@
-THIS IS A FORK OF [THIS](https://github.com/malte0811/IndustrialWires), NOT MY MOD.
+THIS IS A FORK OF [INDUSTRIALWIRES FROM MALTE0811](https://github.com/malte0811/IndustrialWires) WITH MORE STUFF.
 
 # About this:
 ## ALREADY ADDED:
@@ -28,6 +28,59 @@ Plans may change, this will be developed, including more features still being ad
   - IE's rotational energy;
   - Pneumaticcraft ?
 
+## Recipes of the fork:
+
+(the list may not be complete)
+
+Mentionated mods:
+
+- IE - Immersive Engineering
+- IC2 - Industrial Craft 2
+- II - Immersive Inteligence
+- (non mentionated) - Vanilla or Industrial Wires
+
+### Valve Fabricator:
+- 3 Vaccum Tube [IE]
+  - 1 valve glass (item)
+  - 1 valve component
+- 1 Fluorescent Tube [IE]
+  - 1 valve glass (item)
+  - 1 neon component
+  - 25mb hydrogen [II]
+- 3 Advanced Tube [II]
+  - 2 valve glass (item)
+  - 1 advanced component
+- 1 Mercury Retifier (item)
+  - 1 valve glass (item)
+  - 1 retifier component
+  - 1000mb mercury
+
+### Solidifier:
+- 1 Magma Block
+  - 1000mb lava
+- 1 Valve Glass (item)
+  - 250mb valve glass (fluid)
+- 1 Glass Fiber Wire [IC2]
+  - 250mb glass fiber (fluid)
+- 1 Insulator Glass Block [IE]
+  - 1000mb insulator glass (fluid)
+
+### Melter:
+- 200mb Mercury
+  - 1 mercury ore
+- 4000mb Insulator Glass (fluid)
+  - 4 glass block
+  - 1 iron dust [IE]
+  - 1 cactus green
+- 2000mb Valve Glass (fluid)
+  - 2 glass block
+  - 1 quartz
+- 20000mb Glass Fiber (fluid)
+  - 20 glass block
+  - 2 redstone dust
+  - 2 diamond dust [IC2]
+  - 2 silver dust [IC2]
+  - 2 glowstone dust
 
 ## Credits: 
 

@@ -66,7 +66,7 @@ public class RecipesValveFabricator {
 			}
 		}
 		//add mercury (ID 4)
-		put(new RecipeData(2,
+		put(new RecipeData(4,
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 0),
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 2),
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 6), 
