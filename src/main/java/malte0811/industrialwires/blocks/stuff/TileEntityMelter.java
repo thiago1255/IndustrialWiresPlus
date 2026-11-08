@@ -6,11 +6,11 @@ import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import malte0811.industrialwires.crafting.RecipesMelter;
 import malte0811.industrialwires.crafting.RecipesMelter.RecipeData;
 
-import blusunrise.immersiveengineering.api.crafting.IngredientStack;
-import blusunrise.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
-import blusunrise.immersiveengineering.common.util.Utils;
-import blusunrise.immersiveengineering.common.util.inventory.IEInventoryHandler;
-import blusunrise.immersiveengineering.common.util.inventory.IIEInventory;
+import blusunrize.immersiveengineering.api.crafting.IngredientStack;
+import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
+import blusunrize.immersiveengineering.common.util.Utils;
+import blusunrize.immersiveengineering.common.util.inventory.IEInventoryHandler;
+import blusunrize.immersiveengineering.common.util.inventory.IIEInventory;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
