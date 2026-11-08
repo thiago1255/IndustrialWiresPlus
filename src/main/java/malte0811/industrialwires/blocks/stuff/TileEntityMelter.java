@@ -199,7 +199,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public void disassemble() {
 		if(world.isRemote) {return;}
 
-		if(isDummy) {
+		if(isDummy()) {
 			if(formed) {
 				TileEntity tem = world.getTileEntity(getOrigin());
 				if (tem instanceof TileEntityMelter) {
