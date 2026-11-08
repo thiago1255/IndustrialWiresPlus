@@ -28,14 +28,13 @@ package malte0811.industrialwires;
  import malte0811.industrialwires.blocks.hv.*;
  import malte0811.industrialwires.blocks.wire.*;
  import malte0811.industrialwires.blocks.stuff.*;
- import malte0811.industrialwires.blocks.stuff.MultiblockValveFabricator;
- import malte0811.industrialwires.blocks.stuff.MultiblockMelter;
  import malte0811.industrialwires.compat.Compat;
  import malte0811.industrialwires.controlpanel.PanelComponent;
  import malte0811.industrialwires.controlpanel.PanelUtils;
  import malte0811.industrialwires.crafting.Recipes;
  import malte0811.industrialwires.crafting.RecipesValveFabricator;
  import malte0811.industrialwires.crafting.RecipesSolidifier;
+ import malte0811.industrialwires.crafting.RecipesMelter;
  import malte0811.industrialwires.entities.EntityBrokenPart;
  import malte0811.industrialwires.hv.MarxOreHandler;
  import malte0811.industrialwires.hv.MultiblockMarx;
@@ -383,6 +382,7 @@ public class IndustrialWires {
 		GameRegistry.registerWorldGenerator(new IWWorldGen(), 3);
 		RecipesValveFabricator.init();
 		RecipesSolidifier.init();
+		RecipesMelter.init();
 	}
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
