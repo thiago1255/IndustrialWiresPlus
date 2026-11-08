@@ -7,10 +7,10 @@ import malte0811.industrialwires.crafting.RecipesMelter;
 import malte0811.industrialwires.crafting.RecipesMelter.RecipeData;
 
 import blusunrise.immersiveengineering.api.crafting.IngredientStack;
-import blusunrise.immersiveengineering.commom.blocks.IEBlockInterfaces.IPlayerInteraction;
-import blusunrise.immersiveengineering.commom.util.Utils;
-import blusunrise.immersiveengineering.commom.util.inventory.IEInventoryHandler;
-import blusunrise.immersiveengineering.commom.util.inventory.IIEInventory;
+import blusunrise.immersiveengineering.common.blocks.IEBlockInterfaces.IPlayerInteraction;
+import blusunrise.immersiveengineering.common.util.Utils;
+import blusunrise.immersiveengineering.common.util.inventory.IEInventoryHandler;
+import blusunrise.immersiveengineering.common.util.inventory.IIEInventory;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -52,9 +52,9 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 	public int[] mBpos = new int[3];
 
-	public int ticketsPassed = 0;
+	public int ticksPassed = 0;
 
-	public int ticketsNeeded = 0;
+	public int ticksNeeded = 0;
 
 	public int burnTime = 0;
 
@@ -73,12 +73,12 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public boolean isPartFluidOutput() { return mBpos[1] == 0; }
 
 	//Utils
-	@override
-	public void ReadNBT(NBTTagCompound in, boolean updatePacket) {
+	@Override
+	public void readNBT(NBTTagCompound in, boolean updatePacket) {
 		super.readNBT(in, updatePacket);
 		facing = EnumFacing.byHorizontalIndex(in.getByte("facing"));
 		mBpos = in.getIntArray("offsetMb");
-		ticksPassed = ingetInteger("ticksPassed");
+		ticksPassed = in.getInteger("ticksPassed");
 		burnTime = in.getInteger("burnTime");
 		int recipeIndex = in.hasKey("recipeIndex") ? in.getInteger("recipeIndex") : -1;
 		recipe = (recipeIndex >= 0 && recipeIndex < RecipesMelter.allRecipes.size()) ? RecipesMelter.allRecipes.get(recipeIndex) : null;
@@ -88,8 +88,8 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		inventory = Utils.readInventory(in.getTagList("inventory", 10), INPUT_SLOTS + 1);
 	}
 
-	@override
-	public void writeNBT(NBTTagCoumpound out, boolean updatePacket) {
+	@Override
+	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		super.writeNBT(out, updatePacket);
 		out.setByte("facing", (byte) facing.getHorizontalIndex());
 		out.setIntArray("offsetMb", mBpos);
@@ -100,7 +100,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		out.setTag("inventory", Utils.writeInventory(inventory));
 	}
 
-	@override
+	@Override
 	public void update() {
 		if(masterTe == null && world.getTileEntity(getOrigin()) instanceof TileEntityMelter) {
 			masterTe = (TileEntityMelter)world.getTileEntity(getOrigin());
@@ -127,7 +127,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		RecipeData found = RecipesMelter.recipeByInputs(inventory.subList(0, INPUT_SLOTS));
 		if(found == null) {return;}
 		FluidStack result = found.output.get();
-		if(outputTank.fill(result, false) < result.ammount) {return;}
+		if(outputTank.fill(result, false) < result.amount) {return;}
 		if(!burn()) {return;}
 		consumeInputs(found);
 		recipe = found;
@@ -147,7 +147,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		}
 	}
 
-	@override
+	@Override
 	public boolean interact(EnumFacing side, EntityPlayer player, EnumHand hand, ItemStack heldItem, float hitX, float hitY, float hitZ) {
 		if(masterTe == null) {return false;}
 		if(world.isRemote) {return false;}
@@ -158,7 +158,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 			for(int i = 0; i < masterTe.inventory.size(); i++) {
 				ItemStack stack = masterTe.inventory.get(i);
 				if(stack.isEmpty()) {continue;}
-				masterTe.inventory.set(i, ItemStack.Empty);
+				masterTe.inventory.set(i, ItemStack.EMPTY);
 				ItemHandlerHelper.giveItemToPlayer(player, stack);
 				taken = true;
 			}
@@ -254,7 +254,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		TheFluidHandler(TileEntityMelter tem) { this.tem = tem; }
 
 		@Override
-		public int fill(FluidStack resource, boolean doFill) (return 0;}
+		public int fill(FluidStack resource, boolean doFill) {return 0;}
 
 		@Override
 		public FluidStack drain(FluidStack resource, boolean doDrain) {
@@ -283,11 +283,11 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	}
 
 	@Override
-	public <T> T getCapablity(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if(masterTe != null) {
 			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput()) {return (T)masterTe.fluidHandler;}
-			if(capability==CapabilityFluidHandler.ITEM_HANDLER_CAPABILITY && isPartItemInput()) {return (T)masterTe.inputHandler;}
-			if(capability==CapabilityFluidHandler.ITEM_HANDLER_CAPABILITY && isPartFuelInput()) {return (T)masterTe.fuelHandler;}
+			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartItemInput()) {return (T)masterTe.inputHandler;}
+			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartFuelInput()) {return (T)masterTe.fuelHandler;}
 		}
 		return super.getCapability(capability, facing);
 	}
