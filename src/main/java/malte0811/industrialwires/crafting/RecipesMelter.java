@@ -3,7 +3,7 @@ package malte0811.industrialwires.crafting;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import blusunrize.immersiveengineering.common.util.Utils;
 
-import malte0811.industrialwires.IndustrialWrites;
+import malte0811.industrialwires.IndustrialWires;
 import malte0811.industrialwires.blocks.stuff.BlockTypes_GeneralStuff;
 
 import net.minecraft.init.Blocks;
@@ -48,16 +48,18 @@ public class RecipesMelter {
 				new IngredientStack(new ItemStack(Items.QUARTZ))
 			}
 		)); // Valve Glass
-		put(new RecipeData(20000,
-			() -> new FluidStack(fluidGlassFiber, 20000),
-			() -> new IngredientStack[] {
-				new IngredientStack(new ItemStack(Blocks.GLASS, 20)),
-				new IngredientStack(new ItemStack(Items.REDSTONE, 2)),
-				new IngredientStack(new ItemStack(Items.GLOWSTONE_DUST, 2)),
-				new IngredientStack(Utils.copyStackWIthAmount(getItem("dust", "diamond"), 2)),
-				new IngredientStack(Utils.copyStackWIthAmount(getItem("dust", "silver"), 2))
-			}
-		)); // Glass Fiber
+		if (hasIC2) {
+			put(new RecipeData(20000,
+				() -> new FluidStack(fluidGlassFiber, 20000),
+				() -> new IngredientStack[] {
+					new IngredientStack(new ItemStack(Blocks.GLASS, 20)),
+					new IngredientStack(new ItemStack(Items.REDSTONE, 2)),
+					new IngredientStack(new ItemStack(Items.GLOWSTONE_DUST, 2)),
+					new IngredientStack(Utils.copyStackWithAmount(getItem("dust", "diamond"), 2)),
+					new IngredientStack(Utils.copyStackWithAmount(getItem("dust", "silver"), 2))
+				}
+			)); // Glass Fiber
+		}
 	}
 
 	public static void put(RecipesMelter.RecipeData recipe) { // also used by CT
@@ -75,7 +77,7 @@ public class RecipesMelter {
 
 	public static class RecipeData {
 		public final int time; //ticks
-		public final Supplier<FLuidStack> output;
+		public final Supplier<FluidStack> output;
 		public final Supplier<IngredientStack[]> inputs;
 
 		public RecipeData(int time, Supplier<FluidStack> output, Supplier<IngredientStack[]> inputs) {

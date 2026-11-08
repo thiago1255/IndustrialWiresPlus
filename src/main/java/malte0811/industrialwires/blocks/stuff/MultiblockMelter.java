@@ -44,7 +44,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import static blusunrize.immersiveengineering.api.IEProperties.*;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDevice1.FLUID_PIPE;
 import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll.IRON;
-import static blusunrize.immersiveengineering.common.blocks.BlockTypes_MetalsAll.STEEL;
 import static blusunrize.immersiveengineering.common.blocks.stone.BlockTypes_StoneDecoration.ALLOYBRICK;
 import static malte0811.industrialwires.IEObjects.*;
 import static malte0811.industrialwires.util.MiscUtils.offset;
@@ -59,23 +58,20 @@ public class MultiblockMelter implements IMultiblock {
 		ItemStack brick = new ItemStack(IEContent.blockStoneDecoration, 1, ALLOYBRICK.getMeta());
 		//structure [height] [length] [width] //up forward right
 		//1st layer
-		structure[0][0][0] = iron;
-		structure[0][0][1] = iron;
-
-		structure[0][1][0] = iron;
-		structure[0][1][1] = iron;
+		structure[2][0][0] = brick;
+		structure[2][0][1] = brick;
+		structure[2][1][0] = brick;
+		structure[2][1][1] = brick;
 		//2nd layer
 		structure[1][0][0] = pipe;
 		structure[1][0][1] = iron;
-
 		structure[1][1][0] = iron;
 		structure[1][1][1] = iron;
 		//3rd layer
-		structure[2][0][0] = brick;
-		structure[2][0][1] = brick;
-
-		structure[2][1][0] = brick;
-		structure[2][1][1] = brick;
+		structure[0][0][0] = iron;
+		structure[0][0][1] = iron;
+		structure[0][1][0] = iron;
+		structure[0][1][1] = iron;
 	}
 	
 	@Override
@@ -224,7 +220,7 @@ public class MultiblockMelter implements IMultiblock {
 	{
 		return new IngredientStack[]{
 			new IngredientStack(new ItemStack(IEContent.blockMetalDevice1, 1, FLUID_PIPE.getMeta())),
-			new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 7, STEEL.getMeta())),
+			new IngredientStack(new ItemStack(IEContent.blockSheetmetal, 7, IRON.getMeta())),
 			new IngredientStack(new ItemStack(IEContent.blockStoneDecoration, 4, ALLOYBRICK.getMeta()))
 		};
 	}
