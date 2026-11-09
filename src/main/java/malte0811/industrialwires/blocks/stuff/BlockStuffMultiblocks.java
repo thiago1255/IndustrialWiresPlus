@@ -78,9 +78,9 @@ public class BlockStuffMultiblocks extends BlockIWMultiblock implements IMetaEnu
 		if (te instanceof TileEntityValveFabricator) {
 			((TileEntityValveFabricator) te).entityInteractionWithBlock(worldIn, entityIn);
 		}
-		if (te instanceof TileEntityMelter) {
-			((TileEntityMelter) te).entityInteractionWithBlock(worldIn, entityIn);
-		}
+//		if (te instanceof TileEntityMelter) {
+//			((TileEntityMelter) te).entityInteractionWithBlock(worldIn, entityIn);
+//		}
 	}
 
 	@Override
