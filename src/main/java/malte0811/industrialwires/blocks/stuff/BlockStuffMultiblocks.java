@@ -78,11 +78,20 @@ public class BlockStuffMultiblocks extends BlockIWMultiblock implements IMetaEnu
 		if (te instanceof TileEntityValveFabricator) {
 			((TileEntityValveFabricator) te).entityInteractionWithBlock(worldIn, entityIn);
 		}
+		if (te instanceof TileEntityMelter) {
+			((TileEntityMelter) te).entityInteractionWithBlock(worldIn, entityIn);
+		}
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(type).getMeta();
+	}
+
+	@Nonnull
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(type, BlockTypes_StuffMultiblocks.values()[meta]);
 	}
 
 	@Override
