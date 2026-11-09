@@ -63,8 +63,8 @@ public class MultiblockMelter implements IMultiblock {
 		structure[0][1][0] = iron;
 		structure[0][1][1] = iron;
 		//2nd layer
-		structure[1][0][0] = pipe;
 		structure[1][0][1] = iron;
+		structure[1][0][0] = pipe;
 		structure[1][1][0] = iron;
 		structure[1][1][1] = iron;
 		//3rd layer
