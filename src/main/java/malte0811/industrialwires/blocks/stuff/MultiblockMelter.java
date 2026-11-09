@@ -58,20 +58,20 @@ public class MultiblockMelter implements IMultiblock {
 		ItemStack brick = new ItemStack(IEContent.blockStoneDecoration, 1, ALLOYBRICK.getMeta());
 		//structure [height] [length] [width] //up forward right
 		//1st layer
-		structure[0][0][0] = iron;
-		structure[0][0][1] = iron;
-		structure[0][1][0] = iron;
-		structure[0][1][1] = iron;
+		structure[2][0][0] = iron;
+		structure[2][0][1] = iron;
+		structure[2][1][0] = iron;
+		structure[2][1][1] = iron;
 		//2nd layer
 		structure[1][0][1] = iron;
 		structure[1][0][0] = pipe;
 		structure[1][1][0] = iron;
 		structure[1][1][1] = iron;
 		//3rd layer
-		structure[2][0][0] = brick;
-		structure[2][0][1] = brick;
-		structure[2][1][0] = brick;
-		structure[2][1][1] = brick;
+		structure[0][0][0] = brick;
+		structure[0][0][1] = brick;
+		structure[0][1][0] = brick;
+		structure[0][1][1] = brick;
 	}
 	
 	@Override
