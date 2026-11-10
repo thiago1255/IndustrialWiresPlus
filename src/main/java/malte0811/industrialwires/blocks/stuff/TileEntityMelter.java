@@ -70,7 +70,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 	public boolean isPartFuelInput() { return mBpos[1] == -1; }
 
-	public boolean isPartFluidOutput() { return mBpos[1] == 0; }
+	public boolean isPartFluidOutput() { return !isDummy(); }
 
 	//Utils
 	@Override
@@ -106,7 +106,6 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 			masterTe = (TileEntityMelter)world.getTileEntity(getOrigin());
 		}
 		if(world.isRemote) {return;}
-		if(isPartItemInput() && formed && masterTe != null && world.getTotalWorldTime() % 8 == 0) {pickUpItems();}
 		if(isDummy() || !formed) {return;}
 
 		if(ticksPassed != 0) {
@@ -134,17 +133,6 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		ticksNeeded = found.time;
 		ticksPassed = 1;
 		markDirty();
-	}
-
-	private void pickUpItems() {
-		for(EntityItem entity : world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX(), pos.getY()+1, pos.getZ(), pos.getX()+1, pos.getY()+2, pos.getZ()+1))) {
-			if(entity.isDead) {continue;}
-			ItemStack stack = entity.getItem();
-			ItemStack rest = ItemHandlerHelper.insertItemStacked(masterTe.inputHandler, stack.copy(), false);
-			if(rest.getCount() == stack.getCount()) {continue;}
-			if(rest.isEmpty()) {entity.setDead();} else {entity.setItem(rest);}
-			masterTe.markDirty();
-		}
 	}
 
 	@Override
@@ -187,7 +175,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 	@Override
 	public IBlockState getOriginalBlock() {
-		return Utils.getStateFromItemStack(MultiblockMelter.INSTANCE.getStructureManual()[mBpos[1]+1][mBpos[0]][mBpos[2]]);
+		return Utils.getStateFromItemStack(getOriginalItem());
 	}
 
 	@Override
@@ -285,7 +273,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if(masterTe != null) {
-			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput()) {return (T)masterTe.fluidHandler;}
+			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing == this.facing) {return (T)masterTe.fluidHandler;}
 			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartItemInput()) {return (T)masterTe.inputHandler;}
 			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartFuelInput()) {return (T)masterTe.fuelHandler;}
 		}
