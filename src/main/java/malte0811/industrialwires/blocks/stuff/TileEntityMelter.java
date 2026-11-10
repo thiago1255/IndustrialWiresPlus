@@ -278,6 +278,8 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		if(masterTe == null || masterTe.isInvalid()) {return false;}
+		if(!formed) {return false;}
 		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing.getOpposite() == this.facing) {return true;}
 		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && (isPartItemInput() || isPartFuelInput())) {return true;}
 		return super.hasCapability(capability, facing);

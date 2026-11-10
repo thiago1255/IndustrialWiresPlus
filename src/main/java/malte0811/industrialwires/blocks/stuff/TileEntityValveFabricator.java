@@ -414,9 +414,11 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		if(masterTe == null || masterTe.isInvalid()) {return false;}
+		if(!formed) {return false;}
 		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
-		   && isPartFluidInput()
-		   && facing.getOpposite() == this.facing) { return true; }
+			&& isPartFluidInput()
+			&& facing.getOpposite() == this.facing) { return true; }
 		return super.hasCapability(capability, facing);
 	}
 
