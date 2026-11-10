@@ -108,31 +108,43 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		if(world.isRemote) {return;}
 		if(isDummy() || !formed) {return;}
 
+		if(burnTime <= 0) {
+			ItemStack fuel = inventory.get(FUEL_SLOT);
+			if(fuel.isEmpty()) {return;}
+			burnTime = TileEntityFurnace.getItemBurnTime(fuel);
+			if(burnTime <= 0) {return;}
+			ItemStack container = fuel.getItem().getContainerItem(fuel);
+			fuel.shrink(1);
+			if(fuel.isEmpty()) {inventory.set(FUEL_SLOT, container);}
+		}
+		burnTime--;
+		markDirty();
 		if(ticksPassed != 0) {
-			if(recipe == null) {ticksPassed = 0; return;}
-			if(ticksPassed < ticksNeeded) {
-				if(burn()) {ticksPassed++; markDirty();}
-				return;
+			ticksPassed++;
+			if(ticksPassed >= ticksNeeded) {
+				outputTank.fill(recipe.output.get(), true);
+				ticksPassed = 0;
 			}
-			FluidStack out = recipe.output.get();
-			if(outputTank.fill(out, false) < out.amount) {return;}
-			outputTank.fill(out, true);
-			ticksPassed = 0;
-			recipe = null;
-			markDirty();
 			return;
 		}
-
 		RecipeData found = RecipesMelter.recipeByInputs(inventory.subList(0, INPUT_SLOTS));
 		if(found == null) {return;}
 		FluidStack result = found.output.get();
 		if(outputTank.fill(result, false) < result.amount) {return;}
-		if(!burn()) {return;}
-		consumeInputs(found);
 		recipe = found;
-		ticksNeeded = found.time;
+		for(IngredientStack ing : recipe.inputs.get()) {
+			int left = ing.inputSize;
+			for(int i = 0; i < INPUT_SLOTS && left > 0; i++) {
+				ItemStack stack = inventory.get(i);
+				if(!ing.matchesItemStackIgnoringSize(stack)) {continue;}
+				int taken = Math.min(left, stack.getCount());
+				stack.shrink(taken);
+				left -= taken;
+				if(stack.isEmpty()) {inventory.set(i, ItemStack.EMPTY);}
+			}
+		}
+		ticksNeeded = recipe.time;
 		ticksPassed = 1;
-		markDirty();
 	}
 
 	@Override
@@ -203,6 +215,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		if (!formed) {return;}
 		formed = false;
 		markDirty();
+
 
 		for(ItemStack stack : inventory) {
 			if(!stack.isEmpty()) {Utils.dropStackAtPos(world, pos, stack);}
@@ -299,34 +312,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public int getSlotLimit(int slot) {return 64;}
 
 	@Override
-	public void doGraphicalUpdates(int slot) {markDirty();}
-
-	private boolean burn() {
-		if(burnTime <= 0) {
-			ItemStack fuel = inventory.get(FUEL_SLOT);
-			if(fuel.isEmpty()) {return false;}
-			burnTime = TileEntityFurnace.getItemBurnTime(fuel);
-			if(burnTime <= 0) {return false;}
-			fuel.shrink(1);
-			if(fuel.isEmpty()) {inventory.set(FUEL_SLOT, fuel.getItem().getContainerItem(fuel));}
-		}
-		burnTime--;
-		return true;
-	}
-
-	private void consumeInputs(RecipeData re) {
-		for(IngredientStack ing : re.inputs.get()) {
-			int left = ing.inputSize;
-			for(int i = 0; i < INPUT_SLOTS && left > 0; i++) {
-				ItemStack stack = inventory.get(i);
-				if(!ing.matchesItemStackIgnoringSize(stack)) {continue;}
-				int taken = Math.min(left, stack.getCount());
-				stack.shrink(taken);
-				left -= taken;
-				if(stack.isEmpty()) {inventory.set(i, ItemStack.EMPTY);}
-			}
-		}
-	}
+	public void doGraphicalUpdates(int slot) {}
 
 	// dummy
 	@Override
