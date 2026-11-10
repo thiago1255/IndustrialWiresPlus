@@ -75,7 +75,7 @@ public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyB
 
 	@Override
 	public void update() {
-		if(masterTe == null) { 
+		if(masterTe == null || masterTe.isInvalid()) { 
 			if(world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:0)) instanceof TileEntitySolidifier) {
 				masterTe = (TileEntitySolidifier)world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:0));
 			}

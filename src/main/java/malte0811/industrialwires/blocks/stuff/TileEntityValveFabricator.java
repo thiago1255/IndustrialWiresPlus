@@ -179,11 +179,12 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 
 	@Override
 	public void update() {
-		if(masterTe == null && world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
+		if((masterTe == null || masterTe.isInvalid()) && world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
 			masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
 			isPartConveyorBool = isPartConveyorVoid();
 		}
-	    if(world.isRemote) {return;}
+		if(world.isRemote) {return;}
+		if(isDummy()) {return;}
 		if(recipe == null) {return;}
 		if((world.getRedstonePowerFromNeighbors(pos.offset(facing, 1).offset(facing.rotateY(), -1).add(0, -1, 0)) != 0) != inverted) {return;}
 		

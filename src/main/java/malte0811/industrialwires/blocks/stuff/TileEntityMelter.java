@@ -102,7 +102,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 	@Override
 	public void update() {
-		if(masterTe == null && world.getTileEntity(getOrigin()) instanceof TileEntityMelter) {
+		if((masterTe == null || masterTe.isInvalid()) && world.getTileEntity(getOrigin()) instanceof TileEntityMelter) {
 			masterTe = (TileEntityMelter)world.getTileEntity(getOrigin());
 		}
 		if(world.isRemote) {return;}
@@ -265,7 +265,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput()) {return true;}
+		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing.getOpposite() == this.facing) {return true;}
 		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && (isPartItemInput() || isPartFuelInput())) {return true;}
 		return super.hasCapability(capability, facing);
 	}
@@ -273,7 +273,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if(masterTe != null) {
-			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing == this.facing) {return (T)masterTe.fluidHandler;}
+			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing.getOpposite() == this.facing) {return (T)masterTe.fluidHandler;}
 			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartItemInput()) {return (T)masterTe.inputHandler;}
 			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartFuelInput()) {return (T)masterTe.fuelHandler;}
 		}
@@ -299,7 +299,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public int getSlotLimit(int slot) {return 64;}
 
 	@Override
-	public void doGraphicalUpdates(int slot) {}
+	public void doGraphicalUpdates(int slot) {markDirty();}
 
 	private boolean burn() {
 		if(burnTime <= 0) {
