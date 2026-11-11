@@ -109,6 +109,13 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		if(world.isRemote) {return;}
 		if(isDummy() || !formed) {return;}
 
+		if(outputTank.getFluidAmount() > 0) {
+			IFluidHandler out = FluidUtil.getFluidHandler(world, pos.offset(facing.getOpposite()), facing);
+			if(out != null) {
+				FluidUtil.tryFluidTransfer(out, outputTank, 100, true);
+			}
+		}
+
 		if(burnTime <= 0) {
 			ItemStack fuel = inventory.get(FUEL_SLOT);
 			if(fuel.isEmpty()) {return;}
