@@ -182,6 +182,7 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		if((masterTe == null || masterTe.isInvalid()) && world.getTileEntity(getOrigin()) instanceof TileEntityValveFabricator) {
 			masterTe = (TileEntityValveFabricator)world.getTileEntity(getOrigin());
 			isPartConveyorBool = isPartConveyorVoid();
+			atualizar();
 		}
 		if(world.isRemote) {return;}
 		if(isDummy()) {return;}
