@@ -104,7 +104,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public void update() {
 		if((masterTe == null || masterTe.isInvalid()) && world.getTileEntity(getOrigin()) instanceof TileEntityMelter) {
 			masterTe = (TileEntityMelter)world.getTileEntity(getOrigin());
-			atualizar();
+			markDirty();
 		}
 		if(world.isRemote) {return;}
 		if(isDummy() || !formed) {return;}
@@ -112,7 +112,8 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		if(outputTank.getFluidAmount() > 0) {
 			IFluidHandler out = FluidUtil.getFluidHandler(world, pos.offset(facing.getOpposite()), facing);
 			if(out != null) {
-				FluidUtil.tryFluidTransfer(out, outputTank, 100, true);
+				FluidStack moved = FluidUtil.tryFluidTransfer(out, outputTank, 100, true);
+				if(moved != null && moved.amount != 0) {markDirty();}
 			}
 		}
 
@@ -126,13 +127,14 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 			if(fuel.isEmpty()) {inventory.set(FUEL_SLOT, container);}
 		}
 		burnTime--;
+		markDirty();
 		if(ticksPassed != 0) {
 			ticksPassed++;
 			if(ticksPassed >= ticksNeeded) {
 				outputTank.fill(recipe.output.get(), true);
 				ticksPassed = 0;
 			}
-			atualizar();
+			markDirty();
 			return;
 		}
 		RecipeData found = RecipesMelter.recipeByInputs(inventory.subList(0, INPUT_SLOTS));
@@ -153,14 +155,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		}
 		ticksNeeded = recipe.time;
 		ticksPassed = 1;
-		atualizar();
-	}
-
-	public void atualizar() {
-	    this.markDirty();
-	    IBlockState state = world.getBlockState(pos);
-		world.notifyBlockUpdate(pos, state, state, 3);
-		world.addBlockEvent(pos, state.getBlock(), 255, 0);
+		markDirty();
 	}
 
 	@Override
@@ -230,7 +225,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 
 		if (!formed) {return;}
 		formed = false;
-		atualizar();
+		markDirty();
 
 
 		for(ItemStack stack : inventory) {
@@ -282,7 +277,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 		@Override
 		public FluidStack drain(int maxDrain, boolean doDrain) {
 			FluidStack drained = tem.outputTank.drain(maxDrain, doDrain);
-			if(drained != null && doDrain) {tem.atualizar();}
+			if(drained != null && doDrain) {tem.markDirty();}
 			return drained;
 		}
 
