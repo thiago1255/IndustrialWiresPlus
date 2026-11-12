@@ -19,8 +19,7 @@ public enum BlockTypes_GeneralStuff implements IStringSerializable{
     POTENTIOMETER, //3
     CURRENT_TRANSFORMER, //4
 	RETIFIER_VALVE, //5
-	MERCURY_ORE, //6
-	SOLIDIFIER; //7
+	MERCURY_ORE; //6
 	
 	@Override
 	public String getName() {

@@ -67,6 +67,8 @@ public class BlockStuffMultiblocks extends BlockIWMultiblock implements IMetaEnu
 				return new TileEntityValveFabricator(state.getValue(IEProperties.FACING_HORIZONTAL));
 			case MELTER:
 				return new TileEntityMelter(state.getValue(IEProperties.FACING_HORIZONTAL));
+			case SOLIDIFIER:
+				return new TileEntitySolidifier(state.getValue(IEProperties.FACING_HORIZONTAL));
 		}
 		return null;
 	}

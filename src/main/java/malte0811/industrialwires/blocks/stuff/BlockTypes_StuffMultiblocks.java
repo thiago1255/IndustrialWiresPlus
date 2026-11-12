@@ -13,7 +13,8 @@ import blusunrize.immersiveengineering.common.blocks.BlockIEBase;
 
 public enum BlockTypes_StuffMultiblocks implements BlockIEBase.IBlockEnum {
 	VALVE_FABRICATOR,
-	MELTER;
+	MELTER,
+	SOLIDIFIER;
 
 	@Override
 	public int getMeta() {

@@ -108,7 +108,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 		    case POTENTIOMETER: return new TileEntityPotentiometer();
 		    case CURRENT_TRANSFORMER: return new TileEntityCurrentTransformer();
 			case RETIFIER_VALVE: return new TileEntityRetifierValve();
-			case SOLIDIFIER: return new TileEntitySolidifier();
 		    default: return null;
 	    }
 	}
@@ -147,11 +146,6 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 						}
 					}
 				}
-				break;
-			case 7:
-				if (!w.isAirBlock(pos.up(1))) {
-				    return false;
-			    }
 				break;
 		}
 		return true;
