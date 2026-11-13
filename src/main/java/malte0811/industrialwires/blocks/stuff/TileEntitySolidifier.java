@@ -89,6 +89,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 				masterTe = (TileEntitySolidifier)world.getTileEntity(pos.offset(EnumFacing.UP, isDummy() ? -1 : 0));
 			}
 		}
+		if(world.isRemote) {return;}
 		if(isDummy()) {return;}
 		if(recipe == null) {return;}
 		
