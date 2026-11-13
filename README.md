@@ -7,15 +7,12 @@ THIS IS A FORK OF [INDUSTRIALWIRES FROM MALTE0811](https://github.com/malte0811/
 - Varistor (read wiki)
 - Retifier valve (wiki soon)
 - 2 digits energy meter
-
-## IN PROGRESS:
-
-- Recipes stuff, including multiblocks
+- Some multiblocks & recipes (see below)
 
 ## PLANS:
 
 Plans may change, this will be developed, including more features still being added; Will likely be:
-- Make stuff craftable on survival;
+- FIX BUGS
 - Add use to varistor;
 - Explain things in IE manual;
 - A fusor that takes hydrogen, maybe used as a lamp, lore accurate;
