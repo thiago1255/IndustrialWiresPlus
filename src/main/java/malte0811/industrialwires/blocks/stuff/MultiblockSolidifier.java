@@ -28,11 +28,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDecoration0.RADIATOR;
 import static blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalDevice0.BARREL;
 
-public class MultiblockMelter implements IMultiblock {
-	public static MultiblockMelter INSTANCE;
+public class MultiblockSolidifier implements IMultiblock {
+	public static MultiblockSolidifier INSTANCE;
 	private static final ItemStack[][][] structure = new ItemStack[2][1][1];
 	
-	public MultiblockMelter() {
+	public MultiblockSolidifier() {
 		structure[0][0][0] = new ItemStack(IEContent.blockMetalDecoration0, 1, RADIATOR.getMeta());
 		structure[1][0][0] = new ItemStack(IEContent.blockMetalDevice0, 1, BARREL.getMeta());
 	}

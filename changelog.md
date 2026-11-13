@@ -1,5 +1,13 @@
 ###Minecraft 1.12.2
 
+####Version 2.1-01
+ - Added Solidifier Multiblock
+ - Vaccum tube fabricator now functional
+ - Added Melter Multiblock
+ - Added some fluids
+ - Added many recipes (some use craft tweaker to work)
+   - You can check them in the README.md
+
 ####Version 2.1-00
  - Added Vacuum tube fabricator (Multiblock, useless for now).
  - Control Transformer is only one block again.
