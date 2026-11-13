@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -84,7 +85,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 	@Override
 	public void update() {
 		if(masterTe == null || masterTe.isInvalid()) { 
-			if(world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:0)) instanceof TileEntitySolidifier) {
+			if(world.getTileEntity(pos.offset(EnumFacing.UP, isDummy() ? -1 : 0)) instanceof TileEntitySolidifier) {
 				masterTe = (TileEntitySolidifier)world.getTileEntity(pos.offset(EnumFacing.UP, isDummy() ? -1 : 0));
 			}
 		}
@@ -124,7 +125,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 
 	@Override
 	public ItemStack getOriginalItem() {
-		return MultiblockMelter.INSTANCE.getStructureManual()[mBpos[1]][0][0];
+		return MultiblockSolidifier.INSTANCE.getStructureManual()[mBpos[1]][0][0];
 	}
 
 	// INVENTORY: -----------------------------------------
@@ -190,7 +191,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		@Override
 		public IFluidTankProperties[] getTankProperties() {
 			IFluidTankProperties[] array = new IFluidTankProperties[1];
-			if(tes.dummy) {
+			if(tes.isDummy() && tes.masterTe != null) {
 				array[0] = new FluidTankProperties(tes.masterTe.tank.getFluid(), tes.masterTe.tank.getCapacity());
 			} else {
 				array[0] = new FluidTankProperties(tes.tank.getFluid(), tes.tank.getCapacity());
@@ -234,9 +235,9 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		TileEntity top = world.getTileEntity(pos.up());
 		if (top instanceof TileEntitySolidifier) {
 			TileEntitySolidifier teso = (TileEntitySolidifier)top;
-			top.formed = false;
-			top.markDirty();
-			world.setBlockState(pos.up(), top.getOriginalBlock());
+			teso.formed = false;
+			teso.markDirty();
+			world.setBlockState(pos.up(), teso.getOriginalBlock());
 		}
 
 		world.setBlockState(pos, getOriginalBlock());
