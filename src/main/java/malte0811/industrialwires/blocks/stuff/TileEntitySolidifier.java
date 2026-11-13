@@ -12,9 +12,9 @@ package malte0811.industrialwires.blocks.stuff;
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.util.inventory.IIEInventory;
 import blusunrize.immersiveengineering.common.util.inventory.IEInventoryHandler;
-import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces.IDirectionalTile;
 
-import malte0811.industrialwires.blocks.TileEntityIWBase;
+import malte0811.industrialwires.blocks.TileEntityIWMultiblock;
+import malte0811.industrialwires.blocks.IBlockBoundsIW;
 import malte0811.industrialwires.blocks.IHasDummyBlocksIW;
 import malte0811.industrialwires.crafting.RecipesSolidifier;
 import malte0811.industrialwires.crafting.RecipesSolidifier.RecipeData;
@@ -27,7 +27,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.entity.EntityLivingBase;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -56,36 +55,40 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 	public int ticksPassed = 0;
 	public RecipeData recipe = null;
 	public TileEntitySolidifier masterTe = null;
-	
+	public int[] mBpos = new int[3];
+
 	//utils ===============================================================================
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
 		super.readNBT(in, updatePacket);
 		facing = EnumFacing.byHorizontalIndex(in.getInteger("facing"));
+		mBpos = in.getIntArray("offsetMb");
+		int ri = in.hasKey("recipeIndex") ? in.getInteger("recipeIndex") : -1;
+		recipe = ri >= 0 && ri < RecipesSolidifier.allRecipes.size() ? RecipesSolidifier.allRecipes.get(ri) : null;
 		ticksPassed = in.getInteger("ticksPassed");
 		tank.readFromNBT(in.getCompoundTag("tank"));
 		inventory = Utils.readInventory(in.getTagList("inventory", 10), 1);
-		dummy = in.getBoolean("dummy");
 	}
 
 	@Override
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
 		super.writeNBT(out, updatePacket);
 		out.setByte("facing",  (byte) facing.getHorizontalIndex());
+		out.setIntArray("offsetMb", mBpos);
+		out.setInteger("recipeIndex", RecipesSolidifier.allRecipes.indexOf(recipe));
 		out.setInteger("ticksPassed", ticksPassed);
 		out.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		out.setTag("inventory", Utils.writeInventory(inventory));
-		out.setBoolean("dummy", dummy);
 	}
 
 	@Override
 	public void update() {
 		if(masterTe == null || masterTe.isInvalid()) { 
 			if(world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:0)) instanceof TileEntitySolidifier) {
-				masterTe = (TileEntitySolidifier)world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:0));
+				masterTe = (TileEntitySolidifier)world.getTileEntity(pos.offset(EnumFacing.UP, isDummy() ? -1 : 0));
 			}
 		}
-		if(dummy) {return;}
+		if(isDummy()) {return;}
 		if(recipe == null) {return;}
 		
 		if(ticksPassed != 0) {
@@ -105,20 +108,40 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		this.markDirty();
 	}
 
+	@Override
+	public AxisAlignedBB getBoundingBox() { return new AxisAlignedBB(0,0,0,1,1,1); }
+
+	@Nonnull
+	@Override
+	protected BlockPos getOrigin() {
+		return pos.add(0, -mBpos[1], 0);
+	}
+
+	@Override
+	public IBlockState getOriginalBlock() {
+		return Utils.getStateFromItemStack(getOriginalItem());
+	}
+
+	@Override
+	public ItemStack getOriginalItem() {
+		return MultiblockMelter.INSTANCE.getStructureManual()[mBpos[1]][0][0];
+	}
+
 	// INVENTORY: -----------------------------------------
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return (capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && dummy && facing == EnumFacing.UP)
-			|| (capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && !dummy && facing.getOpposite().rotateY() == this.facing)
+		if (!formed) {return false;}
+		return (capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isDummy() && facing == EnumFacing.UP)
+			|| (capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && !isDummy() && facing.getOpposite().rotateY() == this.facing)
 			|| (super.hasCapability(capability, facing));
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && masterTe != null && dummy && facing == EnumFacing.UP) {
+		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && formed && masterTe != null && isDummy() && facing == EnumFacing.UP) {
 			return (T)thefluidhandler;
 		}
-		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && !dummy && facing.getOpposite().rotateY() == this.facing) {
+		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && formed && !isDummy() && facing.getOpposite().rotateY() == this.facing) {
 			return (T)theoutputhandler;
 		}
 		return super.getCapability(capability, facing);
@@ -153,7 +176,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		@Override
 		public int fill(FluidStack resource, boolean doFill) {
 			if(tes.masterTe == null) {return 0;}
-			if(resource==null || !tes.dummy) {return 0;}
+			if(resource==null || !tes.isDummy()) {return 0;}
 			RecipeData r = RecipesSolidifier.recipeByInput(resource.getFluid());
 			if(r == null) {return 0;}
 			int i = tes.masterTe.tank.fill(resource, doFill);
@@ -178,24 +201,45 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 
 	// DUMMY BLOCKS: --------------------------------------
 	@Override
-	public boolean isDummy() { return dummy; }
+	public boolean isDummy() { return mBpos[1] != 0; }
 
 	@Override
-	public void placeDummies(IBlockState state) {
-		BlockPos pos2 = pos.offset(EnumFacing.UP, 1);
-		world.setBlockState(pos2, state);
-		TileEntity te = world.getTileEntity(pos2);
-		if (te instanceof TileEntitySolidifier) {
-			((TileEntitySolidifier) te).dummy = true;
-			((TileEntitySolidifier) te).facing = this.facing;
-		}
-	}
+	public boolean isLogicDummy() {return isDummy();}
 
 	@Override
-	public void breakDummies() {
-		if (world.getTileEntity(pos.offset(EnumFacing.UP, dummy?-1:1)) instanceof TileEntitySolidifier) {
-			world.setBlockToAir(pos.offset(EnumFacing.UP, dummy?-1:1)); 
+	public void placeDummies(IBlockState state) {}
+
+	@Override
+	public void breakDummies() {}
+
+	@Override
+	public void disassemble() {
+		if(world.isRemote || !formed) {return;}
+
+		if(isDummy()) {
+			TileEntity te = world.getTileEntity(getOrigin());
+			if (te instanceof TileEntitySolidifier ) {
+					TileEntitySolidifier tes = (TileEntitySolidifier)te;
+					if(!tes.isDummy()) { tes.disassemble(); }
+			}
+			return;
 		}
+		formed = false;
+		markDirty();
+
+		for(ItemStack stack : inventory) {
+			if(!stack.isEmpty()) {Utils.dropStackAtPos(world, pos, stack);}
+		}
+
+		TileEntity top = world.getTileEntity(pos.up());
+		if (top instanceof TileEntitySolidifier) {
+			TileEntitySolidifier teso = (TileEntitySolidifier)top;
+			top.formed = false;
+			top.markDirty();
+			world.setBlockState(pos.up(), top.getOriginalBlock());
+		}
+
+		world.setBlockState(pos, getOriginalBlock());
 	}
 	// END ------------------------------------------------
 }
