@@ -70,23 +70,23 @@ public class MultiblockMelter implements IMultiblock {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isBlockTrigger(IBlockState state) {
-		return state.getBlock() == IEContent.blockMetalDecoration && state.getBlock().getMetaFromState(state) == RADIATOR.getMeta();
+		return state.getBlock() == IEContent.blockMetalDecoration0 && state.getBlock().getMetaFromState(state) == RADIATOR.getMeta();
 	}
 
 	@Override
 	public boolean createStructure(World world, BlockPos pos, EnumFacing side, EntityPlayer player)
 	{
 		side = side.getAxis() == Axis.Y ? EnumFacing.fromAngle(player.rotationYaw) : side.getOpposite();
-		if(!Utils.isBlockAt(world, pos.up(), IEContent.blovkMetalDevice0, BARREL.getMeta())) return false;
+		if(!Utils.isBlockAt(world, pos.up(), IEContent.blockMetalDevice0, BARREL.getMeta())) return false;
 
 		ItemStack hammer = player.getHeldItemMainhand().getItem().getToolClasses(player.getHeldItemMainhand()).contains(Lib.TOOL_HAMMER) ? player.getHeldItemMainhand(): player.getHeldItemOffhand();
 		if(MultiblockHandler.fireMultiblockFormationEventPost(player, this, pos, hammer).isCanceled()) return false;
 
-		IBlockState state = IndustrialWires.mBstuff.getStateFromMeta(BlockTypes_stuffMultiblocks.SOLIDIFIER.getMeta()).withProperty(IEProperties.FACING_HORIZONTAL, side);
+		IBlockState state = IndustrialWires.mBstuff.getStateFromMeta(BlockTypes_StuffMultiblocks.SOLIDIFIER.getMeta()).withProperty(IEProperties.FACING_HORIZONTAL, side);
 		for(int yy = 0; yy <= 1; yy++) {
 			BlockPos position = pos.add(0, yy, 0);
 			world.setBlockState(position, state);
-			TileEntity te = world.getTileEntity(position)
+			TileEntity te = world.getTileEntity(position);
 			if(!(te instanceof TileEntitySolidifier)) continue;
 			TileEntitySolidifier tileS = (TileEntitySolidifier)te;
 			tileS.mBpos[0] = 0;

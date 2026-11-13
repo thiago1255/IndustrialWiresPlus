@@ -320,6 +320,9 @@ public class IndustrialWires {
 		MultiblockMelter.INSTANCE = new MultiblockMelter();
 		MultiblockHandler.registerMultiblock(MultiblockMelter.INSTANCE);
 
+		MultiblockSolidifer.INSTANCE = new MultiblockSolidifer();
+		MultiblockHandler.registerMultiblock(MultiblockSolidifer.INSTANCE);
+
 		MultiblockMechMB.INSTANCE = new MultiblockMechMB();
 		MultiblockHandler.registerMultiblock(MultiblockMechMB.INSTANCE);
 		MultiblockHandler.registerMultiblock(new MultiblockTemplateManual(EXAMPLE_MECHMB_LOC));

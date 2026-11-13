@@ -44,19 +44,23 @@ import javax.annotation.Nullable;
 
 import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
-public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyBlocksIW, ITickable, IIEInventory, IDirectionalTile {
+public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITickable, IHasDummyBlocksIW, IIEInventory, IBlockBoundsIW {
 	// VARIABLES/CONS: ------------------------------------
+	TileEntitySolidifier(EnumFacing facing) {
+		this.facing = facing;
+	}
+	public TileEntitySolidifier() {}
+
 	public FluidTank tank = new FluidTank(10000);
 	public NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
-	public boolean dummy = false;
 	public int ticksPassed = 0;
 	public RecipeData recipe = null;
-	EnumFacing facing = EnumFacing.NORTH;;
 	public TileEntitySolidifier masterTe = null;
 	
 	//utils ===============================================================================
 	@Override
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
+		super.readNBT(in, updatePacket);
 		facing = EnumFacing.byHorizontalIndex(in.getInteger("facing"));
 		ticksPassed = in.getInteger("ticksPassed");
 		tank.readFromNBT(in.getCompoundTag("tank"));
@@ -66,6 +70,7 @@ public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyB
 
 	@Override
 	public void writeNBT(NBTTagCompound out, boolean updatePacket) {
+		super.writeNBT(out, updatePacket);
 		out.setByte("facing",  (byte) facing.getHorizontalIndex());
 		out.setInteger("ticksPassed", ticksPassed);
 		out.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
@@ -99,25 +104,6 @@ public class TileEntitySolidifier extends TileEntityIWBase implements IHasDummyB
 		tank.drain(recipe.input.get().amount, true);
 		this.markDirty();
 	}
-	
-	@Nonnull
-	@Override
-	public EnumFacing getFacing() { return facing; }
-
-	@Override
-	public void setFacing(@Nonnull EnumFacing facing) { this.facing = facing; }
-
-	@Override
-	public int getFacingLimitation() { return 2; }
-
-	@Override
-	public boolean mirrorFacingOnPlacement(@Nonnull EntityLivingBase placer) { return false; }
-
-	@Override
-	public boolean canHammerRotate(@Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EntityLivingBase entity) { return false; }
-
-	@Override
-	public boolean canRotate(@Nonnull EnumFacing axis) { return false; }
 
 	// INVENTORY: -----------------------------------------
 	@Override

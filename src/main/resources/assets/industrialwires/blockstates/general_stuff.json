@@ -85,14 +85,6 @@
 				}
 			}
 		],
-		"inventory,type=solidifier": [
-			{
-				"model": "industrialwires:solidifier.obj",
-				"transform": {
-					"scale": [ 0.5, 0.5, 0.5 ]
-				}
-			}
-		],
 		"type": {
 			"control_transformer_rs": {
 				"model": "industrialwires:autotransformer_part_redstone.obj"
@@ -131,10 +123,7 @@
 					"west": "industrialwires:blocks/mercury_ore",
 					"east": "industrialwires:blocks/mercury_ore"
 				}
-			},
-			"solidifier": {
-                "model": "industrialwires:solidifier.obj"
-		    }
+			}
 		},
         "_0multiblockslave":
 		{
