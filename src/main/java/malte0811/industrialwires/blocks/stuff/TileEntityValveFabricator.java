@@ -419,13 +419,14 @@ public class TileEntityValveFabricator extends TileEntityIWMultiblock implements
 		if(!formed) {return false;}
 		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
 			&& isPartFluidInput()
+			&& facing != null
 			&& facing.getOpposite() == this.facing) { return true; }
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && masterTe != null && isPartFluidInput() && facing.getOpposite() == this.facing) {
+		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && masterTe != null && isPartFluidInput() && facing != null && facing.getOpposite() == this.facing) {
 			return (T)thefluidhandler;
 		}
 		return super.getCapability(capability, facing);

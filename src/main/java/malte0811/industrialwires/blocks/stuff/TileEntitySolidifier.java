@@ -63,7 +63,8 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
 		super.readNBT(in, updatePacket);
 		facing = EnumFacing.byHorizontalIndex(in.getInteger("facing"));
-		mBpos = in.getIntArray("offsetMb");
+		int[] mb = in.getIntArray("offsetMb");
+		if(mb.length == 3) {mBpos = mb;}
 		int ri = in.hasKey("recipeIndex") ? in.getInteger("recipeIndex") : -1;
 		recipe = ri >= 0 && ri < RecipesSolidifier.allRecipes.size() ? RecipesSolidifier.allRecipes.get(ri) : null;
 		ticksPassed = in.getInteger("ticksPassed");
@@ -96,7 +97,8 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		if(ticksPassed != 0) {
 			ticksPassed += 1;
 			if(ticksPassed >= recipe.time) {
-				inventory.set(0, recipe.output.get());
+				ItemStack out = recipe.output.get();
+				inventory.set(0, out == null ? ItemStack.EMPTY : out);
 				ticksPassed = 0;
 			}
 			this.markDirty();
@@ -104,6 +106,12 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		}
 		
 		if(!areItemStacksEqual(inventory.get(0), ItemStack.EMPTY)) {return;}
+
+		FluidStack fs = tank.getFluid();
+		if(fs == null) {return;}
+		recipe = RecipesSolidifier.recipeByInput(fs.getFluid());
+		if(recipe == null) {return;}
+
 		if(tank.getFluidAmount() < recipe.input.get().amount) { return; }
 		ticksPassed = 1;
 		tank.drain(recipe.input.get().amount, true);
@@ -130,11 +138,17 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 	}
 
 	// INVENTORY: -----------------------------------------
+
+	private boolean isOutputSide(@Nullable EnumFacing side) {
+		if(side == null || side.getAxis() == EnumFacing.Axis.Y) {return false;}
+		return side.getOpposite().rotateY() == this.facing;
+	}
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		if (!formed) {return false;}
 		return (capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isDummy() && facing == EnumFacing.UP)
-			|| (capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && !isDummy() && facing.getOpposite().rotateY() == this.facing)
+			|| (capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && !isDummy() && isOutputSide(facing) )
 			|| (super.hasCapability(capability, facing));
 	}
 
@@ -143,7 +157,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && formed && masterTe != null && isDummy() && facing == EnumFacing.UP) {
 			return (T)thefluidhandler;
 		}
-		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && formed && !isDummy() && facing.getOpposite().rotateY() == this.facing) {
+		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && formed && !isDummy() && isOutputSide(facing)) {
 			return (T)theoutputhandler;
 		}
 		return super.getCapability(capability, facing);
@@ -182,7 +196,7 @@ public class TileEntitySolidifier extends TileEntityIWMultiblock implements ITic
 			RecipeData r = RecipesSolidifier.recipeByInput(resource.getFluid());
 			if(r == null) {return 0;}
 			int i = tes.masterTe.tank.fill(resource, doFill);
-			if(i > 0) {
+			if(i > 0 && doFill && tes.masterTe.ticksPassed == 0) {
 				tes.masterTe.recipe = r;
 				tes.masterTe.markDirty(); 
 			}

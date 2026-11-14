@@ -18,7 +18,6 @@ tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'meter
 tile.industrialwires.general_stuff.current_transformer.name=Current transformer
 tile.industrialwires.general_stuff.retifier_valve.name=Retifier valve
 tile.industrialwires.general_stuff.mercury_ore.name=Mercury Ore
-tile.industrialwires.general_stuff.solidifier.name=Solidifier
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Rotational Motor
 tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotational To Kinetic
@@ -40,6 +39,11 @@ tile.industrialwires.fluidMercury.name=Liquid Mercury
 tile.industrialwires.fluidGlassInsulator.name=Melted Insulator Glass
 tile.industrialwires.fluidGlassValve.name=Melted Valve Glass
 tile.industrialwires.fluidGlassFiber.name=Melted Glass Fiber
+
+fluid.mercury=Liquid Mercury
+fluid.glassinsulator=Melted Insulator Glass
+fluid.glassvalve=Melted Valve Glass
+fluid.glassfiber=Melted Glass Fiber
 
 item.industrialwires.stuff_crafting.mercury_valve.name=Mercury Valve
 item.industrialwires.stuff_crafting.valve_circuit.name=Retifier Controller

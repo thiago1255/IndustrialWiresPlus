@@ -23,6 +23,7 @@ import static malte0811.industrialwires.IWFluids.fluidGlassValve;
 import static malte0811.industrialwires.IWFluids.fluidGlassFiber;
 import static blusunrize.immersiveengineering.common.IEContent.blockStoneDecoration;
 import static ic2.api.item.IC2Items.getItem;
+import static malte0811.industrialwires.IndustrialWires.hasIC2;
 
 public class RecipesSolidifier {
 	
@@ -37,10 +38,12 @@ public class RecipesSolidifier {
 			() -> new FluidStack(fluidGlassValve, 250),
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 2)
 		)); //Valve glass
-		put(new RecipeData(12000,
-			() -> new FluidStack(fluidGlassFiber, 250),
-			() -> getItem("cable", "type:glass,insulation:0")
-		)); // Fiber
+		if (hasIC2) {
+			put(new RecipeData(12000,
+				() -> new FluidStack(fluidGlassFiber, 250),
+				() -> getItem("cable", "type:glass,insulation:0")
+			)); // Fiber
+		}
 		if(replaceIeTubes && hasCT) {
 			put(new RecipeData(800,
 				() -> new FluidStack(fluidGlassInsulator, 1000),

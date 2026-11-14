@@ -122,7 +122,7 @@ public abstract class TileEntityIWMultiblock extends TileEntityIWBase implements
 		formed = in.getBoolean(FORMED);
 		mirrored = in.getBoolean(MIRRORED);
 		int[] offset = in.getIntArray(OFFSET);
-		this.offset = new Vec3i(offset[0], offset[1], offset[2]);
+		if(offset.length == 3) {this.offset = new Vec3i(offset[0], offset[1], offset[2]);}
 		facing = EnumFacing.byHorizontalIndex(in.getInteger(FACING));
 	}
 

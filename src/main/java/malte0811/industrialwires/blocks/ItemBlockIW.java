@@ -47,7 +47,7 @@ public class ItemBlockIW extends ItemBlock {
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		int meta = stack.getMetadata();
-		if (values != null) {
+		if (values != null && meta >= 0 && meta < values.length) {
 			return block.getTranslationKey() + "." + values[meta].toString().toLowerCase();
 		} else {
 			return block.getTranslationKey();

@@ -77,7 +77,8 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public void readNBT(NBTTagCompound in, boolean updatePacket) {
 		super.readNBT(in, updatePacket);
 		facing = EnumFacing.byHorizontalIndex(in.getByte("facing"));
-		mBpos = in.getIntArray("offsetMb");
+		int[] mb = in.getIntArray("offsetMb");
+		if(mb.length == 3) {mBpos = mb;}
 		ticksPassed = in.getInteger("ticksPassed");
 		burnTime = in.getInteger("burnTime");
 		int recipeIndex = in.hasKey("recipeIndex") ? in.getInteger("recipeIndex") : -1;
@@ -291,7 +292,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		if(masterTe == null || masterTe.isInvalid()) {return false;}
 		if(!formed) {return false;}
-		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing.getOpposite() == this.facing) {return true;}
+		if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing != null && facing.getOpposite() == this.facing) {return true;}
 		if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && (isPartItemInput() || isPartFuelInput())) {return true;}
 		return super.hasCapability(capability, facing);
 	}
@@ -299,7 +300,7 @@ public class TileEntityMelter extends TileEntityIWMultiblock implements ITickabl
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if(masterTe != null) {
-			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing.getOpposite() == this.facing) {return (T)masterTe.fluidHandler;}
+			if(capability==CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && isPartFluidOutput() && facing != null && facing.getOpposite() == this.facing) {return (T)masterTe.fluidHandler;}
 			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartItemInput()) {return (T)masterTe.inputHandler;}
 			if(capability==CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && isPartFuelInput()) {return (T)masterTe.fuelHandler;}
 		}

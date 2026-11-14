@@ -1,5 +1,8 @@
 ###Minecraft 1.12.2
 
+####Version 2.1-02
+ - Small fixes
+
 ####Version 2.1-01
  - Added Solidifier Multiblock
  - Vaccum tube fabricator now functional
