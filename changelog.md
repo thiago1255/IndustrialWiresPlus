@@ -4,7 +4,8 @@
  - Fixed bug with lock panel item
  - Fixed bug with connectors not working
  - Fixed logic on retifier valve
- - Added manual entried
+ - Localization should work 100% now
+ - Added manual entries
 
 ####Version 2.1-02
  - Small fixes

@@ -51,6 +51,7 @@ item.industrialwires.stuff_crafting.valve_glass.name=Vidro para Tubos®
 item.industrialwires.stuff_crafting.valve_component.name=Componente para Tubo Eletrônico
 item.industrialwires.stuff_crafting.neon_component.name=Componente Fluorescente
 item.industrialwires.stuff_crafting.advanced_component.name=Componente para Tubo Avançado
+item.industrialwires.stuff_crafting.retifier_component.name=Componente para Tubo Retificador
 
 item.industrialwires.ic2_wire_coil.tin.name=Bobina de fio de Estanho 
 item.industrialwires.ic2_wire_coil.copper.name=Bobina de fio de Cobre
@@ -126,6 +127,8 @@ industrialwires.desc.height_info=A altura do painél no centro
 industrialwires.desc.angle=Angûlo
 industrialwires.desc.angle_info=O angûlo do painél em relação a superfície de base. 0=-45°, 100=45°
 industrialwires.desc.time=Tempo
+industrialwires.desc.energy=Energia
+industrialwires.desc.fuel=Combustível
 industrialwires.tooltip.wide=Longo
 industrialwires.tooltip.narrow=Estreito
 

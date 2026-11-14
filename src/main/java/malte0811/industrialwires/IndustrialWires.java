@@ -381,11 +381,11 @@ public class IndustrialWires {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 		PanelUtils.PANEL_ITEM = Item.getItemFromBlock(panel);
-		proxy.postInit();
-		GameRegistry.registerWorldGenerator(new IWWorldGen(), 3);
 		RecipesValveFabricator.init();
 		RecipesSolidifier.init();
 		RecipesMelter.init();
+		proxy.postInit();
+		GameRegistry.registerWorldGenerator(new IWWorldGen(), 3);
 	}
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {

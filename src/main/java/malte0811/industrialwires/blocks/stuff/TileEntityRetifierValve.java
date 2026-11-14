@@ -141,7 +141,7 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 			storedEnergy -= 2;
 			fanWorking = true;
 			atualizar();
-			return
+			return;
 		}
 		if(temperature != 0) {
 			temperature -= Math.min(0.5, MAX_TEMP-temperature); 

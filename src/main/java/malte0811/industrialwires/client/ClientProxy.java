@@ -16,6 +16,7 @@ package malte0811.industrialwires.client;
 
 import blusunrize.immersiveengineering.api.ManualHelper;
 import blusunrize.immersiveengineering.api.ManualPageMultiblock;
+import blusunrize.immersiveengineering.api.MultiblockHandler.IMultiblock;
 import blusunrize.immersiveengineering.client.ClientUtils;
 import blusunrize.immersiveengineering.common.Config;
 import blusunrize.immersiveengineering.common.util.Utils;
@@ -35,6 +36,9 @@ import malte0811.industrialwires.blocks.converter.TileEntityMechMB;
 import malte0811.industrialwires.blocks.hv.TileEntityJacobsLadder;
 import malte0811.industrialwires.blocks.hv.TileEntityMarx;
 import malte0811.industrialwires.blocks.stuff.TileEntityRetifierValve;
+import malte0811.industrialwires.blocks.stuff.MultiblockMelter;
+import malte0811.industrialwires.blocks.stuff.MultiblockSolidifier;
+import malte0811.industrialwires.blocks.stuff.MultiblockValveFabricator;
 import malte0811.industrialwires.client.gui.GuiPanelComponent;
 import malte0811.industrialwires.client.gui.GuiPanelCreator;
 import malte0811.industrialwires.client.gui.GuiRSPanelConn;
@@ -46,6 +50,9 @@ import malte0811.industrialwires.client.render.*;
 import malte0811.industrialwires.compat.Compat;
 import malte0811.industrialwires.controlpanel.PanelComponent;
 import malte0811.industrialwires.crafting.IC2TRHelper;
+import malte0811.industrialwires.crafting.RecipesMelter;
+import malte0811.industrialwires.crafting.RecipesSolidifier;
+import malte0811.industrialwires.crafting.RecipesValveFabricator;
 import malte0811.industrialwires.entities.EntityBrokenPart;
 import malte0811.industrialwires.hv.MarxOreHandler;
 import malte0811.industrialwires.hv.MultiblockMarx;
@@ -83,8 +90,11 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static malte0811.industrialwires.IndustrialWires.*;
 
@@ -289,6 +299,14 @@ public class ClientProxy extends CommonProxy {
 		splitter.split(text);
 		List<IManualPage> partsEntry = splitter.toManualEntry();
 		m.addEntry("industrialwires.mech_mb_parts", IndustrialWires.MODID, partsEntry.toArray(new IManualPage[0]));
+
+		for (String name : new String[]{"redstonecr", "controltransformer", "varistor", "potentiometer", "ct", "retifier", "mercury"})
+			addTextEntry(m, name, IndustrialWires.MODID);
+		//addMachineEntry(m, "", .INSTANCE, ());
+		addMachineEntry(m, "melter", MultiblockMelter.INSTANCE, melterRecipes());
+		addMachineEntry(m, "solidifier", MultiblockSolidifier.INSTANCE, solidifierRecipes());
+		addMachineEntry(m, "fabricator", MultiblockValveFabricator.INSTANCE, fabricatorRecipes());
+
 		m.entryRenderPost();
 		m.fontRenderer.setUnicodeFlag(uni);
 
@@ -510,5 +528,45 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 		return null;
+	}
+
+	private static final String ENTRY = "ie.manual.entry.industrialwires.";
+
+	private static void addMachineEntry(ManualInstance m, String name, IMultiblock multiblock, String recipes) {
+		TextSplitter splitter = new TextSplitter(m);
+		splitter.addSpecialPage(0, 0, 8, s -> new ManualPageMultiblock(m, s, multiblock));
+		splitter.split(I18n.format(ENTRY + name) + recipes);
+		m.addEntry("industrialwires." + name, IndustrialWires.MODID, splitter.toManualEntry().toArray(new IManualPage[0]));
+	}
+
+	private static String desc(String key) { return I18n.format(IndustrialWires.MODID + ".desc." + key); }
+	private static String fluid(FluidStack f) { return f.amount + " mB " + f.getLocalizedName(); }
+	private static String seconds(int ticks) { return Utils.formatDouble(ticks / 20., "0.#") + " s"; }
+	private static String recipe(String title, String... details) { return "§l" + title + "§r<br>" + String.join("<br>", details) + "<br>"; }
+
+	private static String melterRecipes() {
+		return RecipesMelter.allRecipes.stream().map(r -> recipe(fluid(r.output.get()),
+			desc("input") + ": " + Arrays.stream(r.inputs.get()).map(i -> i.inputSize + "x " + i.getExampleStack().getDisplayName()).collect(Collectors.joining(", ")),
+			desc("time") + ": " + seconds(r.time))).collect(Collectors.joining());
+	}
+
+	private static String solidifierRecipes() {
+		return RecipesSolidifier.allRecipes.stream().filter(r -> r.output.get() != null).map(r -> recipe(r.output.get().getDisplayName(),
+			desc("input") + ": " + fluid(r.input.get()),
+			desc("time") + ": " + seconds(r.time))).collect(Collectors.joining());
+	}
+
+	private static String fabricatorRecipes() {
+		return RecipesValveFabricator.allRecipes.stream().map(r -> recipe(r.output.get().getDisplayName(),
+			desc("input") + ": " + r.inputComponent.get().getDisplayName() + ", " + r.inputGlass.get().getDisplayName() + (r.internal == null ? "" : ", " + fluid(r.internal.get())),
+			desc("energy") + ": " + r.energy + " IF",
+			desc("fuel") + ": " + r.fuel + " mB",
+			desc("time") + ": " + seconds(r.time))).collect(Collectors.joining());
+	}
+
+	private static void addTextEntry(ManualInstance m, String name, String category) {
+		TextSplitter splitter = new TextSplitter(m);
+		splitter.split(I18n.format(ENTRY + name));
+		m.addEntry("industrialwires." + name, category, splitter.toManualEntry().toArray(new IManualPage[0]));
 	}
 }

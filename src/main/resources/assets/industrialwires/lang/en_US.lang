@@ -51,6 +51,7 @@ item.industrialwires.stuff_crafting.valve_glass.name=Tube Glass™
 item.industrialwires.stuff_crafting.valve_component.name=Electron Tube Component
 item.industrialwires.stuff_crafting.neon_component.name=Fluorescent Component
 item.industrialwires.stuff_crafting.advanced_component.name=Advanced Tube Component
+item.industrialwires.stuff_crafting.retifier_component.name=Retifier Tube Component
 
 item.industrialwires.ic2_wire_coil.tin.name=Tin Wire Coil
 item.industrialwires.ic2_wire_coil.copper.name=Copper Wire Coil
@@ -126,6 +127,8 @@ industrialwires.desc.height_info=The Height of the panel in the middle
 industrialwires.desc.angle=Angle
 industrialwires.desc.angle_info=The panel's angle to the surface it is placed on. 0=-45°, 100=45°
 industrialwires.desc.time=Time
+industrialwires.desc.energy=Energy
+industrialwires.desc.fuel=Fuel
 industrialwires.tooltip.wide=Wide
 industrialwires.tooltip.narrow=Narrow
 
@@ -140,7 +143,6 @@ industrialwires.tooltip.power_tier=Power Tier: %s
 industrialwires.tooltip.energy_per_tick=%s EU/t=%s IF/t
 industrialwires.tooltip.transfer_rate=Burns at %s EU/t (%s IF/t)
 industrialwires.tooltip.input_rate=%s EU/t (%s IF/t) per connector
-
 
 industrialwires.chat.tooLong=This coil does not contain enough wire for this connection
 industrialwires.chat.stackSize=Linking is only possible with a stack of size 1
@@ -264,16 +266,16 @@ ie.manual.entry.industrialwires.retifier=Converts AC (IF) to DC (EU) using §o"m
 
 ie.manual.entry.industrialwires.mercury.name=Mercury Ore
 ie.manual.entry.industrialwires.mercury.subtext=Not the planet !
-ie.manual.entry.industrialwires.mercury=Found on nether at Y 8~37, can be <link;industrialwires.melted;melted;0> into liquid mercury.<br>Liquid mercury gives wither effect on entities, and it's main use is to make mercury retifier valve.
+ie.manual.entry.industrialwires.mercury=Found on nether at Y 8~37, can be <link;industrialwires.melter;melted;0> into liquid mercury.<br>Liquid mercury gives wither effect on entities, and it's main use is to make mercury retifier valve.
 
 ie.manual.entry.industrialwires.melter.name=Melter
 ie.manual.entry.industrialwires.melter.subtext=A stove ?
 ie.manual.entry.industrialwires.melter=<&0>Used to melt some materials into fluids.<br>Formed by hammering the pipe block.<br>Will always consume solid fuel.<np>§lRecipes:§r<br>
 
-ie.manual.entry.industrialwires.solidifier.name=Solidifer
+ie.manual.entry.industrialwires.solidifier.name=Solidifier
 ie.manual.entry.industrialwires.solidifier.subtext=A fridge ?
 ie.manual.entry.industrialwires.solidifier=<&0>Used to convert some fluids into blocks/items.<br>Formed by hammering the radiator block.<br>Does not require energy or anything.<np>§lRecipes:§r<br>
 
 ie.manual.entry.industrialwires.fabricator.name=Valve fabricator
 ie.manual.entry.industrialwires.fabricator.subtext=Fine machinery
-ie.manual.entry.industrialwires.fabricator=<&0>Used to fabricate some tubes.<br>Formed by hammering the heavy engineering block from the pipe side.<br>Requires energy and liquid fuel (same accepted on drill).<np>§lRecipes:§r<br>
+ie.manual.entry.industrialwires.fabricator=<&0>Used to fabricate some tubes.<br>Formed by hammering the heavy engineering block from the pipe side.<br>Requires energy and liquid fuel (same accepted on drill).<np>Requires setting the desired recipe with hammer on redstone port.<np>§lRecipes:§r<br>
