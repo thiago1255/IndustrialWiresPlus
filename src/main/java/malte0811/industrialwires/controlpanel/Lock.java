@@ -99,8 +99,8 @@ public class Lock extends PanelComponent implements IConfigurableComponent {
 			lockID = nbt.getInteger("lockId");
 		}
 		latching = nbt.getBoolean(LATCHING);
-		int rsController = nbt.getInteger(RS_CHANNEL);
-		byte rsColor = nbt.getByte(RS_ID);
+		int rsController = nbt.getInteger(RS_ID);
+		byte rsColor = nbt.getByte(RS_CHANNEL);
 		outputChannel = new RSChannel(rsController, rsColor);
 	}
 
