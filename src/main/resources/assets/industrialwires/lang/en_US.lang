@@ -234,3 +234,9 @@ ie.manual.entry.industrialwires.lock1=Up to <config;I;iwKeysOnRing> can be combi
 ie.manual.entry.industrialwires.panel_meter=A panel meter can be used to show display analog redstone signals with some accuracy. Panel meters are available in two different formats, wide and narrow. The difference between the formats is purely visual.
 ie.manual.entry.industrialwires.7seg=Seven-Segment Displays are a way of displaying analog redstone signals precisely. Signal strengths 0-9 are displayed as one would expect, levels 10-15 are represented by the letters A-E. Some of the letters are lower-case to differentiate them from digits (e.g. 8 vs B).
 ie.manual.entry.industrialwires.rgb_led=RGB Indicators consist of 3 indicator lights placed close together: one is red, one green and one blue. They can be controlled independently, allowing for many different colors to be shown without having to disassemble and recreate the panel.
+
+# MANUAL FOR STUFF ADDED ON THIS FORK -----------------------------------------------------------------------------------------------------
+
+#ie.manual.entry.industrialwires.wires.name=
+#ie.manual.entry.industrialwires.wires.subtext=
+#ie.manual.entry.industrialwires.wires=
