@@ -79,6 +79,7 @@ public class TileEntityIC2ConnectorTin extends TileEntityImmersiveConnectable im
 	private final int tier;
 	private final double relayOffset;
 	private final double connOffset;
+	private boolean ic2Registered = false;
 
 	protected TileEntityIC2ConnectorTin(boolean relay, MixedWireType type, int tier, double relayLength, double connLength) {
 		this.relay = relay;
@@ -100,8 +101,10 @@ public class TileEntityIC2ConnectorTin extends TileEntityImmersiveConnectable im
 	@Override
 	public void onLoad() {
 		super.onLoad();
-		if (!world.isRemote&& IndustrialWires.hasIC2)
+		if (!world.isRemote && IndustrialWires.hasIC2 && !ic2Registered) {
 			Compat.loadIC2Tile.accept(this);
+			ic2Registered = true;
+		}
 		ImmersiveNetHandler.INSTANCE.onTEValidated(this);
 	}
 
@@ -292,16 +295,20 @@ public class TileEntityIC2ConnectorTin extends TileEntityImmersiveConnectable im
 
 	@Override
 	public void invalidate() {
-		if (!world.isRemote)
-			Compat.unloadIC2Tile.accept(this);
+		unregisterIC2();
 		super.invalidate();
 	}
 
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		if (!world.isRemote)
-			Compat.unloadIC2Tile.accept(this);
+		unregisterIC2();
+	}
+
+	private void unregisterIC2() {
+		if (world.isRemote || !ic2Registered) return;
+		Compat.unloadIC2Tile.accept(this);
+		ic2Registered = false;
 	}
 
 	@Override
