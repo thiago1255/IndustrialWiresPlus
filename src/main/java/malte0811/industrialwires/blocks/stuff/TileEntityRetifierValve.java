@@ -109,53 +109,55 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 		nbt.setBoolean("ign", ignition);
     }
 // ITICKABLE ---------------------------------------
-    @Override
-    public void update() {
-	    if(world.isRemote) {return;}
-        if(isDummy()) {return;}
-		
-		activeCheck();
-		
-        if(temperature > MAX_TEMP) { 
-            world.createExplosion(null, pos.getX(), pos.getY()-1, pos.getZ(), 5, true);
+	@Override
+	public void update() {
+		if(world.isRemote) {return;}
+		if(isDummy()) {return;}
+
+		if(!active && temperature >= 19000) { 
+			active = true;
+			atualizar();
+		} else if (active && temperature <= 19000){
+			active = false;
+			atualizar();
+		}
+
+		if(temperature > MAX_TEMP) { 
+			world.createExplosion(null, pos.getX(), pos.getY()-1, pos.getZ(), 5, true);
 			return;
 		}
-		
+
 		if((ignition) && (storedEnergy > 192)) {
-		    storedEnergy -= 192;
+			storedEnergy -= 192;
 			temperature += 174.01;
 			fanWorking = false;
 			atualizar();
-            return;
+			return;
 		}
 		if(storedEnergy > 2) {
 			temperature -= Math.min(2.39, MAX_TEMP-temperature); 
 			fanAngle += 18f;
-		    fanAngle %= 360;
+			fanAngle %= 360;
 			storedEnergy -= 2;
 			fanWorking = true;
 			atualizar();
-		} else {
-		    temperature -= Math.min(0.5, MAX_TEMP-temperature); 
+			return
+		}
+		if(temperature != 0) {
+			temperature -= Math.min(0.5, MAX_TEMP-temperature); 
 			if(fanWorking == true) {
-			    fanWorking = false;
+				fanWorking = false;
 				atualizar();
+			} else {
+				markDirty();
 			}
-        }
-    }
-		
-	private void activeCheck()
-	{
-	  if(!active && temperature >= 19000) { 
-		active = true;
-	  } else if (active && temperature <= 19000){
-	    active = false;
-      }
+		}
 	}
-	
+
+
 	public void atualizar() {
-	    markDirty();
-	    IBlockState state = world.getBlockState(pos);
+		markDirty();
+		IBlockState state = world.getBlockState(pos);
 		world.notifyBlockUpdate(pos, state, state, 3);
 		world.addBlockEvent(pos, state.getBlock(), 255, 0);
 	}
@@ -192,47 +194,23 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
     }
 	
 	@Override
-    public int outputEnergy(int amount, boolean simulate, int energyType) {
-		/*if((ignition) && (amount > 190)) {
-		    if(!simulate) {
-		        temperature += 7299.01;
-				active = true;
-                if(temperature < 21900) {active = false;}
-            }
-            return 190;
-		} else if((amount > 2) && (storedEnergy < MAX_ENERGY)) {
-		    int numberToReturn = Math.min(amount, MAX_ENERGY-storedEnergy);
-            if(!simulate) {
-                storedEnergy += ( numberToReturn - 2 );
-				temperature -= Math.min(0.79, MAX_TEMP-temperature);
-				active = true;
-                if(temperature < 21900) {active = false;}
-            } 
-			return numberToReturn;
-        } else {
-		    active = false;
-            return 0;
-        }*/
-
-        if((amount > 2) && (storedEnergy < MAX_ENERGY)) {
-		    int numberToReturn = Math.min(amount, (MAX_ENERGY - storedEnergy));
+	public int outputEnergy(int amount, boolean simulate, int energyType) {
+		if((amount > 2) && (storedEnergy < MAX_ENERGY)) {
+			int numberToReturn = Math.min(amount, (MAX_ENERGY - storedEnergy));
 			numberToReturn = Math.min(numberToReturn, 8192);
-            if(!simulate) {
-			    storedEnergy += numberToReturn;
-            } 
+			if(!simulate) { storedEnergy += numberToReturn; }
 			return numberToReturn;
 		}
 		return 0;
-    } 
+	}
 
 // IC2 STUFF: -----------------------------------------------
-    @Override
+	@Override
 	@Optional.Method(modid = "ic2")
 	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
-		//return true;
 		return side == facing.getOpposite();
 	}
-    
+
 	@Override
 	@Optional.Method(modid = "ic2")
 	public int getSourceTier() {
@@ -242,7 +220,7 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	@Override
 	@Optional.Method(modid = "ic2")
 	public double getOfferedEnergy() {
-	    if(!active && ignition) {return 0;}
+		if(!active || ignition) {return 0;}
 		return ((storedEnergy - 3) / 4);
 	}
 	

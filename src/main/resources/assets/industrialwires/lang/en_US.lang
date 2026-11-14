@@ -125,6 +125,7 @@ industrialwires.desc.height=Height
 industrialwires.desc.height_info=The Height of the panel in the middle
 industrialwires.desc.angle=Angle
 industrialwires.desc.angle_info=The panel's angle to the surface it is placed on. 0=-45°, 100=45°
+industrialwires.desc.time=Time
 industrialwires.tooltip.wide=Wide
 industrialwires.tooltip.narrow=Narrow
 
@@ -237,6 +238,42 @@ ie.manual.entry.industrialwires.rgb_led=RGB Indicators consist of 3 indicator li
 
 # MANUAL FOR STUFF ADDED ON THIS FORK -----------------------------------------------------------------------------------------------------
 
-#ie.manual.entry.industrialwires.wires.name=
-#ie.manual.entry.industrialwires.wires.subtext=
-#ie.manual.entry.industrialwires.wires=
+ie.manual.entry.industrialwires.redstonecr.name=Redstone Controller/Relay
+ie.manual.entry.industrialwires.redstonecr.subtext=Dual Channel
+ie.manual.entry.industrialwires.redstonecr=Some machines - <link;industrialwires.controltransformer;Control transformer;0>, <link;industrialwires.potentiometer;Potenti'o'meter;0>, <link;industrialwires.ct;Current transformer (enhaced);0> and <link;industrialwires.retifier;Retifier valve;0> - require this especial connector in order to connect with redstone network.<br>By clicking with hammer you can set the Coarse and Fine channels of the connection, except for Retifier Valve which uses a hardcoded way to do signals.
+
+ie.manual.entry.industrialwires.controltransformer.name=Control transformer
+ie.manual.entry.industrialwires.controltransformer.subtext=Limits to the power
+ie.manual.entry.industrialwires.controltransformer=Uses a <link;industrialwires.redstonecr;Redstone Controller;0> in order to limit how much IF/tick passes by, based on cabble maximum capacity.<br>The Coarse and Fine signals work in the way of <link;industrialwires.variac;the Variac;0>.<br>Currently only the 3 electrical wires of IE works here.
+
+ie.manual.entry.industrialwires.varistor.name=Varistor
+ie.manual.entry.industrialwires.varistor.subtext=A resistor
+ie.manual.entry.industrialwires.varistor=WIP
+
+ie.manual.entry.industrialwires.potentiometer.name=Potenti'o'meter
+ie.manual.entry.industrialwires.potentiometer.subtext=Not a potentiometer !
+ie.manual.entry.industrialwires.potentiometer=A roof mounted meter for EU energy, uses a <link;industrialwires.redstonecr;Redstone Controller;0> in order to show the values Coarse and Fine, which can eazily be viewed using a <link;industrialwires.panel_meter;Panel Meter;0>.
+
+ie.manual.entry.industrialwires.ct.name=Current transformer (enhaced)
+ie.manual.entry.industrialwires.ct.subtext=Same but different
+ie.manual.entry.industrialwires.ct=Works exactly like the current transformer but allows to use a <link;industrialwires.redstonecr;Redstone Controller;0> in order to show the values Coarse and Fine, which can eazily be viewed using a <link;industrialwires.panel_meter;Panel Meter;0>.
+
+ie.manual.entry.industrialwires.retifier.name=Retifier valve
+ie.manual.entry.industrialwires.retifier.subtext=Nice blue glow
+ie.manual.entry.industrialwires.retifier=Converts AC (IF) to DC (EU) using §o"magic"§r.<br>Medium Voltage IF goes conected directly as wire, the EU output is connected at front (tier 4), and the <link;industrialwires.redstonecr;Redstone Controller;0> at top.<br>The valve need to have a minimun heat in order to convert energy (the mercury will turn in gas and become blue), ignition can heat at begin, energy converted generate heat proportionally, if heat goes to limit it will §lexplode§r.<np>The conversion is 100% efficient, however 2 IF/t is spent on fan.<br>Cut the power makes the fan stop, and temperature decrease slower.<br>Ignition spends 192 IF/t and stops conversion.<np>The hardcoded redstone channels are:<br> White: to enable ignition;<br> Orange: Coarse temperature read;<br> Magenta: fine temperature read.
+
+ie.manual.entry.industrialwires.mercury.name=Mercury Ore
+ie.manual.entry.industrialwires.mercury.subtext=Not the planet !
+ie.manual.entry.industrialwires.mercury=Found on nether at Y 8~37, can be <link;industrialwires.melted;melted;0> into liquid mercury.<br>Liquid mercury gives wither effect on entities, and it's main use is to make mercury retifier valve.
+
+ie.manual.entry.industrialwires.melter.name=Melter
+ie.manual.entry.industrialwires.melter.subtext=A stove ?
+ie.manual.entry.industrialwires.melter=<&0>Used to melt some materials into fluids.<br>Formed by hammering the pipe block.<br>Will always consume solid fuel.<np>§lRecipes:§r<br>
+
+ie.manual.entry.industrialwires.solidifier.name=Solidifer
+ie.manual.entry.industrialwires.solidifier.subtext=A fridge ?
+ie.manual.entry.industrialwires.solidifier=<&0>Used to convert some fluids into blocks/items.<br>Formed by hammering the radiator block.<br>Does not require energy or anything.<np>§lRecipes:§r<br>
+
+ie.manual.entry.industrialwires.fabricator.name=Valve fabricator
+ie.manual.entry.industrialwires.fabricator.subtext=Fine machinery
+ie.manual.entry.industrialwires.fabricator=<&0>Used to fabricate some tubes.<br>Formed by hammering the heavy engineering block from the pipe side.<br>Requires energy and liquid fuel (same accepted on drill).<np>§lRecipes:§r<br>

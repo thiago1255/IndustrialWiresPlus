@@ -85,6 +85,7 @@
         "2.0-02": " - Added animations for retifier valve:\n   - Ignition arc.\n   - Fan animation.\n - Probaly make IC2 a optional dependency again.",
         "2.1-00": " - Added Vacuum tube fabricator (Multiblock, useless for now).\n - Control Transformer is only one block again.\n - Fixed some dummy blocks.",
         "2.1-01": " - Added Solidifier Multiblock\n - Vaccum tube fabricator now functional\n - Added Melter Multiblock\n - Added some fluids\n - Added many recipes (some use craft tweaker to work)\n   - You can check them in the README.md",
-        "2.1-02": " - Small fixes"
+        "2.1-02": " - Small fixes",
+        "2.1-03": " - Fixed bug with lock panel item\n - Fixed bug with connectors not working\n - Fixed logic on retifier valve\n - Added manual entried"
     }
 }

@@ -1,5 +1,11 @@
 ###Minecraft 1.12.2
 
+####Version 2.1-03
+ - Fixed bug with lock panel item
+ - Fixed bug with connectors not working
+ - Fixed logic on retifier valve
+ - Added manual entried
+
 ####Version 2.1-02
  - Small fixes
 

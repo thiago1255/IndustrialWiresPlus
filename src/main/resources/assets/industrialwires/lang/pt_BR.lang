@@ -125,6 +125,7 @@ industrialwires.desc.height=Altura
 industrialwires.desc.height_info=A altura do painél no centro
 industrialwires.desc.angle=Angûlo
 industrialwires.desc.angle_info=O angûlo do painél em relação a superfície de base. 0=-45°, 100=45°
+industrialwires.desc.time=Tempo
 industrialwires.tooltip.wide=Longo
 industrialwires.tooltip.narrow=Estreito
 
