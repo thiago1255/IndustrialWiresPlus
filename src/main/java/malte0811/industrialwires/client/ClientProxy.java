@@ -558,6 +558,7 @@ public class ClientProxy extends CommonProxy {
 
 	private static String fabricatorRecipes() {
 		return RecipesValveFabricator.allRecipes.stream().map(r -> recipe(r.output.get().getDisplayName(),
+			desc("recipe_id") + ": " + r.recipeId,
 			desc("input") + ": " + r.inputComponent.get().getDisplayName() + ", " + r.inputGlass.get().getDisplayName() + (r.internal == null ? "" : ", " + fluid(r.internal.get())),
 			desc("energy") + ": " + r.energy + " IF",
 			desc("fuel") + ": " + r.fuel + " mB",

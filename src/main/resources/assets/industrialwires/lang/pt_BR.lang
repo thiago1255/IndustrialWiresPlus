@@ -129,7 +129,8 @@ industrialwires.desc.angle_info=O angûlo do painél em relação a superfície 
 industrialwires.desc.time=Tempo
 industrialwires.desc.energy=Energia
 industrialwires.desc.fuel=Combustível
-industrialwires.tooltip.wide=Longo
+industrialwires.desc.recipe_id=ID da Receita
+industrialwires.tooltip.wide=Largo
 industrialwires.tooltip.narrow=Estreito
 
 industrialwires.tooltip.horizontal=Horizontal
