@@ -10,16 +10,16 @@
 	},
 	"variants": {
 		"normal": [{
-		 	"model": "industrialwires:retifier_valve_off_base.obj",
-			"custom": {"flip-v": true}
+		 	"model": "immersiveengineering:smartmodel/connector",
+			"custom": {"base": "industrialwires:block/retifier_valve_off_base.obj", "layers": ["SOLID"], "flip-v": true}
 		}],
 		"glass": [{
 		 	"model": "industrialwires:retifier_valve_off_glass.obj",
 			"custom": {"flip-v": true}
 		}],
-        "base": [{
-		 	"model": "industrialwires:retifier_valve_on_base.obj",
-			"custom": {"flip-v": true}
+		"base": [{
+			"model": "immersiveengineering:smartmodel/connector",
+			"custom": {"base": "industrialwires:block/retifier_valve_on_base.obj", "layers": ["SOLID"], "flip-v": true}
 		}],
 		"light": [{
 		 	"model": "industrialwires:retifier_valve_on_glass.obj",
@@ -39,7 +39,7 @@
 				"model": "industrialwires:autotransformer_part_normal.obj"
 			}
 		],
-        "inventory,type=varistor": [
+		"inventory,type=varistor": [
 			{
 				"model": "industrialwires:varistor.obj"
 			}
@@ -88,23 +88,23 @@
 		"type": {
 			"control_transformer_rs": {
 				"model": "immersiveengineering:smartmodel/connector",
-				"custom": {"base": "industrialwires:autotransformer_part_redstone.obj", "layers": ["SOLID"]}
+				"custom": {"base": "industrialwires:block/autotransformer_part_redstone.obj", "layers": ["SOLID"]}
 			},
 			"control_transformer_normal": {
 				"model": "immersiveengineering:smartmodel/connector",
-				"custom": {"base": "industrialwires:autotransformer_part_normal.obj", "layers": ["SOLID"]}
+				"custom": {"base": "industrialwires:block/autotransformer_part_normal.obj", "layers": ["SOLID"]}
 			},
 			"varistor": {
 				"model": "immersiveengineering:smartmodel/connector",
-				"custom": {"base": "industrialwires:varistor.obj", "layers": ["SOLID"]}
+				"custom": {"base": "industrialwires:block/varistor.obj", "layers": ["SOLID"]}
 			},
 			"potentiometer": {
 				"model": "immersiveengineering:smartmodel/connector",
-				"custom": {"base": "industrialwires:potenciometro.obj", "layers": ["SOLID"]}
+				"custom": {"base": "industrialwires:block/potenciometro.obj", "layers": ["SOLID"]}
 			},
 			"current_transformer": {
 				"model": "immersiveengineering:smartmodel/connector",
-				"custom": {"base": "industrialwires:ct_rs.obj", "layers": ["SOLID"]}
+				"custom": {"base": "industrialwires:block/ct_rs.obj", "layers": ["SOLID"]}
 			},
 			"retifier_valve": {
 				"model": "forge:multi-layer",

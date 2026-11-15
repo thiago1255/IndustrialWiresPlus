@@ -14,7 +14,7 @@
 			{
 				"model": "industrialwires:vacuum_tube_fabricator.obj",
 				"transform": {
-					"scale": 0.375,
+					"scale": 1.2,
 					"rotation": [
 						{
 							"x": 20
@@ -24,7 +24,7 @@
 						}
 					],
 					"translation": [
-						0.15, 0, 0
+						0, 0.5, 0
 					]
 				}
 			}
@@ -33,7 +33,7 @@
 			{
 				"model": "industrialwires:melter.obj",
 				"transform": {
-					"scale": 0.375,
+					"scale": 1.2,
 					"rotation": [
 						{
 							"x": 20
@@ -43,7 +43,7 @@
 						}
 					],
 					"translation": [
-						0.15, 0, 0
+						0, 0.5, 0
 					]
 				}
 			}
@@ -52,7 +52,7 @@
 			{
 				"model": "industrialwires:solidifier.obj",
 				"transform": {
-					"scale": 0.375,
+					"scale": 1.2,
 					"rotation": [
 						{
 							"x": 20
@@ -62,7 +62,7 @@
 						}
 					],
 					"translation": [
-						0.15, 0, 0
+						0, 0.5, 0
 					]
 				}
 			}
