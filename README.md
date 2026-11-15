@@ -12,9 +12,7 @@ THIS IS A FORK OF [INDUSTRIALWIRES FROM MALTE0811](https://github.com/malte0811/
 ## PLANS:
 
 Plans may change, this will be developed, including more features still being added; Will likely be:
-- FIX BUGS
 - Add use to varistor;
-- Explain things in IE manual;
 - A fusor that takes hydrogen, maybe used as a lamp, lore accurate;
 - Tesla tower (giant tesla coil ?);
 - Panel items:

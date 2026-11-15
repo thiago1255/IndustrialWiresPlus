@@ -87,21 +87,26 @@
 		],
 		"type": {
 			"control_transformer_rs": {
-				"model": "industrialwires:autotransformer_part_redstone.obj"
+				"model": "immersiveengineering:smartmodel/connector",
+				"custom": {"base": "industrialwires:autotransformer_part_redstone.obj", "layers": ["SOLID"]}
 			},
 			"control_transformer_normal": {
-				"model": "industrialwires:autotransformer_part_normal.obj"
+				"model": "immersiveengineering:smartmodel/connector",
+				"custom": {"base": "industrialwires:autotransformer_part_normal.obj", "layers": ["SOLID"]}
 			},
-            "varistor": {
-                "model": "industrialwires:varistor.obj"
-		    },
+			"varistor": {
+				"model": "immersiveengineering:smartmodel/connector",
+				"custom": {"base": "industrialwires:varistor.obj", "layers": ["SOLID"]}
+			},
 			"potentiometer": {
-				"model": "industrialwires:potenciometro.obj"
-		    },
-            "current_transformer": {
-                "model": "industrialwires:ct_rs.obj"
-		    },
-            "retifier_valve": {
+				"model": "immersiveengineering:smartmodel/connector",
+				"custom": {"base": "industrialwires:potenciometro.obj", "layers": ["SOLID"]}
+			},
+			"current_transformer": {
+				"model": "immersiveengineering:smartmodel/connector",
+				"custom": {"base": "industrialwires:ct_rs.obj", "layers": ["SOLID"]}
+			},
+			"retifier_valve": {
 				"model": "forge:multi-layer",
 		        "custom": {
 					"Translucent": "industrialwires:general_stuff#glass",

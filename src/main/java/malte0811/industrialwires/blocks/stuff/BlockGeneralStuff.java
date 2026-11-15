@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,12 +50,12 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 
 	public BlockGeneralStuff() {
 		super(Material.IRON, NAME);
-        setHardness(3.0F);
+		setHardness(3.0F);
 		setResistance(15.0F);
 		lightOpacity = 0;
 	}
-      	
-    @Override
+
+	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockTypes_GeneralStuff[] values = BlockTypes_GeneralStuff.values();
 		for (int i = 0; i < values.length; i++) {
@@ -177,9 +178,20 @@ public class BlockGeneralStuff extends BlockIWBase implements IMetaEnum, IPlacem
 	public IBlockState getStateFromMeta(int meta) {
 		return super.getStateFromMeta(meta).withProperty(type, BlockTypes_GeneralStuff.values()[meta]);
 	}
-	
+
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
 		return (getMetaFromState(state) != 6);
+	}
+
+	@Nonnull
+	@Override
+	protected BlockStateContainer createBlockState() {
+		BlockStateContainer base = super.createBlockState();
+		return new ExtendedBlockState(
+			this,
+			base.getProperties().toArray(new IProperty[0]),
+			new IUnlistedProperty[]{IEProperties.CONNECTIONS}
+		);
 	}
 }
