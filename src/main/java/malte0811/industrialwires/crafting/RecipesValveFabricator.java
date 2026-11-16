@@ -43,7 +43,7 @@ public class RecipesValveFabricator {
 				() -> new ItemStack(IEContent.itemMaterial, 3, 26),
 				() -> new ItemStack(IndustrialWires.craftingStuff, 1, 2),
 				() -> new ItemStack(IndustrialWires.craftingStuff, 1, 3), 
-				15000, 410, 17,
+				15000, 10*20, 17,
 				null
 			));
 			if(hasII) {
@@ -52,7 +52,7 @@ public class RecipesValveFabricator {
 					() -> new ItemStack(IEContent.itemFluorescentTube, 1, 1),
 					() -> new ItemStack(IndustrialWires.craftingStuff, 1, 2),
 					() -> new ItemStack(IndustrialWires.craftingStuff, 1, 4), 
-					10000, 390, 10, 
+					10000, 10*20, 10, 
 					() -> new FluidStack(gasHydrogen, 25)
 				));
 				//add advanced (ID 3)
@@ -60,7 +60,7 @@ public class RecipesValveFabricator {
 					() -> new ItemStack(itemMaterial, 3, 0),
 					() -> new ItemStack(IndustrialWires.craftingStuff, 2, 2),
 					() -> new ItemStack(IndustrialWires.craftingStuff, 1, 5),
-					30000, 490, 29,
+					30000, 20*20, 29,
 					null
 				));
 			}
@@ -70,7 +70,7 @@ public class RecipesValveFabricator {
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 0),
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 2),
 			() -> new ItemStack(IndustrialWires.craftingStuff, 1, 6), 
-			32000, 528, 32, 
+			32000, 30*20, 32, 
 			() -> new FluidStack(fluidMercury, 1000)
 		));
 	}

@@ -1,5 +1,12 @@
 ###Minecraft 1.12.2
 
+####Version 2.1-04
+ - Changed time of certain recipes
+ - Fixed lots of connections issues
+ - Fixed some render
+ - Fixed/changed some manual
+   - Including ptbr translations
+
 ####Version 2.1-03
  - Fixed bug with lock panel item
  - Fixed bug with connectors not working

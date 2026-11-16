@@ -3,9 +3,9 @@ THIS IS A FORK OF [INDUSTRIALWIRES FROM MALTE0811](https://github.com/malte0811/
 # About this:
 ## ALREADY ADDED:
 
-- HV control transformer (read wiki)
-- Varistor (read wiki)
-- Retifier valve (wiki soon)
+- HV control transformer
+- Varistor (need a use)
+- Retifier valve
 - 2 digits energy meter
 - Some multiblocks & recipes (see below)
 
@@ -22,10 +22,13 @@ Plans may change, this will be developed, including more features still being ad
 - Mechanical Multiblock parts:
   - IE's rotational energy;
   - Pneumaticcraft ?
+  - Fuel/Steam ?
+  - Water ?
+- Inverter (EU -> IF)
 
 ## Recipes of the fork:
 
-(the list may not be complete)
+(the list may not be complete, better check the manual or JEI for normal recipes)
 
 Mentionated mods:
 

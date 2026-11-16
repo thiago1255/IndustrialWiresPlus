@@ -72,8 +72,8 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 // VARIABLES/CONS.: --------------------------------------
 	private final double MAX_TEMP = 49152;
 	private final int MAX_ENERGY = 16384;
-    public EnumFacing facing = EnumFacing.NORTH;
-    private int dummy = 0;
+	public EnumFacing facing = EnumFacing.NORTH;
+	private int dummy = 0;
 	public double temperature = 0;
 	public float fanAngle = 0;
 	private int storedEnergy = 0;
@@ -81,6 +81,7 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	public boolean active = false;
 	public boolean ignition = false;
 	public boolean fanWorking = false;
+	private boolean ic2Registered = false;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -176,12 +177,20 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	    return cabble;
     }
 
-    @Override
-    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) { limitType = cableType; cabble = false; }
+	@Override
+	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
+		limitType = cableType;
+		cabble = false;
+		markDirty();
+	}
 
-    @Override 
-    public void removeCable(ImmersiveNetHandler.Connection connection) { limitType = null; cabble = true;}
-  
+	@Override 
+	public void removeCable(ImmersiveNetHandler.Connection connection) {
+		limitType = null;
+		cabble = true;
+		super.removeCable(connection);
+	}
+
     @Override
     public Vec3d getConnectionOffset(Connection con) {
 	    switch (facing) {
@@ -216,14 +225,14 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 	public int getSourceTier() {
 		return 4;
 	}
-	
+
 	@Override
 	@Optional.Method(modid = "ic2")
 	public double getOfferedEnergy() {
 		if(!active || ignition) {return 0;}
 		return ((storedEnergy - 3) / 4);
 	}
-	
+
 	@Override
 	@Optional.Method(modid = "ic2")
 	public void drawEnergy(double amount) { 
@@ -231,25 +240,33 @@ public class TileEntityRetifierValve extends TileEntityImmersiveConnectable impl
 		temperature += amount / 100;
 		markDirty();
 	}
-	
+
 	@Override
 	public void onLoad() {
 		super.onLoad();
-		if (!world.isRemote && IndustrialWires.hasIC2) { Compat.loadIC2Tile.accept(this); }
+		if (world.isRemote || !IndustrialWires.hasIC2 || ic2Registered) return;
+		Compat.loadIC2Tile.accept(this);
+		ic2Registered = true;
 	}
 	
 	@Override
 	public void invalidate() {
-		if (!world.isRemote && IndustrialWires.hasIC2) { Compat.unloadIC2Tile.accept(this); }
+		unregisterIC2();
 		super.invalidate();
 	}
 
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		if (!world.isRemote && IndustrialWires.hasIC2) { Compat.unloadIC2Tile.accept(this); }
+		unregisterIC2();
 	}
-    	
+
+	private void unregisterIC2() {
+		if (world.isRemote || !ic2Registered) return;
+		Compat.unloadIC2Tile.accept(this);
+		ic2Registered = false;
+	}
+
 // GENERAL PROPERTYES: --------------------------------------           	  
     AxisAlignedBB aabb = null;
     @Override

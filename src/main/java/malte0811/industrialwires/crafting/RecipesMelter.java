@@ -27,13 +27,13 @@ public class RecipesMelter {
 	public static List<RecipeData> allRecipes = new ArrayList<>();
 
 	public static void init() {
-		put(new RecipeData(200,
+		put(new RecipeData(10,
 			() -> new FluidStack(fluidMercury, 200),
 			() -> new IngredientStack[] {
 				new IngredientStack(new ItemStack(IndustrialWires.generalStuff, 1, BlockTypes_GeneralStuff.MERCURY_ORE.ordinal()))
 			}
 		)); // Mercury
-		put(new RecipeData(4000,
+		put(new RecipeData((4*20),
 			() -> new FluidStack(fluidGlassInsulator, 4000),
 			() -> new IngredientStack[] {
 				new IngredientStack(new ItemStack(Blocks.GLASS, 4)),
@@ -41,7 +41,7 @@ public class RecipesMelter {
 				new IngredientStack("dustIron")
 			}
 		)); // Glass Insulator
-		put(new RecipeData(2000,
+		put(new RecipeData((2*20),
 			() -> new FluidStack(fluidGlassValve, 2000),
 			() -> new IngredientStack[] {
 				new IngredientStack(new ItemStack(Blocks.GLASS, 2)),
@@ -49,7 +49,7 @@ public class RecipesMelter {
 			}
 		)); // Valve Glass
 		if (hasIC2) {
-			put(new RecipeData(20000,
+			put(new RecipeData((60*20),
 				() -> new FluidStack(fluidGlassFiber, 20000),
 				() -> new IngredientStack[] {
 					new IngredientStack(new ItemStack(Blocks.GLASS, 20)),

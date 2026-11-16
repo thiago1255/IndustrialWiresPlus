@@ -131,12 +131,14 @@ public class TileEntityVaristor extends TileEntityImmersiveConnectable implement
 	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
 		if(this.limitType==null) { this.limitType = cableType; }
 		wireenergy = true;
+		markDirty();
 	}
 
 	@Override 
 	public void removeCable(Connection connection) {
 		wireenergy = false;
 		limitType = null;
+		super.removeCable(connection);
 	}
 
 	@Override

@@ -90,19 +90,20 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
 	private int clock = 0;
 
 // NBT DATA: --------------------------------------
-    @Override
-    public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
-        super.readCustomNBT(nbt, descPacket);
-        facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
-        dummy = nbt.getInteger("dummys");
-    }
-       
-    @Override
-    public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
-        super.writeCustomNBT(nbt, descPacket);
-	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
-        nbt.setInteger("dummys", dummy);
-    }
+	@Override
+	public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+		super.readCustomNBT(nbt, descPacket);
+		facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
+		dummy = nbt.getInteger("dummys");
+		electricWt = limitType;
+	}
+
+	@Override
+	public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+		super.writeCustomNBT(nbt, descPacket);
+		nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
+		nbt.setInteger("dummys", dummy);
+	}
 
 // ITICKABLE: --------------------------------------
     @Override
@@ -131,18 +132,20 @@ public class TileEntityCurrentTransformer extends TileEntityImmersiveConnectable
 	return true;
     }
 
-    @Override
-    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) { 
-        electricWt = cableType;
-        limitType = cableType;
-    }
+	@Override
+	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) { 
+		electricWt = cableType;
+		limitType = cableType;
+		markDirty();
+	}
 
-    @Override 
-    public void removeCable(ImmersiveNetHandler.Connection connection) {
-        electricWt = null; 
-	    limitType = null;
-    }
-  
+	@Override 
+	public void removeCable(ImmersiveNetHandler.Connection connection) {
+		electricWt = null; 
+		limitType = null;
+		super.removeCable(connection);
+	}
+
     @Override
     public Vec3d getConnectionOffset(Connection con) {
         int xDif = (con==null||con.start==null||con.end==null)?0: (con.start.equals(Utils.toCC(this))&&con.end!=null)?con.end.getX()-getPos().getX(): (con.end.equals(Utils.toCC(this))&&con.start!=null)?con.start.getX()-getPos().getX(): 0;

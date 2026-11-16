@@ -88,21 +88,24 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
     public WireType electricWt = null;
 
 // NBT DATA: --------------------------------------
-    @Override
-    public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
-        super.readCustomNBT(nbt, descPacket);
-        facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
-        wireenergy = nbt.getBoolean("wireenergy");;
-        energyStorage.readFromNBT(nbt);
-    }
-       
-    @Override
-    public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
-        super.writeCustomNBT(nbt, descPacket);
-	    nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
-        nbt.setBoolean("wireenergy", wireenergy);
-	    energyStorage.writeToNBT(nbt);
-    }
+	@Override
+	public void readCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+		super.readCustomNBT(nbt, descPacket);
+		facing = EnumFacing.byHorizontalIndex(nbt.getByte("facing"));
+		wireenergy = nbt.getBoolean("wireenergy");;
+		energyStorage.readFromNBT(nbt);
+		electricWt = nbt.hasKey("electricWt") ? ApiUtils.getWireTypeFromNBT(nbt, "electricWt") : null;
+	}
+
+	@Override
+	public void writeCustomNBT(@Nonnull NBTTagCompound nbt, boolean descPacket) {
+		super.writeCustomNBT(nbt, descPacket);
+		nbt.setByte("facing",  (byte) facing.getHorizontalIndex());
+		nbt.setBoolean("wireenergy", wireenergy);
+		energyStorage.writeToNBT(nbt);
+		if (electricWt != null)
+			nbt.setString("electricWt", electricWt.getUniqueName());
+	}
 
 // ITICKABLE: --------------------------------------
     @Override
@@ -155,19 +158,21 @@ public class TileEntityControlTransformerRs extends TileEntityImmersiveConnectab
 	    return true;
     }
 
-    @Override
-    public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
-	    wireenergy = true; 
-        electricWt = cableType;
-    }
+	@Override
+	public void connectCable(WireType cableType, TargetingInfo target, IImmersiveConnectable other) {
+		wireenergy = true; 
+		electricWt = cableType;
+		markDirty();
+	}
 
-    @Override 
-    public void removeCable(ImmersiveNetHandler.Connection connection) {  
-        electricWt = null;
-	    wireenergy = false; 
-	    limitType = null;
-    }
-  
+	@Override 
+	public void removeCable(ImmersiveNetHandler.Connection connection) {  
+		electricWt = null;
+		wireenergy = false; 
+		limitType = null;
+		super.removeCable(connection);
+	}
+
     @Override
     public Vec3d getConnectionOffset(Connection con) {
         boolean isRs = (con.cableType == WireType.REDSTONE);

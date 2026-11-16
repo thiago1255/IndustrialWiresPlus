@@ -62,11 +62,12 @@ import static blusunrize.immersiveengineering.api.energy.wires.WireType.REDSTONE
 public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable implements ITickable, IBlockBoundsDirectional, IDirectionalTile, IRedstoneConnector, IPlayerInteraction  
 {
 // VARIABLES/CONS.: --------------------------------------
-    EnumFacing facing = EnumFacing.NORTH;
-    protected int redstoneChannel = 0;
-    protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
-    boolean firstTick = true;
-    private TileEntity te = null;
+	EnumFacing facing = EnumFacing.NORTH;
+	protected int redstoneChannel = 0;
+	protected RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
+	boolean firstTick = true;
+	private TileEntity te = null;
+	private boolean refreshWireNetwork = false;
 
 // NBT DATA: --------------------------------------
     @Override
@@ -87,6 +88,10 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
     @Override
     public void update() {
         if (!world.isRemote) {
+				if(!refreshWireNetwork) {
+					refreshWireNetwork = true;
+					wireNetwork.removeFromNetwork(null);
+				}
                 if((world.getTotalWorldTime()&31)==(pos.toLong()&31)) { return; }
                 BlockPos sideBlock = pos.offset(this.facing, 1);
                 te = world.getTileEntity(sideBlock);
@@ -122,9 +127,14 @@ public class TileEntityRedstoneControler extends TileEntityImmersiveConnectable 
   
     @Override
     public Vec3d getConnectionOffset(Connection con) { return new Vec3d(0.5, 0.5, 0.5); }
-    
+
 	@Override
 	public boolean moveConnectionTo(Connection c, BlockPos newEnd) { return true; }
+
+	@Override
+	public void onConnectivityUpdate(BlockPos pos, int dimension) {
+		refreshWireNetwork = false;
+	}
 // REDSTONE WIRE: -------------------------------------------
     @Override
     public void setNetwork(RedstoneWireNetwork net) { wireNetwork = net; }

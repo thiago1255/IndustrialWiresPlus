@@ -87,6 +87,7 @@ public class TileEntityJacobsLadder extends TileEntityIEBase implements ITickabl
 	private int soundPhase;
 	private Vec3d soundPos;
 	public double salt;
+	private boolean ic2Registered = false;
 
 	TileEntityJacobsLadder(LadderSize s) {
 		size = s;
@@ -111,7 +112,9 @@ public class TileEntityJacobsLadder extends TileEntityIEBase implements ITickabl
 	@Override
 	public void onLoad() {
 		super.onLoad();
+		if (!hasIC2 || ic2Registered) return;
 		Compat.loadIC2Tile.accept(this);
+		ic2Registered = true;
 	}
 
 	@Override
@@ -454,18 +457,21 @@ public class TileEntityJacobsLadder extends TileEntityIEBase implements ITickabl
 		return null;
 	}
 
+	private void unregisterIC2() {
+		if (!ic2Registered) return;
+		Compat.unloadIC2Tile.accept(this);
+		ic2Registered = false;
+	}
+
 	@Override
 	public void onChunkUnload() {
-		if (hasIC2) {
-			Compat.unloadIC2Tile.accept(this);
-		}
+		unregisterIC2();
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-		if (hasIC2)
-			Compat.unloadIC2Tile.accept(this);
+		unregisterIC2();
 		if (world.isRemote) {
 			//stop sound
 			IndustrialWires.proxy.playJacobsLadderSound(this, -1, soundPos);

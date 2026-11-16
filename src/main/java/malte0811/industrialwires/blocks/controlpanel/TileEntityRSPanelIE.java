@@ -16,6 +16,7 @@
 package malte0811.industrialwires.blocks.controlpanel;
 
 import blusunrize.immersiveengineering.api.TargetingInfo;
+import blusunrize.immersiveengineering.api.energy.wires.IICProxy;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
@@ -50,6 +51,7 @@ public class TileEntityRSPanelIE extends TileEntityRSPanel
 	@Nonnull
 	private RedstoneWireNetwork wireNetwork = new RedstoneWireNetwork().add(this);
 	private boolean hasConn = false;
+	private boolean refreshWireNetwork = false;
 
 	@Override
 	public void writeNBT(NBTTagCompound nbt, boolean updatePacket) {
@@ -260,8 +262,39 @@ public class TileEntityRSPanelIE extends TileEntityRSPanel
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		if (world.isRemote && !Minecraft.getMinecraft().isSingleplayer()) {
+		if (world.isRemote && !IndustrialWires.proxy.isSingleplayer()) {
 			ImmersiveNetHandler.INSTANCE.clearAllConnectionsFor(pos, world, this, false);
 		}
+	}
+
+	@Override
+	public void update() {
+		if(!world.isRemote && !refreshWireNetwork) {
+			refreshWireNetwork = true;
+			wireNetwork.removeFromNetwork(null);
+		}
+		super.update()
+	}
+
+	@Override
+	public void onConnectivityUpdate(BlockPos pos, int dimension) {
+		refreshWireNetwork = false;
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if (!world.isRemote)
+			ImmersiveNetHandler.INSTANCE.addProxy(new IICProxy(this));
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		if (!world.isRemote)
+			ApiUtils.addFutureServerTask(
+				world,
+				() -> ImmersiveNetHandler.INSTANCE.onTEValidated(this)
+			);
 	}
 }

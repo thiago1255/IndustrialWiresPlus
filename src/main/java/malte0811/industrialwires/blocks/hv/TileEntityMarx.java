@@ -18,6 +18,7 @@ package malte0811.industrialwires.blocks.hv;
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.IEProperties;
 import blusunrize.immersiveengineering.api.TargetingInfo;
+import blusunrize.immersiveengineering.api.energy.wires.IICProxy;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.wires.WireType;
@@ -820,5 +821,12 @@ public class TileEntityMarx extends TileEntityIWMultiblock implements ITickable,
 				genMarxPoint(toGenerate, max, rand);
 			}
 		}
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if (!world.isRemote)
+			ImmersiveNetHandler.INSTANCE.addProxy(new IICProxy(this));
 	}
 }
