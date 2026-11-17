@@ -16,6 +16,7 @@
 package malte0811.industrialwires.blocks.controlpanel;
 
 import blusunrize.immersiveengineering.api.TargetingInfo;
+import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.energy.wires.IICProxy;
 import blusunrize.immersiveengineering.api.energy.wires.IImmersiveConnectable;
 import blusunrize.immersiveengineering.api.energy.wires.ImmersiveNetHandler;
@@ -273,7 +274,7 @@ public class TileEntityRSPanelIE extends TileEntityRSPanel
 			refreshWireNetwork = true;
 			wireNetwork.removeFromNetwork(null);
 		}
-		super.update()
+		super.update();
 	}
 
 	@Override

@@ -15,7 +15,7 @@ tile.industrialwires.general_stuff.control_transformer_normal.name=Control trans
 tile.industrialwires.general_stuff.control_transformer_rs.name=Control transformer
 tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'meter
-tile.industrialwires.general_stuff.current_transformer.name=Current transformer
+tile.industrialwires.general_stuff.current_transformer.name=Enhaced current transformer
 tile.industrialwires.general_stuff.retifier_valve.name=Retifier valve
 tile.industrialwires.general_stuff.mercury_ore.name=Mercury Ore
 
@@ -162,6 +162,10 @@ death.attack.industrialwires.jacobs_ladder=%1$s was electrocuted by a Jacob's La
 death.attack.industrialwires.marx=%1$s was struck by lightning produced by a Marx generator
 
 desc.immersiveengineering.info.multiblock.iw:marx_generator=Marx Generator
+desc.immersiveengineering.info.multiblock.iw:valve_fabricator=Valve Fabricator
+desc.immersiveengineering.info.multiblock.iw:melter=Melter
+desc.immersiveengineering.info.multiblock.iw:solidifier=Solidifier
+
 desc.immersiveengineering.info.multiblock.industrialwires:mech_mb=Mechanical Multiblock
 desc.immersiveengineering.info.multiblock.industrialwires:example_mech_mb=Example Mechanical Multiblock
 desc.immersiveengineering.info.multiblock.industrialwires:flywheel=Mechanical Multiblock part: Flywheel
@@ -247,7 +251,7 @@ ie.manual.entry.industrialwires.redstonecr=Some machines - <link;industrialwires
 
 ie.manual.entry.industrialwires.controltransformer.name=Control transformer
 ie.manual.entry.industrialwires.controltransformer.subtext=Limits to the power
-ie.manual.entry.industrialwires.controltransformer=Uses a <link;industrialwires.redstonecr;§oRedstone Controller§r;0> in order to limit how much IF/tick passes by, based on cabble maximum capacity.<br>The Coarse and Fine signals work in the way of <link;industrialwires.components;§othe Variac§r;7>.<br>Currently only the 3 electrical wires of IE works here.
+ie.manual.entry.industrialwires.controltransformer=Uses a <link;industrialwires.redstonecr;§oRedstone Controller§r;0> in order to limit how much IF/tick passes by, based on cabble maximum capacity.<br>The Coarse and Fine signals work in the way of <link;industrialwires.components;§othe Variac§r;7>.<br>Currently only the 3 electrical wires of IE works here.<br>The input is from the left side.
 
 ie.manual.entry.industrialwires.varistor.name=Varistor
 ie.manual.entry.industrialwires.varistor.subtext=A resistor
@@ -263,7 +267,7 @@ ie.manual.entry.industrialwires.ct=Works exactly like the current transformer bu
 
 ie.manual.entry.industrialwires.retifier.name=Retifier valve
 ie.manual.entry.industrialwires.retifier.subtext=Nice blue glow
-ie.manual.entry.industrialwires.retifier=Converts AC (IF) to DC (EU) using §o"magic"§r.<br>Medium Voltage IF goes conected directly as wire, the EU output is connected at front (tier 4), and the <link;industrialwires.redstonecr;§oRedstone Controller§r;0> at top.<br>The valve need to have a minimun heat in order to convert energy (the mercury will turn in gas and become blue), ignition can heat at begin, energy converted generate heat proportionally, if heat goes to limit it will §lexplode§r.<np>The conversion is 100%% efficient, however 2 IF/t is spent on fan.<br>Cut the power makes the fan stop, and temperature decrease slower.<br>Ignition spends 192 IF/t and stops conversion.<np>The hardcoded redstone channels are:<br> White: to enable ignition;<br> Orange: Coarse temperature read;<br> Magenta: fine temperature read.
+ie.manual.entry.industrialwires.retifier=Converts AC (IF) to DC (EU) using §o"magic"§r.<br>Medium Voltage IF goes conected directly as wire, the EU output is connected at front (tier 4), and the <link;industrialwires.redstonecr;§oRedstone Controller§r;0> at top.<br>The valve need to have a minimun heat in order to convert energy (the mercury will turn in gas and become blue), ignition can heat at begin, energy converted generate heat proportionally, if heat goes to limit it will §lexplode§r.<np>The conversion is 100%% efficient, however 2 IF/t is spent on fan and system.<br>Cut the power makes the fan stop, and temperature decrease slower.<br>Ignition spends 192 IF/t and stops conversion.<np>The hardcoded redstone channels are:<br>- White: to enable ignition;<br>- Orange: Coarse temperature read;<br>- Magenta: fine temperature read.
 
 ie.manual.entry.industrialwires.mercury.name=Mercury Ore
 ie.manual.entry.industrialwires.mercury.subtext=Not the planet !
@@ -275,8 +279,8 @@ ie.manual.entry.industrialwires.melter=<&0>Used to melt some materials into flui
 
 ie.manual.entry.industrialwires.solidifier.name=Solidifier
 ie.manual.entry.industrialwires.solidifier.subtext=A fridge ?
-ie.manual.entry.industrialwires.solidifier=<&0>Used to convert some fluids into blocks/items.<br>Formed by hammering the radiator block.<br>Does not require energy or anything.<np>§lRecipes:§r<br>
+ie.manual.entry.industrialwires.solidifier=<&0>Used to convert some fluids into blocks/items.<br>Formed by hammering the radiator block.<br>Does not require energy or anything to work.<np>§lRecipes:§r<br>
 
 ie.manual.entry.industrialwires.fabricator.name=Valve fabricator
 ie.manual.entry.industrialwires.fabricator.subtext=Fine machinery
-ie.manual.entry.industrialwires.fabricator=<&0>Used to fabricate some tubes.<br>Formed by hammering the heavy engineering block from the pipe side.<br>Requires energy and liquid fuel (same accepted on drill).<np>Requires setting the desired recipe with hammer on redstone port.<br>CLick will cycle by recipes ID, sneak and click will confirm the ID.<br>Once set the recipe ID cannot change.<np>§lRecipes:§r<br>
+ie.manual.entry.industrialwires.fabricator=<&0>Used to fabricate some tubes.<br>Formed by hammering the heavy engineering block from the pipe side.<br>Requires energy and liquid fuel (same accepted on drill).<np>Requires setting the desired recipe with hammer on redstone port.<br>Click will cycle by recipes ID, sneak and click will confirm the ID.<br>Once set the recipe ID cannot change.<np>§lRecipes:§r<br>

@@ -15,17 +15,17 @@ tile.industrialwires.general_stuff.control_transformer_rs.name=Transformador de 
 tile.industrialwires.general_stuff.control_transformer_normal.name=Transformador de controle
 tile.industrialwires.general_stuff.varistor.name=Varistor
 tile.industrialwires.general_stuff.potentiometer.name=Potenci'o'metro
-tile.industrialwires.general_stuff.current_transformer.name=Transformador de corrente
+tile.industrialwires.general_stuff.current_transformer.name=Transformador de corrente melhorado
 tile.industrialwires.general_stuff.retifier_valve.name=Válvula retifícadora
 tile.industrialwires.general_stuff.mercury_ore.name=Minério de Mercúrio
 
 tile.industrialwires.mechanical_converter.ie_motor.name=Motor rotacional
-tile.industrialwires.mechanical_converter.ie_to_ic2.name=Converter: Rotacional para cinético
-tile.industrialwires.mechanical_converter.ic2_to_ie.name=Converter: Cinético para rotacional
+tile.industrialwires.mechanical_converter.ie_to_ic2.name=Conversor: Rotacional para cinético
+tile.industrialwires.mechanical_converter.ic2_to_ie.name=Conversor: Cinético para rotacional
 
-tile.industrialwires.jacobs_ladder.small.name=Jacob's ladder pequena
-tile.industrialwires.jacobs_ladder.normal.name=Jacob's ladder média
-tile.industrialwires.jacobs_ladder.huge.name=Jacob's ladder grande
+tile.industrialwires.jacobs_ladder.small.name=Escada de Jacob pequena
+tile.industrialwires.jacobs_ladder.normal.name=Escada de Jacob média
+tile.industrialwires.jacobs_ladder.huge.name=Escada de Jacob grande
 
 tile.industrialwires.control_panel.top.name=Painél de controle
 tile.industrialwires.control_panel.rs_wire.name=E/S de redstone para "fio"
@@ -33,7 +33,7 @@ tile.industrialwires.control_panel.dummy.name=Base do painel
 tile.industrialwires.control_panel.creator.name=Montador de paíneis de controle
 tile.industrialwires.control_panel.unfinished.name=Painél de controle inacabado
 tile.industrialwires.control_panel.other_rs_wires.name=E/S de redstone para "outros"
-tile.industrialwires.control_panel.rs_controler.name=Controlador a redstone / repetidor
+tile.industrialwires.control_panel.rs_controler.name=Controlador/repetidor de redstone
 
 tile.industrialwires.fluidMercury.name=Mercúrio Liquido
 tile.industrialwires.fluidGlassInsulator.name=Vidro Isolador Derretido
@@ -81,7 +81,7 @@ item.industrialwires.key.key_ring.name=Chaveiro
 potion.industrialwires.tinnitus=Tinido
 
 industrialwires.subtitle.tinnitus=Tu estás com tinido
-industrialwires.subtitle.jacobs_ladder=HUMMM da jacob's ladder      
+industrialwires.subtitle.jacobs_ladder=HUMMM da Escada de Jacob
 industrialwires.subtitle.marx_bang=Descarga do gerador marx
 industrialwires.subtitle.marx_pop=Falha na descarga
 
@@ -158,6 +158,10 @@ death.attack.industrialwires.jacobs_ladder=%1$s foi eletrecutado por uma 'Jacob'
 death.attack.industrialwires.marx=%1$s foi atingido por um raio de Gerador Marx
 
 desc.immersiveengineering.info.multiblock.iw:marx_generator=Gerador Marx
+desc.immersiveengineering.info.multiblock.iw:valve_fabricator=Fabricador de Válvulas
+desc.immersiveengineering.info.multiblock.iw:melter=Derretetor
+desc.immersiveengineering.info.multiblock.iw:solidifier=Solidificador
+
 desc.immersiveengineering.info.multiblock.industrialwires:mech_mb=Multi-bloco Mecânico
 desc.immersiveengineering.info.multiblock.industrialwires:example_mech_mb=Exemplo de Multi-bloco Mecânico
 desc.immersiveengineering.info.multiblock.industrialwires:flywheel=Multi-bloco Mecânico (Volante)
@@ -175,25 +179,24 @@ itemGroup.industrialwires=Fios Industriais
 ie.manual.category.industrialwires.name=Fios Industriais
 ie.manual.category.control_panels.name=Paineís de Controle
 
-ie.manual.entry.industrialwires.wires.name=Industrial Wires
-ie.manual.entry.industrialwires.wires.subtext=No complex impedance!
-ie.manual.entry.industrialwires.wires=Wires from the IndustrialWires company behave nearly like wires provided by Immersive Engineering with two important differences:<br>1. They can transfer both DC (EU) and AC (IF). However they can not transfer both at the same time, sources of DC and sources of AC should never be connected to one another.<br>2. The amount of wire consumed for a connection depends on the length of the connection. The maximum stack size for the wire coils is 1, however this single coil can contain up to 1024 or 2048 meters/blocks of wire.<br><&0>The wire coils can be created by placing any combination of existing wire coils of this type, wire coils from Immersive Engineering of the corresponding type and IndustrialCraft cables of the corresponding type. Wire coils will combine automatically when picked up.
+ie.manual.entry.industrialwires.wires.name=Fios Insdustriais
+ie.manual.entry.industrialwires.wires.subtext=Sem impedancia complexa!
+ie.manual.entry.industrialwires.wires=Fios da Companhia Fios Industriais funcionam de modo similar aos providos pela IE, com duas diferenças:<br>1. Eles podem transferir ambos CC (EU) ou CA (IF), nunca podendo se misturar.<br>2. A quantidade consumida de fio depende do tamanho conexão. As bobinas devem ter pelo menos 1 fio, podendo ter no maximo 1024 ou 2048.<br><&0>As bobinas podem ser criadas combinando fios existentes do IE ou IC2. As bobinas se combinam automaticamente ao serem coletadas.
 
-ie.manual.entry.industrialwires.mechConv.name=Mechanical Converters
-ie.manual.entry.industrialwires.mechConv.subtext=I made rotational energy for this!
-ie.manual.entry.industrialwires.mechConv0=Both the IC2 and IE company produce products that run on kinetic energy of some sort. The new converters from IndustrialWires allow you to convert between these two forms of energy!<br>To use the "Converter: Rotational To Kinetic" attach a source of IE rotational energy
-ie.manual.entry.industrialwires.mechConv1=like a waterwheel or a motor (see page 3) to the side marked with a gear and a consumer of IC2 kinetic energy to the opposite side. The "Converter: Kinetic To Rotational" is used in a similar way (Rotational and kinetic energy have to be swapped).<br>Unfortunately some energy is
-ie.manual.entry.industrialwires.mechConv2=lost with each conversion.<br>As a little extra the "Mechanical converter" product series also contains a Rotational Motor: It consumes IF to produce IE rotational energy. As with the converters this is not a lossless process.
+ie.manual.entry.industrialwires.mechConv.name=Conversores Mecanicos
+ie.manual.entry.industrialwires.mechConv.subtext=Fiz energia rotacional para isso!
+ie.manual.entry.industrialwires.mechConv0=Ambas as companhias IC2 e IE têm maquinas que rodam em alguma energia cinética. Os conversores de Fios Industriais permitem converter entre esses tipos de energia !<br>Para usar o "Conversor: Rotacional para cinético", liga-se uma fonte de energia rotacional do IE
+ie.manual.entry.industrialwires.mechConv1=como uma roda de agua ou um motor (pag. 3) pelo lado marcado com uma engrenagem, e um consumidor de energia IC2 do lado oposto. O "Conversor: Cinético para rotacional" é usado de forma similar, trocando os lados.<br>Infelizmente parte da energia é perdida com cada conversão.
+ie.manual.entry.industrialwires.mechConv2=Como um extra para a série dos 'Conversores Mecanicos', há também o "Motor rotacional", consome IF para gerar energia rotacional (IE). Também não é 100%% eficiente.
 
-ie.manual.entry.industrialwires.jacobs.name=Jacob's Ladders
+ie.manual.entry.industrialwires.jacobs.name=Escadas de Jacob
 # Note for potential translators: This refers to Polychlorinated biphenyls (a poisonous ingredient in old insulation oils) rather than printed circuit boards
-ie.manual.entry.industrialwires.jacobs.subtext=Probably contain PCB's!
-ie.manual.entry.industrialwires.jacobs0=By applying a high voltage between 2 electrodes forming a "V" one can create an arc travelling upwards. They don't serve a particular purpose apart from being a nice-looking waste of power. Power can be supplied using either Flux or EU. The energy usage varies with the size of the ladder.
-ie.manual.entry.industrialwires.jacobs1=These are the required power values in EU: <config;dA;iwJacobsUsage>. Due to the voltages involved touching the ladder while active is not a good idea. Applying salt to the electrodes will cause the arc to be colored orange for a short time due to the sodium contained in the salt.
+ie.manual.entry.industrialwires.jacobs.subtext=Provavelmente contém PCB!
+ie.manual.entry.industrialwires.jacobs0=Ao colocar alta voltagem entre dois eletrodos em forma de "V" é possível criar um arco que vai para cima. Não tem utilidade a não ser gasta energia de maneira que parece legal. A energia fornecida pode ser CC ou CA. O uso varia conforme o tamanho da escada.
+ie.manual.entry.industrialwires.jacobs1=Esses são os valores de energia necessários em EU: <config;dA;iwJacobsUsage>. Devido a quantidade de volts, não recomenda-se encostar nas escadas. Colocar sal nos eletrodos os deixará temporariamente o arco alaranjado devido ao Sódio do sal.
 
-
-ie.manual.entry.industrialwires.marx.name=Marx Generator
-ie.manual.entry.industrialwires.marx.subtext=I'm Erwin-Otto, not Karl!
+ie.manual.entry.industrialwires.marx.name=Gerador Marx
+ie.manual.entry.industrialwires.marx.subtext=Sou Erwin-Otto, não Karl!
 ie.manual.entry.industrialwires.marx=A Marx Generator is a device use to produce high-voltage high-energy pulses. These pulses are visible as lightning between the output terminals and can be used to process ores. Each type of ore has an ideal amount of processing energy (see <link;industrialwires.marx;§oAppendix B§r;7>). The precise values are unknown, estimate values with 10%% accuracy can be found at the end of this entry. The factor between the actual value and the estimate is the same for all types of ore.<br>§lConstruction§r<&0><br>The above plan shows a 5-stage generator capable of producing 3 block lightning. It is formed by hitting the side of the bottom left capacitor (The same side that the redstone connector is on) with an Engineer's hammer. An arbitrary amount of stages can be added by increasing the number of "middle" layers. Power (either IF or EU) is connected to the HV connector, the redstone wire for the control signals is connected to the redstone connector<br>§lEnergy§r<br>Each stage of the Marx generator consists of a 1.6μF capacitor that is charged to up to 250kV (see <link;industrialwires.marx;§oAppendix A§r;6>). When the generator is fully charged the voltage of each capacitor is roughly equal to the charging voltage. The total energy is the sum of the energy stored in the individual capacitors and is split equally between the ores to be processed.<br>§lControl signals§r<br>Voltages are represented by 2 signals: The first signal is simply proportional to the voltage to represent. The second signal is proportional to the voltage in the "gap" between 2 values of the first signal, thus allowing more precise control/measurements. Panel components capable of interacting with analog signals usually support this dual-channel setup. The charging voltage is controlled by the white and yellow signals. The voltages of the top and bottom capacitor are output to the magenta and pink resp. the orange and lime signals. The light blue signal is a firing control. If it is high the generator will attempt to fire. If the voltage of the bottom capacitor is lower than 125 kV or the total voltage is lower than 30%% of the maximum output voltage the generator will misfire, discharging the capacitors without actually producing lightning.<br>§lSafety§r<br>Due to the high voltages and energies involved in firing a Marx generator a safe distance should be maintained to avoid injury or death. Even outside of this area hearing protection (As provided by Immersive Engineering) is obligatory. Formulas to calculate the safe distances can be found in <link;industrialwires.marx;§oAppendix A§r;6>.<np>§lAppendix A: Formulas§r<br>Energy stored in a capacitor:<br>E=0.5*C*U^2<br>E: Energy, C: Capacitance, U: Voltage<br><br>Voltage from redstone signals:<br>U=250/255*(16*a+b)<br>U: Voltage (kV), a: First signal, b: Second signal<br><br>Safe distance (Physical damage):<br>r=sqrt(e/50,000)<br>r: Safe distance, e: Energy stored<br><br>Safe distance (Ear damage):<br>r=sqrt(e)/50<br>r: Safe distance, e: Energy stored<np>§lAppendix B: Ore Energy Values§r<br>
 
 ie.manual.entry.industrialwires.mech_mb.name=Mechanical Multiblocks
@@ -237,42 +240,42 @@ ie.manual.entry.industrialwires.rgb_led=RGB Indicators consist of 3 indicator li
 
 # MANUAL FOR STUFF ADDED ON THIS FORK -----------------------------------------------------------------------------------------------------
 
-ie.manual.entry.industrialwires.redstonecr.name=Redstone Controller/Relay
-ie.manual.entry.industrialwires.redstonecr.subtext=Dual Channel
-ie.manual.entry.industrialwires.redstonecr=Some machines - <link;industrialwires.controltransformer;§oControl transformer§r;0>, <link;industrialwires.potentiometer;§oPotenti'o'meter§r;0>, <link;industrialwires.ct;§oEnhaced Current Transformer§r;0> and <link;industrialwires.retifier;§oRetifier valve§r;0> - require this especial connector in order to connect with redstone network.<br>By clicking with hammer you can set the Coarse and Fine channels of the connection, except for Retifier Valve which uses a hardcoded way to do signals.
+ie.manual.entry.industrialwires.redstonecr.name=Controlador/repetidor de redstone
+ie.manual.entry.industrialwires.redstonecr.subtext=Duas vias
+ie.manual.entry.industrialwires.redstonecr=Algumas máquinas - <link;industrialwires.controltransformer;§oTransformador de controle§r;0>, <link;industrialwires.potentiometer;§oPotenci'o'metro§r;0>, <link;industrialwires.ct;§oTransformador de corrente melhorado§r;0> e a <link;industrialwires.retifier;§oVálvula Retificadora§r;0> - precisam desse conector especial para ligar-se a rede de redstone.<br>Ao clicar com um martelo pode-se configurar os canais Grosso e Fino da coneção, exceto pela Válvula Retificadora que usa canais fixos.
 
-ie.manual.entry.industrialwires.controltransformer.name=Control transformer
-ie.manual.entry.industrialwires.controltransformer.subtext=Limits to the power
-ie.manual.entry.industrialwires.controltransformer=Uses a <link;industrialwires.redstonecr;§oRedstone Controller§r;0> in order to limit how much IF/tick passes by, based on cabble maximum capacity.<br>The Coarse and Fine signals work in the way of <link;industrialwires.components;§othe Variac§r;7>.<br>Currently only the 3 electrical wires of IE works here.
+ie.manual.entry.industrialwires.controltransformer.name=Transformador de controle
+ie.manual.entry.industrialwires.controltransformer.subtext=Limites ao poder
+ie.manual.entry.industrialwires.controltransformer=Usa um <link;industrialwires.redstonecr;§oControlador de redstone§r;0> para limitar quanto IF/tick passa, baseado na capacidade máxima do cabo.<br>Os sinais grosso e fino funcionam igual <link;industrialwires.components;§oo Variac§r;7>.<br>Atualmente apenas os 3 fios do IE funcionam aqui.
 
 ie.manual.entry.industrialwires.varistor.name=Varistor
-ie.manual.entry.industrialwires.varistor.subtext=A resistor
+ie.manual.entry.industrialwires.varistor.subtext=Um resistor
 ie.manual.entry.industrialwires.varistor=WIP
 
-ie.manual.entry.industrialwires.potentiometer.name=Potenti'o'meter
-ie.manual.entry.industrialwires.potentiometer.subtext=Not a potentiometer !
-ie.manual.entry.industrialwires.potentiometer=A roof mounted meter for EU energy, uses a <link;industrialwires.redstonecr;§oRedstone Controller§r;0> in order to show the values Coarse and Fine, which can eazily be viewed using a <link;industrialwires.components;§oPanel Meter§r;10>.
+ie.manual.entry.industrialwires.potentiometer.name=Potenci'o'metro
+ie.manual.entry.industrialwires.potentiometer.subtext=Não é um potenciometro!
+ie.manual.entry.industrialwires.potentiometer=Um medidor de energia EU montável no teto, usa-se um <link;industrialwires.redstonecr;§oControlador de redstone§r;0> para mostrar as leituras grossa e fina, que podem ser vizualizadas facilmente com um <link;industrialwires.components;§oMedidor de Painel§r;10>.
 
-ie.manual.entry.industrialwires.ct.name=Enhaced current transformer
-ie.manual.entry.industrialwires.ct.subtext=Same but different
-ie.manual.entry.industrialwires.ct=Works exactly like the current transformer but allows to use a <link;industrialwires.redstonecr;§oRedstone Controller§r;0> in order to show the values Coarse and Fine, which can eazily be viewed using a <link;industrialwires.components;§oPanel Meter§r;10>.
+ie.manual.entry.industrialwires.ct.name=Transformador de corrente melhorado
+ie.manual.entry.industrialwires.ct.subtext=Mesma coisa, mas diferente
+ie.manual.entry.industrialwires.ct=Funciona como um transformador de corrente normal, mas permite usar um <link;industrialwires.redstonecr;§oControlador de redstone§r;0> para mostrar as leituras grossa e fina, que podem ser vizualizadas facilmente com um <link;industrialwires.components;§oMedidor de Painel§r;10>.
 
-ie.manual.entry.industrialwires.retifier.name=Retifier valve
-ie.manual.entry.industrialwires.retifier.subtext=Nice blue glow
-ie.manual.entry.industrialwires.retifier=Converts AC (IF) to DC (EU) using §o"magic"§r.<br>Medium Voltage IF goes conected directly as wire, the EU output is connected at front (tier 4), and the <link;industrialwires.redstonecr;§oRedstone Controller§r;0> at top.<br>The valve need to have a minimun heat in order to convert energy (the mercury will turn in gas and become blue), ignition can heat at begin, energy converted generate heat proportionally, if heat goes to limit it will §lexplode§r.<np>The conversion is 100%% efficient, however 2 IF/t is spent on fan.<br>Cut the power makes the fan stop, and temperature decrease slower.<br>Ignition spends 192 IF/t and stops conversion.<np>The hardcoded redstone channels are:<br> White: to enable ignition;<br> Orange: Coarse temperature read;<br> Magenta: fine temperature read.
+ie.manual.entry.industrialwires.retifier.name=Válvula Retificadora
+ie.manual.entry.industrialwires.retifier.subtext=Brilho azul legal
+ie.manual.entry.industrialwires.retifier=Converte CA (IF) em CC (EU) usando §o"magica"§r.<br>Média voltagem (IF) é conectada direto como fio. A saída de EU é na frente (nível 4). E o <link;industrialwires.redstonecr;§oControlador de redstone§r;0> em cima.<br>A válvula precisa de um calor mínimo para converter a energia (o mercúrio se tornará em gas e ficará azul), a ignição pode ser usada para esquentar no começo, energia convertida gera calor proporcionalmente, se o calor chegar ao limite §lexplodirá§r.<np>A conversão é 100%% eficiente, porém gasta-se 2 IF/t com o ventilador e o sistema.<br>Cortar a energia faz o ventilador parar, e a temperatura se perder mais lentamente.<br>A ignição usa 192 IF/t e para a conversão.<np>Os canais de redstone fixos são:<br>- Branco: para ligar a ignição;<br>- Laranja: leitura grossa da temperatura;<br>- Magenta: leitura fina da temperatura.
 
-ie.manual.entry.industrialwires.mercury.name=Mercury Ore
-ie.manual.entry.industrialwires.mercury.subtext=Not the planet !
-ie.manual.entry.industrialwires.mercury=Found on nether at Y 8~37, can be <link;industrialwires.melter;§omelted§r;0> into liquid mercury.<br>Liquid mercury gives wither effect on entities, and it's main use is to make mercury retifier valve.
+ie.manual.entry.industrialwires.mercury.name=Minério de Mercúrio
+ie.manual.entry.industrialwires.mercury.subtext=Não o planeta!
+ie.manual.entry.industrialwires.mercury=Encontrado no nether entre Y 8~37, pode ser <link;industrialwires.melter;§oderretido§r;0> em mercúrio líquido.<br>Mercúrio líquido dá efeito de podridão em entidades, o seu principal uso é para fabricar a vávula retificadora a mercurio.
 
-ie.manual.entry.industrialwires.melter.name=Melter
-ie.manual.entry.industrialwires.melter.subtext=A stove ?
-ie.manual.entry.industrialwires.melter=<&0>Used to melt some materials into fluids.<br>Formed by hammering the pipe block.<br>Will always consume solid fuel.<np>§lRecipes:§r<br>
+ie.manual.entry.industrialwires.melter.name=Derretedor
+ie.manual.entry.industrialwires.melter.subtext=Um fogão ?
+ie.manual.entry.industrialwires.melter=<&0>Usado para derreter alguns materiais em líquidos.<br>Forma-se com o martelo no bloco do cano.<br>Vai consumir combustível solido sem parar.<np>§lRecipes:§r<br>
 
-ie.manual.entry.industrialwires.solidifier.name=Solidifier
-ie.manual.entry.industrialwires.solidifier.subtext=A fridge ?
-ie.manual.entry.industrialwires.solidifier=<&0>Used to convert some fluids into blocks/items.<br>Formed by hammering the radiator block.<br>Does not require energy or anything.<np>§lRecipes:§r<br>
+ie.manual.entry.industrialwires.solidifier.name=Solidificador
+ie.manual.entry.industrialwires.solidifier.subtext=Uma geladeira ?
+ie.manual.entry.industrialwires.solidifier=<&0>Usado para converter certos flúidos em blocos/items.<br>Forma-se com o martelo no bloco do radiador.<br>Não precisa de energia ou coisa alguma.<np>§lRecipes:§r<br>
 
-ie.manual.entry.industrialwires.fabricator.name=Valve fabricator
-ie.manual.entry.industrialwires.fabricator.subtext=Fine machinery
-ie.manual.entry.industrialwires.fabricator=<&0>Used to fabricate some tubes.<br>Formed by hammering the heavy engineering block from the pipe side.<br>Requires energy and liquid fuel (same accepted on drill).<np>Requires setting the desired recipe with hammer on redstone port.<br>CLick will cycle by recipes ID, sneak and click will confirm the ID.<br>Once set the recipe ID cannot change.<np>§lRecipes:§r<br>
+ie.manual.entry.industrialwires.fabricator.name=Fabricador de válvulas
+ie.manual.entry.industrialwires.fabricator.subtext=Maquinario refinado
+ie.manual.entry.industrialwires.fabricator=<&0>Usado para fabricar alguns tubos.<br>Forma-se com o martelo no bloco de engenharia pesado, pelo lado do cano.<br>Requer energia e combustível líquido (o mesmo usado na broca).<np>Precisa configurar a receita desejada com o martelo na porta de redstone.<br>Clicar vai circular entre os IDs das receitas, se abaixar e clicar confirma.<br>Uma vez configurado não é possível mudar.<np>§lRecipes:§r<br>

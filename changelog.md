@@ -4,7 +4,7 @@
  - Changed time of certain recipes
  - Fixed lots of connections issues
  - Fixed some render
- - Fixed/changed some manual
+ - Fixed/changed some localization and manual
    - Including ptbr translations
 
 ####Version 2.1-03
